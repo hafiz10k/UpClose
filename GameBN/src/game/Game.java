@@ -1,6 +1,8 @@
 package game;
 
 import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -16,10 +18,12 @@ import com.sun.glass.events.KeyEvent;
 public class Game extends JFrame implements Runnable {
 
 	public static int alpha = 0xFFFF00DC;
-
+	
 	private Canvas canvas =  new Canvas();
+	
 	private RenderHandler renderer;
-
+	private BufferedImage background = null;
+	
 	private SpriteSheet sheet;
 	private SpriteSheet playerSheet;
 
@@ -40,17 +44,27 @@ public class Game extends JFrame implements Runnable {
 	private int yZoom = 3;
 
 	private Menu menu;
+	private Help help;
+	private Load load;
 	
-	private enum STATE{
+	public enum STATE{
 		MENU,
-		GAME
-		
+		GAME,
+		LOAD,
+		HELP
 	};
 	
-	private STATE State = STATE.MENU;
+	public static STATE State = STATE.MENU;
+	
+
+	
 	
 	
 	public Game() {
+		
+		setBackground(Color.BLACK);
+
+//		c.setBackground(Color.red);
 		// make our prog shutdown when we exit
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -66,6 +80,8 @@ public class Game extends JFrame implements Runnable {
 		//make frame visible
 		setVisible(true);
 
+		
+		
 		// create obj for buffer strat
 		canvas.createBufferStrategy(3);	
 
@@ -75,6 +91,8 @@ public class Game extends JFrame implements Runnable {
 		BufferedImage sheetImage = loadImage("/Tiles1.png");
 		sheet = new SpriteSheet(sheetImage);
 		sheet.loadSprites(16, 16);
+		
+		background = loadImage("/background.png");
 
 		BufferedImage playerSheetImage = loadImage("/girl-main-anim.png");
 		playerSheet = new SpriteSheet(playerSheetImage);
@@ -111,7 +129,12 @@ public class Game extends JFrame implements Runnable {
 		player = new Player(playerAni);
 		objects[0] = player;
 		objects[1] = gui;
+		
+		//new java class load
 		menu = new Menu();
+		help = new Help();
+		load = new Load();
+		
 
 
 		// add listeners
@@ -119,9 +142,12 @@ public class Game extends JFrame implements Runnable {
 		canvas.addFocusListener(keyListener);
 		canvas.addMouseListener(mouseListener);
 		canvas.addMouseMotionListener(mouseListener);
+		
+		this.addMouseListener(new MouseInput());
 
 	}
-
+	
+	
 	public void update() { 
 		for(int i = 0; i < objects.length; i++) {
 			objects[i].update(this);
@@ -179,15 +205,22 @@ public class Game extends JFrame implements Runnable {
 		super.paint(graphics);
 
 		map.render(renderer, xZoom, yZoom);
-
+		
+		graphics.drawImage(background, 0, 0, null);
+		
 		for(int i = 0; i < objects.length; i++) {
 			objects[i].render(renderer, xZoom, yZoom);
 		}
+		
 		if(State == STATE.GAME) {
 		renderer.render(graphics);
 		
 		}else if(State == STATE.MENU) {
 			menu.render(graphics);
+		}else if(State == STATE.HELP) {
+			help.render(graphics);
+		}else if(State == STATE.LOAD) {
+			load.render(graphics);
 		}
 		graphics.dispose();
 		bufferStrategy.show();
