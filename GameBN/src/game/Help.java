@@ -15,7 +15,7 @@ public class Help {
 	public void render(Graphics graphics) {
 		Font fnt0 = new Font("arial", Font.BOLD, 50);
 		graphics.setFont(fnt0);
-		graphics.setColor(Color.black);
-		graphics.drawString("Help", 360, 140);
+		graphics.setColor(Color.white);
+		graphics.drawString("Help", 440, 140);
 	}
 }

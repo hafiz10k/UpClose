@@ -41,7 +41,7 @@ public class MouseEventListener implements MouseListener, MouseMotionListener{
 		
 	} 
 
-	@Override
+	
 	public void mousePressed(MouseEvent event) {
 		if(event.getButton() == MouseEvent.BUTTON1) {
 			//button1 = left click
@@ -63,46 +63,46 @@ public class MouseEventListener implements MouseListener, MouseMotionListener{
 
 
 		
-		if(mx >= 340 && mx <= 640) 
-		{
-			if(my >= 250 && my <= 300) 
-			{
-				//Press Play Button
-				Game.State = Game.STATE.GAME;
-			}
-		}
-		
-		//Load Button
-		
-		if(mx >= 340 && mx <= 640) 
-		{
-			if(my >= 350 && my <= 400) 
-			{
-				//Press Load Button
-				Game.State = Game.STATE.LOAD;
-			}
-		}
-		
-		// Help Button
-		if(mx >= 340 && mx <= 640) 
-		{
-			if(my >= 450 && my <= 500) 
-			{
-				//Press Help Button	
-				Game.State = Game.STATE.HELP;
-			}
-		}
-		
-		
-		// Quit Button
-		if(mx >= 340 && mx <= 640) 
-		{
-			if(my >= 550 && my <= 600) 
-			{
-				//Press Play Button
-				System.exit(1);
-			}
-		}
+//		if(mx >= 340 && mx <= 640) 
+//		{
+//			if(my >= 250 && my <= 300) 
+//			{
+//				//Press Play Button
+//				Game.State = Game.STATE.GAME;
+//			}
+//		}
+//		
+//		//Load Button
+//		
+//		if(mx >= 340 && mx <= 640) 
+//		{
+//			if(my >= 350 && my <= 400) 
+//			{
+//				//Press Load Button
+//				Game.State = Game.STATE.LOAD;
+//			}
+//		}
+//		
+//		// Help Button
+//		if(mx >= 340 && mx <= 640) 
+//		{
+//			if(my >= 450 && my <= 500) 
+//			{
+//				//Press Help Button	
+//				Game.State = Game.STATE.HELP;
+//			}
+//		}
+//		
+//		
+//		// Quit Button
+//		if(mx >= 340 && mx <= 640) 
+//		{
+//			if(my >= 550 && my <= 600) 
+//			{
+//				//Press Play Button
+//				System.exit(1);
+//			}
+//		}
 		
 	}
 

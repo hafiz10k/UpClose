@@ -37,6 +37,7 @@ public class Game extends JFrame implements Runnable {
 	private GameObject[] objects;
 	private KeyBoardListener keyListener = new KeyBoardListener(this);
 	private MouseEventListener mouseListener = new MouseEventListener(this);
+	private MouseInput mouseListener2 = new MouseInput();
 
 	private Player player;
 
@@ -47,7 +48,7 @@ public class Game extends JFrame implements Runnable {
 	private Help help;
 	private Load load;
 	
-	public enum STATE{
+	public static enum STATE{
 		MENU,
 		GAME,
 		LOAD,
@@ -88,11 +89,11 @@ public class Game extends JFrame implements Runnable {
 		renderer = new RenderHandler(getWidth(), getHeight());
 
 		// load assets
-		BufferedImage sheetImage = loadImage("/Tiles1.png");
+		BufferedImage sheetImage = loadImage("/Tiles3.png");
 		sheet = new SpriteSheet(sheetImage);
 		sheet.loadSprites(16, 16);
 		
-		background = loadImage("/background.png");
+		background = loadImage("/background2.png");
 
 		BufferedImage playerSheetImage = loadImage("/girl-main-anim.png");
 		playerSheet = new SpriteSheet(playerSheetImage);
@@ -142,8 +143,9 @@ public class Game extends JFrame implements Runnable {
 		canvas.addFocusListener(keyListener);
 		canvas.addMouseListener(mouseListener);
 		canvas.addMouseMotionListener(mouseListener);
-		
+		canvas.addMouseListener(mouseListener2);
 		this.addMouseListener(new MouseInput());
+//		this.addMouseListener(new MouseInput());
 
 	}
 	
