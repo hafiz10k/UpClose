@@ -2,8 +2,9 @@ package game;
 
 import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -12,9 +13,28 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
-import com.sun.glass.events.KeyEvent;
+import entity.AnimatedSprite;
+import entity.Map;
+import entity.Player;
+import entity.Rectangle;
+import entity.Sprite;
+import entity.SpriteSheet;
+import entity.Tiles;
+import gui.CreateName;
+import gui.GUI;
+import gui.GUIButton;
+import gui.Help;
+import gui.Load;
+import gui.Menu;
+import gui.SDKButton;
+import handler.KeyBoardListener;
+import handler.MouseEventListener;
+import handler.MouseInput;
+import handler.RenderHandler;
+import javax.swing.JButton;
+import java.awt.BorderLayout;
 
-@SuppressWarnings({ "serial", "restriction", "unused" })
+@SuppressWarnings({ "serial", "unused" })
 public class Game extends JFrame implements Runnable {
 
 	public static int alpha = 0xFFFF00DC;
@@ -22,10 +42,11 @@ public class Game extends JFrame implements Runnable {
 	private Canvas canvas =  new Canvas();
 	
 	private RenderHandler renderer;
-	private BufferedImage background = null;
+	private BufferedImage testImage = null;
 	
 	private SpriteSheet sheet;
 	private SpriteSheet playerSheet;
+	private SpriteSheet alphabetSheet;
 
 	private int selectedTileID = 2;
 
@@ -45,11 +66,13 @@ public class Game extends JFrame implements Runnable {
 	private int yZoom = 3;
 
 	private Menu menu;
+	private CreateName name;
 	private Help help;
 	private Load load;
 	
 	public static enum STATE{
 		MENU,
+		NAME,
 		GAME,
 		LOAD,
 		HELP
@@ -57,15 +80,9 @@ public class Game extends JFrame implements Runnable {
 	
 	public static STATE State = STATE.MENU;
 	
-
-	
-	
-	
 	public Game() {
+		setTitle("UpClose");
 		
-		setBackground(Color.BLACK);
-
-//		c.setBackground(Color.red);
 		// make our prog shutdown when we exit
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -74,32 +91,48 @@ public class Game extends JFrame implements Runnable {
 
 		//put our frame in center of screen
 		setLocationRelativeTo(null);
+		
+		setResizable(false);
 
 		// add graphics component
-		add(canvas);
+		getContentPane().add(canvas);
+		
+		//set focus on canvas - so player dont have to click on screen everytime
+		canvas.setFocusable(true);
+		canvas.requestFocus();	
 
 		//make frame visible
 		setVisible(true);
+		
+		
 
-		
-		
 		// create obj for buffer strat
 		canvas.createBufferStrategy(3);	
+		
+		getContentPane().setBackground(Color.BLACK);
 
 		renderer = new RenderHandler(getWidth(), getHeight());
 
 		// load assets
-		BufferedImage sheetImage = loadImage("/Tiles3.png");
-		sheet = new SpriteSheet(sheetImage);
+		BufferedImage tilemapImage = loadImage("/Tiles3.png");
+		sheet = new SpriteSheet(tilemapImage);
 		sheet.loadSprites(16, 16);
 		
-		background = loadImage("/background2.png");
-
-		BufferedImage playerSheetImage = loadImage("/girl-main-anim.png");
+		//male
+		BufferedImage playerSheetImage = loadImage("/mainAnimated.png");
 		playerSheet = new SpriteSheet(playerSheetImage);
 		playerSheet.loadSprites(24, 32);
 
-		//animated sprite
+		// female
+//		BufferedImage playerSheetImage = loadImage("/girl-main-anim.png");
+//		playerSheet = new SpriteSheet(playerSheetImage);
+//		playerSheet.loadSprites(24, 32);
+		
+		BufferedImage alphabetSheetImage = loadImage("/alpha.png");
+		alphabetSheet = new SpriteSheet(alphabetSheetImage);
+		alphabetSheet.loadSprites(8, 8);
+
+		//load player animated sprite
 		AnimatedSprite playerAni = new AnimatedSprite(playerSheet, 10);
 
 		// load tiles
@@ -108,10 +141,9 @@ public class Game extends JFrame implements Runnable {
 		// load map
 		map = new Map(new File("Map.txt"), tiles);
 
-		// testImage = loadImage("/GrassTile.png");
+	
 		// testSprite = sheet.getSprite(4, 1);
 
-		testRectangle.generateGraphics(2, 12234);
 
 		//load SDK GUI
 		GUIButton[] buttons = new GUIButton[tiles.size()];
@@ -133,30 +165,37 @@ public class Game extends JFrame implements Runnable {
 		
 		//new java class load
 		menu = new Menu();
+		name = new CreateName(alphabetSheet);
 		help = new Help();
 		load = new Load();
-		
-
 
 		// add listeners
 		canvas.addKeyListener(keyListener);
 		canvas.addFocusListener(keyListener);
 		canvas.addMouseListener(mouseListener);
 		canvas.addMouseMotionListener(mouseListener);
-		canvas.addMouseListener(mouseListener2);
-		this.addMouseListener(new MouseInput());
+//		canvas.addMouseListener(mouseListener2);
+//		this.addMouseListener(new MouseInput());
 //		this.addMouseListener(new MouseInput());
 
 	}
 	
 	
 	public void update() { 
-		for(int i = 0; i < objects.length; i++) {
-			objects[i].update(this);
+//		for(int i = 0; i < objects.length; i++) {
+//			objects[i].update(this);
+//		}
+		if(State == STATE.GAME) {
+			for(int i = 0; i < objects.length; i++) {
+				objects[i].update(this);
+			}
+		}
+		else if(State == STATE.MENU) {
+			menu.update(this);
 		}
 	}
 
-	private BufferedImage loadImage(String path) {
+	BufferedImage loadImage(String path) {
 		try {
 			BufferedImage loadedImage = ImageIO.read(Game.class.getResourceAsStream(path));
 			BufferedImage formattedImage = new BufferedImage(loadedImage.getWidth(), loadedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
@@ -208,8 +247,6 @@ public class Game extends JFrame implements Runnable {
 
 		map.render(renderer, xZoom, yZoom);
 		
-		graphics.drawImage(background, 0, 0, null);
-		
 		for(int i = 0; i < objects.length; i++) {
 			objects[i].render(renderer, xZoom, yZoom);
 		}
@@ -217,13 +254,24 @@ public class Game extends JFrame implements Runnable {
 		if(State == STATE.GAME) {
 		renderer.render(graphics);
 		
-		}else if(State == STATE.MENU) {
+		}
+		
+		else if(State == STATE.MENU) {
 			menu.render(graphics);
-		}else if(State == STATE.HELP) {
+		}
+		
+		else if(State == STATE.NAME) {
+			name.render(graphics);
+		}
+		
+		else if(State == STATE.HELP) {
 			help.render(graphics);
-		}else if(State == STATE.LOAD) {
+		}
+		
+		else if(State == STATE.LOAD) {
 			load.render(graphics);
 		}
+		
 		graphics.dispose();
 		bufferStrategy.show();
 		renderer.clear();
@@ -243,8 +291,6 @@ public class Game extends JFrame implements Runnable {
 	@Override
 	public void run() {
 		BufferStrategy bufferStrategy = canvas.getBufferStrategy();
-		int i = 0;
-		int x = 0;
 
 		long lastTime = System.nanoTime();
 

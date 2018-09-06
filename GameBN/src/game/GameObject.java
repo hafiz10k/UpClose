@@ -1,5 +1,8 @@
 package game;
 
+import entity.Rectangle;
+import handler.RenderHandler;
+
 public interface GameObject {
 	
 	// call every time physically possible
@@ -11,4 +14,5 @@ public interface GameObject {
 	//Call when mouse click on canvas
 	//return true if stop checking other clicks
 	public boolean handleMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom);
+
 }
