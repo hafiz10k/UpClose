@@ -1,16 +1,19 @@
-package gui;
+package menuComponents;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.concurrent.TimeUnit;
 
+import entity.SpriteSheet;
 import game.Game;
 import handler.KeyBoardListener;
 
-public class Menu {
+public class Menu implements MenuObject {
 
 	private int currentChoice = 0;
 	private String[] options = 
@@ -30,15 +33,17 @@ public class Menu {
 
 	private Font font;
 	
+	private Image alphabetSheet;
+	
 	public Menu() {		
 
 		try 
 		{
 			
-			titleColor = new Color(128, 0, 0);
-			titleFont = new Font("Arial", Font.PLAIN, 100);
+			titleColor = new Color(246, 246, 246);
+			titleFont = new Font("Broadway", Font.BOLD, 100);
 			
-			font = new Font("Arial", Font.BOLD, 50);
+			font = new Font("Caviar Dreams", Font.PLAIN, 50);
 			
 		}
 		catch (Exception e)
@@ -48,14 +53,14 @@ public class Menu {
 		
 	}
 
-
+	@Override
 	public void render(Graphics graphics) {
-		Graphics2D g2d = (Graphics2D) graphics;
 		
 		// draw title
 		graphics.setColor(titleColor);
 		graphics.setFont(titleFont);
-		graphics.drawString("UpClose", 325, 120);
+		graphics.drawString("UpClose", 275, 120);
+	
 		
 		//draw menu options
 		graphics.setFont(font);
@@ -63,17 +68,18 @@ public class Menu {
 		{
 			if (i == currentChoice)
 			{
-				graphics.setColor(Color.YELLOW);
+				graphics.setColor(Color.RED);
 			}
 			else 
 			{
-				graphics.setColor(Color.RED);
+				graphics.setColor(Color.YELLOW);
 			}
-			graphics.drawString(options[i], 425, 250 + i * 100);
+			graphics.drawString(options[i], 425, 270 + i * 130);
 		}
 
 	}
 	
+	@Override
 	public void update(Game game) {
 		
 		try {
@@ -104,7 +110,7 @@ public class Menu {
 			}
 		}
 		
-		Thread.sleep(110);
+		Thread.sleep(150);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

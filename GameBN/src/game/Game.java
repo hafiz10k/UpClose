@@ -20,17 +20,18 @@ import entity.Rectangle;
 import entity.Sprite;
 import entity.SpriteSheet;
 import entity.Tiles;
-import gui.CreateName;
 import gui.GUI;
 import gui.GUIButton;
-import gui.Help;
-import gui.Load;
-import gui.Menu;
 import gui.SDKButton;
 import handler.KeyBoardListener;
 import handler.MouseEventListener;
 import handler.MouseInput;
 import handler.RenderHandler;
+import menuComponents.CreateName;
+import menuComponents.Help;
+import menuComponents.Load;
+import menuComponents.Menu;
+
 import javax.swing.JButton;
 import java.awt.BorderLayout;
 
@@ -193,9 +194,17 @@ public class Game extends JFrame implements Runnable {
 		else if(State == STATE.MENU) {
 			menu.update(this);
 		}
+		
+		else if(State == STATE.LOAD) {
+			load.update(this);
+		}
+		
+		else if(State == STATE.HELP) {
+			help.update(this);
+		}
 	}
 
-	BufferedImage loadImage(String path) {
+	public static BufferedImage loadImage(String path) {
 		try {
 			BufferedImage loadedImage = ImageIO.read(Game.class.getResourceAsStream(path));
 			BufferedImage formattedImage = new BufferedImage(loadedImage.getWidth(), loadedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
