@@ -9,7 +9,7 @@ import java.awt.Rectangle;
 import game.Game;
 import handler.KeyBoardListener;
 
-public class Load implements MenuObject{
+public class Gender implements MenuObject{
 	public Rectangle backButton =  new Rectangle (10, 10, 200, 50);
 
 	private Color titleColor;
@@ -19,18 +19,18 @@ public class Load implements MenuObject{
 	
 	private int loadChoice = 0;
 
-	private String[] load = 
+	private String[] gen = 
 		{
-				"Yes",
-				"No"
+				"Boy",
+				"Girl"
 		};
 
-	public Load() {
+	public Gender() {
 		try 
 		{
 
 			titleColor = new Color(100, 128, 128);
-			titleFont = new Font("Broadway", Font.BOLD, 80);
+			titleFont = new Font("Broadway", Font.BOLD, 50);
 
 			font = new Font("Arial", Font.PLAIN, 30);
 
@@ -47,12 +47,11 @@ public class Load implements MenuObject{
 
 		graphics.setColor(Color.WHITE);
 		graphics.setFont(titleFont);
-		graphics.drawString("Load", 380, 120);
+		graphics.drawString("Are you a Boy or Girl?", 200, 120);
 
 		graphics.setFont(font);
-		graphics.drawString("load game?", 420, 250);
-
-		for(int i = 0; i < load.length; i++) 
+		
+		for(int i = 0; i < gen.length; i++) 
 		{
 			if (i == loadChoice)
 			{
@@ -62,7 +61,7 @@ public class Load implements MenuObject{
 			{
 				graphics.setColor(Color.WHITE);
 			}
-			graphics.drawString(load[i], 350 + i * 250, 350);
+			graphics.drawString(gen[i], 350 + i * 250, 350);
 		}
 	}
 
@@ -84,14 +83,14 @@ public class Load implements MenuObject{
 				loadChoice --;
 				if(loadChoice == -1)
 				{
-					loadChoice = load.length -1;
+					loadChoice = gen.length -1;
 				}
 			}
 
 			if(keyListener.right()) {
 				loading = true;
 				loadChoice ++;
-				if(loadChoice == load.length)
+				if(loadChoice == gen.length)
 				{
 					loadChoice = 0;
 				}
@@ -106,15 +105,6 @@ public class Load implements MenuObject{
 	}
 
 	private void select() {
-
-		if(loadChoice == 0) {
-			Game.State = Game.STATE.GAME;
-		}
-
-		if(loadChoice == 1) {
-			Game.State = Game.STATE.MENU;
-		}
-
 
 	}
 }

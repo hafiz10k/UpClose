@@ -74,7 +74,7 @@ public class Menu implements MenuObject {
 			{
 				graphics.setColor(Color.YELLOW);
 			}
-			graphics.drawString(options[i], 425, 270 + i * 130);
+			graphics.drawString(options[i], 425 , 270 + i * 130);
 		}
 
 	}
@@ -122,8 +122,9 @@ public class Menu implements MenuObject {
 		if(currentChoice == 0)
 		{
 			// start
-			Game.State = Game.STATE.GAME;	
-//			Game.State = Game.STATE.NAME;
+//			Game.State = Game.STATE.GAME;	
+			Game.State = Game.STATE.NAME;
+//			Game.State = Game.STATE.GENDER;
 			
 		}
 		if(currentChoice == 1)

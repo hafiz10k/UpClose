@@ -28,6 +28,7 @@ import handler.MouseEventListener;
 import handler.MouseInput;
 import handler.RenderHandler;
 import menuComponents.CreateName;
+import menuComponents.Gender;
 import menuComponents.Help;
 import menuComponents.Load;
 import menuComponents.Menu;
@@ -68,12 +69,14 @@ public class Game extends JFrame implements Runnable {
 
 	private Menu menu;
 	private CreateName name;
+	private Gender gender;
 	private Help help;
 	private Load load;
 	
 	public static enum STATE{
 		MENU,
 		NAME,
+		GENDER,
 		GAME,
 		LOAD,
 		HELP
@@ -93,6 +96,7 @@ public class Game extends JFrame implements Runnable {
 		//put our frame in center of screen
 		setLocationRelativeTo(null);
 		
+		//frame cannot be resize
 		setResizable(false);
 
 		// add graphics component
@@ -103,13 +107,12 @@ public class Game extends JFrame implements Runnable {
 		canvas.requestFocus();	
 
 		//make frame visible
-		setVisible(true);
-		
-		
+		setVisible(true);		
 
 		// create obj for buffer strat
 		canvas.createBufferStrategy(3);	
 		
+		//color bg for panel
 		getContentPane().setBackground(Color.BLACK);
 
 		renderer = new RenderHandler(getWidth(), getHeight());
@@ -166,7 +169,8 @@ public class Game extends JFrame implements Runnable {
 		
 		//new java class load
 		menu = new Menu();
-		name = new CreateName(alphabetSheet);
+		name = new CreateName();
+		gender = new Gender();
 		help = new Help();
 		load = new Load();
 
@@ -175,9 +179,6 @@ public class Game extends JFrame implements Runnable {
 		canvas.addFocusListener(keyListener);
 		canvas.addMouseListener(mouseListener);
 		canvas.addMouseMotionListener(mouseListener);
-//		canvas.addMouseListener(mouseListener2);
-//		this.addMouseListener(new MouseInput());
-//		this.addMouseListener(new MouseInput());
 
 	}
 	
@@ -195,12 +196,20 @@ public class Game extends JFrame implements Runnable {
 			menu.update(this);
 		}
 		
+		else if(State == STATE.GENDER) {
+			gender.update(this);
+		}
+		
 		else if(State == STATE.LOAD) {
 			load.update(this);
 		}
 		
 		else if(State == STATE.HELP) {
 			help.update(this);
+		}
+		
+		else if(State == STATE.NAME) {
+			name.update(this);
 		}
 	}
 
@@ -271,6 +280,10 @@ public class Game extends JFrame implements Runnable {
 		
 		else if(State == STATE.NAME) {
 			name.render(graphics);
+		}
+		
+		else if(State == STATE.GENDER) {
+			gender.render(graphics);
 		}
 		
 		else if(State == STATE.HELP) {
