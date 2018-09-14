@@ -74,7 +74,7 @@ public class Gender implements MenuObject{
 
 			if(keyListener.enter()) {
 				loading = true;
-				select();
+				Game.State = Game.STATE.GAME;
 
 			}
 
@@ -95,18 +95,11 @@ public class Gender implements MenuObject{
 					loadChoice = 0;
 				}
 			}
-			
-			if(loading) {
-				Thread.sleep(120);
-			}
+				Thread.sleep(150);
 		}
 		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
-	}
-
-	private void select() {
 
 	}
 }

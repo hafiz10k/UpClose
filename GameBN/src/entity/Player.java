@@ -99,8 +99,7 @@ public class Player implements GameObject {
 	
 	public void updateCamera(Rectangle camera) {
 		camera.x = playerRectangle.x - (camera.w / 2);
-		System.out.println(camera.x);
-		System.out.println(playerRectangle.x);
+
 		camera.y = -384;
 		
 //		boolean moveCam = true;

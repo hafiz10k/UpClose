@@ -69,10 +69,12 @@ public class CreateName implements MenuObject, ActionListener{
 		try {
 			KeyBoardListener keyListener = game.getKeyListener();
 			boolean didMove = false;
+			
 			if(keyListener.enter()) {
 				String fullName = new String(name);
 				System.out.println(fullName);
-				Game.State = Game.STATE.GAME;
+//				Game.State = Game.STATE.GAME;
+				Game.State = Game.STATE.GENDER;
 			}
 
 			if(keyListener.up()) {
@@ -99,10 +101,7 @@ public class CreateName implements MenuObject, ActionListener{
 				}
 			}
 
-			if(didMove) {
-
 				Thread.sleep(150);
-			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

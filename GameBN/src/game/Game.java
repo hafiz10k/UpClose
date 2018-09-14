@@ -44,10 +44,10 @@ public class Game extends JFrame implements Runnable {
 	private Canvas canvas =  new Canvas();
 	
 	private RenderHandler renderer;
-	private BufferedImage testImage = null;
 	
 	private SpriteSheet sheet;
-	private SpriteSheet playerSheet;
+	private SpriteSheet boySheet;
+	private SpriteSheet girlSheet;
 	private SpriteSheet alphabetSheet;
 
 	private int selectedTileID = 2;
@@ -124,20 +124,22 @@ public class Game extends JFrame implements Runnable {
 		
 		//male
 		BufferedImage playerSheetImage = loadImage("/mainAnimated.png");
-		playerSheet = new SpriteSheet(playerSheetImage);
-		playerSheet.loadSprites(24, 32);
+		boySheet = new SpriteSheet(playerSheetImage);
+		boySheet.loadSprites(24, 32);
 
 		// female
-//		BufferedImage playerSheetImage = loadImage("/girl-main-anim.png");
-//		playerSheet = new SpriteSheet(playerSheetImage);
-//		playerSheet.loadSprites(24, 32);
+		BufferedImage girlSheetImage = loadImage("/girl-main-anim.png");
+		girlSheet = new SpriteSheet(girlSheetImage);
+		girlSheet.loadSprites(24, 32);
 		
+		// font
 		BufferedImage alphabetSheetImage = loadImage("/alpha.png");
 		alphabetSheet = new SpriteSheet(alphabetSheetImage);
 		alphabetSheet.loadSprites(8, 8);
 
 		//load player animated sprite
-		AnimatedSprite playerAni = new AnimatedSprite(playerSheet, 10);
+		AnimatedSprite boyAni = new AnimatedSprite(boySheet, 10);
+		AnimatedSprite girlAni = new AnimatedSprite(girlSheet, 10);
 
 		// load tiles
 		tiles = new Tiles(new File("tile.txt"), sheet);
@@ -162,10 +164,10 @@ public class Game extends JFrame implements Runnable {
 		GUI gui = new GUI(buttons, 5, 5, true);
 
 		// load objects
-		objects = new GameObject[2];
-		player = new Player(playerAni);
+		objects = new GameObject[1];
+		player = new Player(girlAni);
 		objects[0] = player;
-		objects[1] = gui;
+//		objects[1] = gui;
 		
 		//new java class load
 		menu = new Menu();
@@ -177,8 +179,8 @@ public class Game extends JFrame implements Runnable {
 		// add listeners
 		canvas.addKeyListener(keyListener);
 		canvas.addFocusListener(keyListener);
-		canvas.addMouseListener(mouseListener);
-		canvas.addMouseMotionListener(mouseListener);
+//		canvas.addMouseListener(mouseListener);
+//		canvas.addMouseMotionListener(mouseListener);
 
 	}
 	

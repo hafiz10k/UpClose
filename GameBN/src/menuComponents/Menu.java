@@ -14,6 +14,8 @@ import game.Game;
 import handler.KeyBoardListener;
 
 public class Menu implements MenuObject {
+	
+	public static int alpha = 0xFFFF00DC;
 
 	private int currentChoice = 0;
 	private String[] options = 
@@ -33,7 +35,7 @@ public class Menu implements MenuObject {
 
 	private Font font;
 	
-	private Image alphabetSheet;
+	private BufferedImage logo;
 	
 	public Menu() {		
 
@@ -44,6 +46,8 @@ public class Menu implements MenuObject {
 			titleFont = new Font("Broadway", Font.BOLD, 100);
 			
 			font = new Font("Caviar Dreams", Font.PLAIN, 50);
+			
+			logo = Game.loadImage("/title_logo_nobg.png");
 			
 		}
 		catch (Exception e)
@@ -56,10 +60,12 @@ public class Menu implements MenuObject {
 	@Override
 	public void render(Graphics graphics) {
 		
+		graphics.drawImage(logo, 230, 10, game);
+		
 		// draw title
-		graphics.setColor(titleColor);
-		graphics.setFont(titleFont);
-		graphics.drawString("UpClose", 275, 120);
+//		graphics.setColor(titleColor);
+//		graphics.setFont(titleFont);
+//		graphics.drawString("UpClose", 275, 120);
 	
 		
 		//draw menu options
