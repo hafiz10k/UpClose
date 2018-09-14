@@ -84,8 +84,10 @@ public class Help implements MenuObject{
 				select();
 
 			}
+			if(back) {
+				Thread.sleep(150);
+			}
 
-			Thread.sleep(150);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

@@ -16,7 +16,7 @@ public class Gender implements MenuObject{
 	private Font titleFont;
 
 	private Font font;
-	
+
 	private int loadChoice = 0;
 
 	private String[] gen = 
@@ -50,7 +50,7 @@ public class Gender implements MenuObject{
 		graphics.drawString("Are you a Boy or Girl?", 200, 120);
 
 		graphics.setFont(font);
-		
+
 		for(int i = 0; i < gen.length; i++) 
 		{
 			if (i == loadChoice)
@@ -71,13 +71,13 @@ public class Gender implements MenuObject{
 			KeyBoardListener keyListener = game.getKeyListener();
 
 			boolean loading = false;
-			
+
 			if(keyListener.enter()) {
 				loading = true;
 				select();
-				
+
 			}
-			
+
 			if(keyListener.left()) {
 				loading = true;
 				loadChoice --;
@@ -95,8 +95,10 @@ public class Gender implements MenuObject{
 					loadChoice = 0;
 				}
 			}
-
-			Thread.sleep(150);
+			
+			if(loading) {
+				Thread.sleep(120);
+			}
 		}
 		catch (InterruptedException e) {
 			e.printStackTrace();

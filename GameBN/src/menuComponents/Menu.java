@@ -110,7 +110,10 @@ public class Menu implements MenuObject {
 			}
 		}
 		
+		if(didMove) {
 		Thread.sleep(150);
+		}
+		
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

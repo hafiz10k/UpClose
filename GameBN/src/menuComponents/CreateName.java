@@ -52,18 +52,14 @@ public class CreateName implements MenuObject, ActionListener{
 
 		for(int i = 0; i < name.length; i++) 
 		{
-			if (name[currentChoice] == 0) {
+			if (i == currentChoice) {
 				graphics.setColor(Color.RED);
 			}
 			else {
 				graphics.setColor(Color.WHITE);
 			}
 
-			graphics.drawString("" + name[0], 200, 300);
-			graphics.drawString("" + name[1], 240, 300);
-			graphics.drawString("" + name[2], 280, 300);
-			graphics.drawString("" + name[3], 320, 300);
-			graphics.drawString("" + name[4], 360, 300);
+			graphics.drawString("" + name[i], 260 + i * 100, 300);
 
 		}
 	}
@@ -72,10 +68,11 @@ public class CreateName implements MenuObject, ActionListener{
 	public void update(Game game) {
 		try {
 			KeyBoardListener keyListener = game.getKeyListener();
-
+			boolean didMove = false;
 			if(keyListener.enter()) {
 				String fullName = new String(name);
 				System.out.println(fullName);
+				Game.State = Game.STATE.GAME;
 			}
 
 			if(keyListener.up()) {
@@ -102,7 +99,10 @@ public class CreateName implements MenuObject, ActionListener{
 				}
 			}
 
-			Thread.sleep(120);
+			if(didMove) {
+
+				Thread.sleep(150);
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

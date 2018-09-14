@@ -96,8 +96,12 @@ public class Load implements MenuObject{
 					loadChoice = 0;
 				}
 			}
+			
+			if(loading) {
+				Thread.sleep(120);
+			}
 
-			Thread.sleep(150);
+			
 		}
 		catch (InterruptedException e) {
 			e.printStackTrace();
