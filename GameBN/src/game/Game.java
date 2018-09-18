@@ -40,11 +40,11 @@ import java.awt.BorderLayout;
 public class Game extends JFrame implements Runnable {
 
 	public static int alpha = 0xFFFF00DC;
-	
+
 	private Canvas canvas =  new Canvas();
-	
+
 	private RenderHandler renderer;
-	
+
 	private SpriteSheet sheet;
 	private SpriteSheet boySheet;
 	private SpriteSheet girlSheet;
@@ -72,7 +72,7 @@ public class Game extends JFrame implements Runnable {
 	private Gender gender;
 	private Help help;
 	private Load load;
-	
+
 	public static enum STATE{
 		MENU,
 		NAME,
@@ -81,12 +81,12 @@ public class Game extends JFrame implements Runnable {
 		LOAD,
 		HELP
 	};
-	
+
 	public static STATE State = STATE.MENU;
-	
+
 	public Game() {
 		setTitle("UpClose");
-		
+
 		// make our prog shutdown when we exit
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -95,13 +95,16 @@ public class Game extends JFrame implements Runnable {
 
 		//put our frame in center of screen
 		setLocationRelativeTo(null);
-		
+
 		//frame cannot be resize
-		setResizable(false);
+		setResizable(true);
+
+		//color bg for panel
+//		getContentPane().setSize(1000, 800);
 
 		// add graphics component
 		getContentPane().add(canvas);
-		
+
 		//set focus on canvas - so player dont have to click on screen everytime
 		canvas.setFocusable(true);
 		canvas.requestFocus();	
@@ -111,9 +114,8 @@ public class Game extends JFrame implements Runnable {
 
 		// create obj for buffer strat
 		canvas.createBufferStrategy(3);	
-		
-		//color bg for panel
-		getContentPane().setBackground(Color.BLACK);
+
+
 
 		renderer = new RenderHandler(getWidth(), getHeight());
 
@@ -121,7 +123,7 @@ public class Game extends JFrame implements Runnable {
 		BufferedImage tilemapImage = loadImage("/Tiles3.png");
 		sheet = new SpriteSheet(tilemapImage);
 		sheet.loadSprites(16, 16);
-		
+
 		//male
 		BufferedImage playerSheetImage = loadImage("/mainAnimated.png");
 		boySheet = new SpriteSheet(playerSheetImage);
@@ -131,7 +133,7 @@ public class Game extends JFrame implements Runnable {
 		BufferedImage girlSheetImage = loadImage("/girl-main-anim.png");
 		girlSheet = new SpriteSheet(girlSheetImage);
 		girlSheet.loadSprites(24, 32);
-		
+
 		// font
 		BufferedImage alphabetSheetImage = loadImage("/alpha.png");
 		alphabetSheet = new SpriteSheet(alphabetSheetImage);
@@ -147,7 +149,7 @@ public class Game extends JFrame implements Runnable {
 		// load map
 		map = new Map(new File("Map.txt"), tiles);
 
-	
+
 		// testSprite = sheet.getSprite(4, 1);
 
 
@@ -164,11 +166,11 @@ public class Game extends JFrame implements Runnable {
 		GUI gui = new GUI(buttons, 5, 5, true);
 
 		// load objects
-		objects = new GameObject[1];
+		objects = new GameObject[2];
 		player = new Player(girlAni);
 		objects[0] = player;
-//		objects[1] = gui;
-		
+		objects[1] = gui;
+
 		//new java class load
 		menu = new Menu();
 		name = new CreateName();
@@ -179,16 +181,16 @@ public class Game extends JFrame implements Runnable {
 		// add listeners
 		canvas.addKeyListener(keyListener);
 		canvas.addFocusListener(keyListener);
-//		canvas.addMouseListener(mouseListener);
-//		canvas.addMouseMotionListener(mouseListener);
+		canvas.addMouseListener(mouseListener);
+		canvas.addMouseMotionListener(mouseListener);
 
 	}
-	
-	
+
+
 	public void update() { 
-//		for(int i = 0; i < objects.length; i++) {
-//			objects[i].update(this);
-//		}
+		//		for(int i = 0; i < objects.length; i++) {
+		//			objects[i].update(this);
+		//		}
 		if(State == STATE.GAME) {
 			for(int i = 0; i < objects.length; i++) {
 				objects[i].update(this);
@@ -197,19 +199,19 @@ public class Game extends JFrame implements Runnable {
 		else if(State == STATE.MENU) {
 			menu.update(this);
 		}
-		
+
 		else if(State == STATE.GENDER) {
 			gender.update(this);
 		}
-		
+
 		else if(State == STATE.LOAD) {
 			load.update(this);
 		}
-		
+
 		else if(State == STATE.HELP) {
 			help.update(this);
 		}
-		
+
 		else if(State == STATE.NAME) {
 			name.update(this);
 		}
@@ -266,47 +268,48 @@ public class Game extends JFrame implements Runnable {
 		super.paint(graphics);
 
 		map.render(renderer, xZoom, yZoom);
-		
+
 		for(int i = 0; i < objects.length; i++) {
 			objects[i].render(renderer, xZoom, yZoom);
 		}
-		
+
 		if(State == STATE.GAME) {
-		renderer.render(graphics);
-		
+			renderer.render(graphics);
+
 		}
-		
+
 		else if(State == STATE.MENU) {
 			menu.render(graphics);
+			//menu.render(renderer, xZoom, yZoom);
 		}
-		
+
 		else if(State == STATE.NAME) {
 			name.render(graphics);
 		}
-		
+
 		else if(State == STATE.GENDER) {
 			gender.render(graphics);
 		}
-		
+
 		else if(State == STATE.HELP) {
 			help.render(graphics);
 		}
-		
+
 		else if(State == STATE.LOAD) {
 			load.render(graphics);
 		}
-		
+
 		graphics.dispose();
 		bufferStrategy.show();
 		renderer.clear();
-		
-	
+
+
 	}
 
 	public void changeTile(int tileID) {
 		selectedTileID = tileID;
 	}
-	
+
 	public int getSelectedTile() {
 		return selectedTileID;
 	}

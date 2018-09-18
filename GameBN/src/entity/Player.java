@@ -1,6 +1,7 @@
 package entity;
 
 import game.Game;
+import game.Game.STATE;
 import game.GameObject;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
@@ -99,15 +100,19 @@ public class Player implements GameObject {
 	
 	public void updateCamera(Rectangle camera) {
 		camera.x = playerRectangle.x - (camera.w / 2);
-
-		camera.y = -384;
+		camera.y = playerRectangle.y - (camera.h / 2);
+			
+	
+		if (camera.x >= 600) {
+			playerRectangle.x = 1100;
+			Game.State = STATE.MENU;
+		}
 		
-//		boolean moveCam = true;
-//		
-//		if (camera.x == 616) {
-//			return;
-//		}
-//		camera.y = playerRectangle.y - (camera.h / 2);
+		if (camera.y <= -652) {
+			playerRectangle.y = -252;
+		}
+		
+		System.out.println(camera.y + " " + playerRectangle.y);
 		
 	}
 	
