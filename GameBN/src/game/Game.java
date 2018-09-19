@@ -2,6 +2,10 @@ package game;
 
 import java.awt.Canvas;
 import java.awt.Graphics;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -10,20 +14,43 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
-import com.sun.glass.events.KeyEvent;
+import entity.AnimatedSprite;
+import entity.Map;
+import entity.Player;
+import entity.Rectangle;
+import entity.Sprite;
+import entity.SpriteSheet;
+import entity.Tiles;
+import gui.GUI;
+import gui.GUIButton;
+import gui.SDKButton;
+import handler.KeyBoardListener;
+import handler.MouseEventListener;
+import handler.MouseInput;
+import handler.RenderHandler;
+import menuComponents.CreateName;
+import menuComponents.Gender;
+import menuComponents.Help;
+import menuComponents.Load;
+import menuComponents.Menu;
+import java.awt.Color;
 
-@SuppressWarnings({ "serial", "restriction", "unused" })
+@SuppressWarnings({ "serial", "unused" })
 public class Game extends JFrame implements Runnable {
 
 	public static int alpha = 0xFFFF00DC;
 
-	private Canvas canvas =  new Canvas();
+	public static Canvas canvas =  new Canvas();
+
 	private RenderHandler renderer;
 
 	private SpriteSheet sheet;
-	private SpriteSheet playerSheet;
+	private SpriteSheet boySheet;
+	private SpriteSheet girlSheet;
+	private SpriteSheet alphabetSheet;
 
 	private int selectedTileID = 2;
+	private int selectedLayer = 1;
 
 	private Rectangle testRectangle = new Rectangle(30,30,100,100);
 
@@ -33,24 +60,36 @@ public class Game extends JFrame implements Runnable {
 	private GameObject[] objects;
 	private KeyBoardListener keyListener = new KeyBoardListener(this);
 	private MouseEventListener mouseListener = new MouseEventListener(this);
+	private MouseInput mouseListener2 = new MouseInput();
 
-	private Player player;
+	public Player player;
 
 	private int xZoom = 3;
 	private int yZoom = 3;
 
 	private Menu menu;
+	private CreateName name;
+	private Gender gender;
+	private Help help;
+	private Load load;
+
+	private boolean boy = true;
 	
-	private enum STATE{
+	public static enum STATE{
 		MENU,
-		GAME
-		
+		NAME,
+		GENDER,
+		GAME,
+		LOAD,
+		HELP
 	};
-	
-	private STATE State = STATE.MENU;
-	
-	
+
+	public static STATE State = STATE.MENU;
+
 	public Game() {
+		getContentPane().setBackground(Color.GRAY);
+		setTitle("UpClose");
+
 		// make our prog shutdown when we exit
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -60,28 +99,54 @@ public class Game extends JFrame implements Runnable {
 		//put our frame in center of screen
 		setLocationRelativeTo(null);
 
+		//frame cannot be resize
+		setResizable(true);
+		canvas.setForeground(Color.GRAY);
+		canvas.setBackground(Color.GRAY);
+
+		//color bg for panel
+		getContentPane().setSize(1000, 800);
+
 		// add graphics component
-		add(canvas);
+		getContentPane().add(canvas);
+
+		//set focus on canvas - so player dont have to click on screen everytime
+		canvas.setFocusable(true);
+		canvas.requestFocus();	
 
 		//make frame visible
-		setVisible(true);
+		setVisible(true);		
 
 		// create obj for buffer strat
 		canvas.createBufferStrategy(3);	
 
+
+
 		renderer = new RenderHandler(getWidth(), getHeight());
 
 		// load assets
-		BufferedImage sheetImage = loadImage("/Tiles1.png");
-		sheet = new SpriteSheet(sheetImage);
+		BufferedImage tilemapImage = loadImage("/Tiles3.png");
+		sheet = new SpriteSheet(tilemapImage);
 		sheet.loadSprites(16, 16);
 
-		BufferedImage playerSheetImage = loadImage("/girl-main-anim.png");
-		playerSheet = new SpriteSheet(playerSheetImage);
-		playerSheet.loadSprites(24, 32);
+		//male
+		BufferedImage playerSheetImage = loadImage("/mainAnimated.png");
+		boySheet = new SpriteSheet(playerSheetImage);
+		boySheet.loadSprites(24, 32);
 
-		//animated sprite
-		AnimatedSprite playerAni = new AnimatedSprite(playerSheet, 10);
+		// female
+		BufferedImage girlSheetImage = loadImage("/girl-main-anim.png");
+		girlSheet = new SpriteSheet(girlSheetImage);
+		girlSheet.loadSprites(24, 32);
+
+		// font
+		BufferedImage alphabetSheetImage = loadImage("/alpha.png");
+		alphabetSheet = new SpriteSheet(alphabetSheetImage);
+		alphabetSheet.loadSprites(8, 8);
+
+		//load player animated sprite
+		AnimatedSprite boyAni = new AnimatedSprite(boySheet, 10);
+		AnimatedSprite girlAni = new AnimatedSprite(girlSheet, 10);
 
 		// load tiles
 		tiles = new Tiles(new File("tile.txt"), sheet);
@@ -89,10 +154,9 @@ public class Game extends JFrame implements Runnable {
 		// load map
 		map = new Map(new File("Map.txt"), tiles);
 
-		// testImage = loadImage("/GrassTile.png");
+
 		// testSprite = sheet.getSprite(4, 1);
 
-		testRectangle.generateGraphics(2, 12234);
 
 		//load SDK GUI
 		GUIButton[] buttons = new GUIButton[tiles.size()];
@@ -108,27 +172,89 @@ public class Game extends JFrame implements Runnable {
 
 		// load objects
 		objects = new GameObject[2];
-		player = new Player(playerAni);
+		player = new Player(boyAni);
 		objects[0] = player;
 		objects[1] = gui;
-		menu = new Menu();
 
+		//new java class load
+		menu = new Menu();
+		name = new CreateName();
+		gender = new Gender();
+		help = new Help();
+		load = new Load();
 
 		// add listeners
 		canvas.addKeyListener(keyListener);
 		canvas.addFocusListener(keyListener);
 		canvas.addMouseListener(mouseListener);
 		canvas.addMouseMotionListener(mouseListener);
+		
+		addComponentListener(new ComponentListener() {
+			
+			public void componentResized(ComponentEvent e) {
+				int newWidth = canvas.getWidth();
+				int newHeight = canvas.getHeight();
 
+				if(newWidth > renderer.getMaxWidth())
+					newWidth = renderer.getMaxWidth();
+
+				if(newHeight > renderer.getMaxHeight())
+					newHeight = renderer.getMaxHeight();
+
+				renderer.getCamera().w = newWidth;
+				renderer.getCamera().h = newHeight;
+				canvas.setSize(newWidth, newHeight);
+				pack();
+				
+			}
+			
+			@Override
+			public void componentHidden(ComponentEvent e) {
+			}
+
+			@Override
+			public void componentMoved(ComponentEvent e) {
+			}
+
+			@Override
+			public void componentShown(ComponentEvent e) {
+			}
+			
+		});
 	}
 
+
 	public void update() { 
-		for(int i = 0; i < objects.length; i++) {
-			objects[i].update(this);
+		//		for(int i = 0; i < objects.length; i++) {
+		//			objects[i].update(this);
+		//		}
+		if(State == STATE.GAME) {
+			for(int i = 0; i < objects.length; i++) {
+				objects[i].update(this);
+			}
+		}
+		else if(State == STATE.MENU) {
+			menu.update(this);
+		}
+
+		else if(State == STATE.GENDER) {
+			gender.update(this);
+		}
+
+		else if(State == STATE.LOAD) {
+			load.update(this);
+		}
+
+		else if(State == STATE.HELP) {
+			help.update(this);
+		}
+
+		else if(State == STATE.NAME) {
+			name.update(this);
 		}
 	}
 
-	private BufferedImage loadImage(String path) {
+	public static BufferedImage loadImage(String path) {
 		try {
 			BufferedImage loadedImage = ImageIO.read(Game.class.getResourceAsStream(path));
 			BufferedImage formattedImage = new BufferedImage(loadedImage.getWidth(), loadedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
@@ -162,7 +288,7 @@ public class Game extends JFrame implements Runnable {
 		if(!stoppedChecking) {
 			x = (int) Math.floor((x + renderer.getCamera().x) / (16.0 * xZoom));
 			y = (int) Math.floor((y + renderer.getCamera().y) / (16.0 * yZoom));
-			map.setTile(x, y, selectedTileID);
+			map.setTile(selectedLayer, x, y, selectedTileID);
 		}
 	}
 
@@ -170,7 +296,7 @@ public class Game extends JFrame implements Runnable {
 	public void rightClick(int x, int y) {
 		x = (int) Math.floor((x + renderer.getCamera().x) / (16.0 * xZoom));
 		y = (int) Math.floor((y + renderer.getCamera().y) / (16.0 * yZoom));
-		map.removeTile(x, y);
+		map.removeTile(selectedLayer, x, y);
 	}
 
 	public void render() {
@@ -178,28 +304,51 @@ public class Game extends JFrame implements Runnable {
 		Graphics graphics = bufferStrategy.getDrawGraphics();
 		super.paint(graphics);
 
-		map.render(renderer, xZoom, yZoom);
+		map.render(renderer, objects, xZoom, yZoom);
 
-		for(int i = 0; i < objects.length; i++) {
-			objects[i].render(renderer, xZoom, yZoom);
-		}
+//		for(int i = 0; i < objects.length; i++) {
+//			objects[i].render(renderer, xZoom, yZoom);
+//		}
+
 		if(State == STATE.GAME) {
+			int chosen1 = gender.getLoadChoice();
+//			System.out.println(chosen1);
 		renderer.render(graphics);
 		
-		}else if(State == STATE.MENU) {
-			menu.render(graphics);
 		}
+
+		else if(State == STATE.MENU) {
+			menu.render(graphics);
+			//menu.render(renderer, xZoom, yZoom);
+		}
+
+		else if(State == STATE.NAME) {
+			name.render(graphics);
+		}
+
+		else if(State == STATE.GENDER) {
+			gender.render(graphics);
+		}
+
+		else if(State == STATE.HELP) {
+			help.render(graphics);
+		}
+
+		else if(State == STATE.LOAD) {
+			load.render(graphics);
+		}
+
 		graphics.dispose();
 		bufferStrategy.show();
 		renderer.clear();
-		
-	
+
+
 	}
 
 	public void changeTile(int tileID) {
 		selectedTileID = tileID;
 	}
-	
+
 	public int getSelectedTile() {
 		return selectedTileID;
 	}
@@ -208,8 +357,6 @@ public class Game extends JFrame implements Runnable {
 	@Override
 	public void run() {
 		BufferStrategy bufferStrategy = canvas.getBufferStrategy();
-		int i = 0;
-		int x = 0;
 
 		long lastTime = System.nanoTime();
 
@@ -251,6 +398,14 @@ public class Game extends JFrame implements Runnable {
 
 	public RenderHandler getRenderer() {
 		return renderer;
+	}
+	
+	public boolean isBoy() {
+		return boy;
+	}
+
+	public void setBoy(boolean boy) {
+		this.boy = boy;
 	}
 
 
