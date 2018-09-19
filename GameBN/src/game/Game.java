@@ -1,10 +1,11 @@
 package game;
 
 import java.awt.Canvas;
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -32,16 +33,14 @@ import menuComponents.Gender;
 import menuComponents.Help;
 import menuComponents.Load;
 import menuComponents.Menu;
-
-import javax.swing.JButton;
-import java.awt.BorderLayout;
+import java.awt.Color;
 
 @SuppressWarnings({ "serial", "unused" })
 public class Game extends JFrame implements Runnable {
 
 	public static int alpha = 0xFFFF00DC;
 
-	private Canvas canvas =  new Canvas();
+	public static Canvas canvas =  new Canvas();
 
 	private RenderHandler renderer;
 
@@ -51,6 +50,7 @@ public class Game extends JFrame implements Runnable {
 	private SpriteSheet alphabetSheet;
 
 	private int selectedTileID = 2;
+	private int selectedLayer = 1;
 
 	private Rectangle testRectangle = new Rectangle(30,30,100,100);
 
@@ -62,7 +62,7 @@ public class Game extends JFrame implements Runnable {
 	private MouseEventListener mouseListener = new MouseEventListener(this);
 	private MouseInput mouseListener2 = new MouseInput();
 
-	private Player player;
+	public Player player;
 
 	private int xZoom = 3;
 	private int yZoom = 3;
@@ -73,6 +73,8 @@ public class Game extends JFrame implements Runnable {
 	private Help help;
 	private Load load;
 
+	private boolean boy = true;
+	
 	public static enum STATE{
 		MENU,
 		NAME,
@@ -85,6 +87,7 @@ public class Game extends JFrame implements Runnable {
 	public static STATE State = STATE.MENU;
 
 	public Game() {
+		getContentPane().setBackground(Color.GRAY);
 		setTitle("UpClose");
 
 		// make our prog shutdown when we exit
@@ -98,9 +101,11 @@ public class Game extends JFrame implements Runnable {
 
 		//frame cannot be resize
 		setResizable(true);
+		canvas.setForeground(Color.GRAY);
+		canvas.setBackground(Color.GRAY);
 
 		//color bg for panel
-//		getContentPane().setSize(1000, 800);
+		getContentPane().setSize(1000, 800);
 
 		// add graphics component
 		getContentPane().add(canvas);
@@ -167,7 +172,7 @@ public class Game extends JFrame implements Runnable {
 
 		// load objects
 		objects = new GameObject[2];
-		player = new Player(girlAni);
+		player = new Player(boyAni);
 		objects[0] = player;
 		objects[1] = gui;
 
@@ -183,7 +188,39 @@ public class Game extends JFrame implements Runnable {
 		canvas.addFocusListener(keyListener);
 		canvas.addMouseListener(mouseListener);
 		canvas.addMouseMotionListener(mouseListener);
+		
+		addComponentListener(new ComponentListener() {
+			
+			public void componentResized(ComponentEvent e) {
+				int newWidth = canvas.getWidth();
+				int newHeight = canvas.getHeight();
 
+				if(newWidth > renderer.getMaxWidth())
+					newWidth = renderer.getMaxWidth();
+
+				if(newHeight > renderer.getMaxHeight())
+					newHeight = renderer.getMaxHeight();
+
+				renderer.getCamera().w = newWidth;
+				renderer.getCamera().h = newHeight;
+				canvas.setSize(newWidth, newHeight);
+				pack();
+				
+			}
+			
+			@Override
+			public void componentHidden(ComponentEvent e) {
+			}
+
+			@Override
+			public void componentMoved(ComponentEvent e) {
+			}
+
+			@Override
+			public void componentShown(ComponentEvent e) {
+			}
+			
+		});
 	}
 
 
@@ -251,7 +288,7 @@ public class Game extends JFrame implements Runnable {
 		if(!stoppedChecking) {
 			x = (int) Math.floor((x + renderer.getCamera().x) / (16.0 * xZoom));
 			y = (int) Math.floor((y + renderer.getCamera().y) / (16.0 * yZoom));
-			map.setTile(x, y, selectedTileID);
+			map.setTile(selectedLayer, x, y, selectedTileID);
 		}
 	}
 
@@ -259,7 +296,7 @@ public class Game extends JFrame implements Runnable {
 	public void rightClick(int x, int y) {
 		x = (int) Math.floor((x + renderer.getCamera().x) / (16.0 * xZoom));
 		y = (int) Math.floor((y + renderer.getCamera().y) / (16.0 * yZoom));
-		map.removeTile(x, y);
+		map.removeTile(selectedLayer, x, y);
 	}
 
 	public void render() {
@@ -267,15 +304,17 @@ public class Game extends JFrame implements Runnable {
 		Graphics graphics = bufferStrategy.getDrawGraphics();
 		super.paint(graphics);
 
-		map.render(renderer, xZoom, yZoom);
+		map.render(renderer, objects, xZoom, yZoom);
 
-		for(int i = 0; i < objects.length; i++) {
-			objects[i].render(renderer, xZoom, yZoom);
-		}
+//		for(int i = 0; i < objects.length; i++) {
+//			objects[i].render(renderer, xZoom, yZoom);
+//		}
 
 		if(State == STATE.GAME) {
-			renderer.render(graphics);
-
+			int chosen1 = gender.getLoadChoice();
+//			System.out.println(chosen1);
+		renderer.render(graphics);
+		
 		}
 
 		else if(State == STATE.MENU) {
@@ -359,6 +398,14 @@ public class Game extends JFrame implements Runnable {
 
 	public RenderHandler getRenderer() {
 		return renderer;
+	}
+	
+	public boolean isBoy() {
+		return boy;
+	}
+
+	public void setBoy(boolean boy) {
+		this.boy = boy;
 	}
 
 

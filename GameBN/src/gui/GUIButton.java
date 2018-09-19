@@ -37,5 +37,15 @@ public abstract class GUIButton implements GameObject{
 	}
 
 	public abstract void activate();
+	
+	@Override
+	public int getLayer() {
+		return Integer.MAX_VALUE;
+	}
+	
+	@Override
+	public Rectangle getRectangle() {
+		return rect;
+	}
 
 }

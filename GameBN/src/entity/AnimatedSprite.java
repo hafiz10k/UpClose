@@ -90,4 +90,16 @@ public class AnimatedSprite extends Sprite implements GameObject{
 		}
 	}
 
+	@Override
+	public int getLayer() {
+		System.out.println("getlayer anisprite");
+		return -1;
+	}
+
+	@Override
+	public Rectangle getRectangle() {
+		System.out.println("getRect anisprite");
+		return null;
+	}
+
 }

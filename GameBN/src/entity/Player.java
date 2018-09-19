@@ -100,7 +100,8 @@ public class Player implements GameObject {
 	
 	public void updateCamera(Rectangle camera) {
 		camera.x = playerRectangle.x - (camera.w / 2);
-		camera.y = playerRectangle.y - (camera.h / 2);
+//		camera.y = playerRectangle.y - (camera.h / 2);
+		camera.y = -384;
 			
 	
 		if (camera.x >= 600) {
@@ -108,14 +109,31 @@ public class Player implements GameObject {
 			Game.State = STATE.MENU;
 		}
 		
-		if (camera.y <= -652) {
-			playerRectangle.y = -252;
-		}
+//		if (camera.y <= -652) {
+//			playerRectangle.y = -252;
+//		}
 		
-		System.out.println(camera.y + " " + playerRectangle.y);
+//		System.out.println(camera.y + " " + playerRectangle.y);
 		
 	}
 	
+	@Override
+	public int getLayer() {
+		return 0;
+	}
+
+	
 	public boolean handleMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) { return false; }
 
+	public void changeSprite(AnimatedSprite girlAni) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Rectangle getRectangle() {
+		return playerRectangle;
+	}
+
+	
 }

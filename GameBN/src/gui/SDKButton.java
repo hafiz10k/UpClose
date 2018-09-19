@@ -45,8 +45,12 @@ public class SDKButton extends GUIButton{
 	} 
 	
 	public void activate() {
-		System.out.println("clicked");
 		game.changeTile(tileID);
+	}
+
+	@Override
+	public int getLayer() {
+		return Integer.MAX_VALUE;
 	}
 
 }

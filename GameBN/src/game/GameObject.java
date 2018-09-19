@@ -14,5 +14,8 @@ public interface GameObject {
 	//Call when mouse click on canvas
 	//return true if stop checking other clicks
 	public boolean handleMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom);
-
+	
+	public int getLayer();
+	
+	public Rectangle getRectangle();
 }

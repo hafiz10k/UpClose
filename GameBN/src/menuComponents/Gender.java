@@ -5,8 +5,12 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 import game.Game;
+import entity.AnimatedSprite;
+import entity.Player;
+import entity.SpriteSheet;
 import handler.KeyBoardListener;
 
 public class Gender implements MenuObject{
@@ -14,7 +18,8 @@ public class Gender implements MenuObject{
 
 	private Color titleColor;
 	private Font titleFont;
-
+	
+	
 	private Font font;
 
 	private int loadChoice = 0;
@@ -24,22 +29,9 @@ public class Gender implements MenuObject{
 				"Boy",
 				"Girl"
 		};
+	
 
-	public Gender() {
-		try 
-		{
 
-			titleColor = new Color(100, 128, 128);
-			titleFont = new Font("Broadway", Font.BOLD, 50);
-
-			font = new Font("Arial", Font.PLAIN, 30);
-
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
 
 	@Override
 	public void render(Graphics graphics) {
@@ -62,7 +54,9 @@ public class Gender implements MenuObject{
 				graphics.setColor(Color.WHITE);
 			}
 			graphics.drawString(gen[i], 350 + i * 250, 350);
+			
 		}
+		
 	}
 
 	@Override
@@ -72,11 +66,6 @@ public class Gender implements MenuObject{
 
 			boolean loading = false;
 
-			if(keyListener.enter()) {
-				loading = true;
-				Game.State = Game.STATE.GAME;
-
-			}
 
 			if(keyListener.left()) {
 				loading = true;
@@ -94,12 +83,63 @@ public class Gender implements MenuObject{
 				{
 					loadChoice = 0;
 				}
+
 			}
-				Thread.sleep(150);
+			if(keyListener.enter()) {
+				loading = true;
+				if(loadChoice == 0) {
+					//male
+					BufferedImage playerSheetImage = Game.loadImage("/mainAnimated.png");
+					SpriteSheet boySheet = new SpriteSheet(playerSheetImage);
+					boySheet.loadSprites(24, 32);
+
+					AnimatedSprite boyAni = new AnimatedSprite(boySheet, 10);
+					
+					game.player.changeSprite(boyAni);
+				} else {
+					// female
+					BufferedImage girlSheetImage = Game.loadImage("/girl-main-anim.png");
+					SpriteSheet girlSheet = new SpriteSheet(girlSheetImage);
+					girlSheet.loadSprites(24, 32);
+					
+					AnimatedSprite girlAni = new AnimatedSprite(girlSheet, 10);
+					game.player.changeSprite(girlAni);
+				}
+//				System.out.println(gen[loadChoice]);
+				
+				Game.State = Game.STATE.GAME;
+
+			}
+			Thread.sleep(150);
 		}
 		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
 	}
+	public Gender() {
+		
+		try 
+		{
+			
+			titleColor = new Color(100, 128, 128);
+			titleFont = new Font("Broadway", Font.BOLD, 50);
+
+			font = new Font("Arial", Font.PLAIN, 30);
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	public void setLoadChoice(int loadChoice) {
+		this.loadChoice = loadChoice;
+	}
+	public int getLoadChoice() {
+		
+		return loadChoice;
+	}
+	
 }
+

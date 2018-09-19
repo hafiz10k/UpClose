@@ -84,4 +84,14 @@ public class GUI implements GameObject{
 
 	}
 
+	@Override
+	public int getLayer() {
+		return Integer.MAX_VALUE;
+	}
+
+	@Override
+	public Rectangle getRectangle() {
+		return rect;
+	}
+
 }
