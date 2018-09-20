@@ -20,7 +20,7 @@ import game.Game;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
 
-public class Menu extends JFrame implements MenuObject {
+public class Menu implements MenuObject {
 	private int currentChoice = 0;
 	private String[] options = 
 		{
@@ -38,24 +38,22 @@ public class Menu extends JFrame implements MenuObject {
 	private Font titleFont;
 
 	private Font font;
-	
+
 	private BufferedImage logo;
 	private BufferedImage grass;
-	
+
 	private Image girl;
-	
+
 	private AnimatedSprite boyAni;
 	private AnimatedSprite girlAni;
-	
+
 	private SpriteSheet boySheet;
 	private SpriteSheet girlSheet;
 
 	public Menu() {		
 
-		
-		try 
-		{
-			getContentPane().setBackground(Color.CYAN);
+
+		try {
 
 			titleColor = new Color(246, 246, 246);
 			titleFont = new Font("Broadway", Font.BOLD, 100);
@@ -78,8 +76,8 @@ public class Menu extends JFrame implements MenuObject {
 	public void render(Graphics graphics) {
 
 		graphics.drawImage(logo, 230, 10, game);
-	//	graphics.drawImage(grass, 0, 300, game);
-		
+		//	graphics.drawImage(grass, 0, 300, game);
+
 		graphics.drawImage(girl, 100, 100, game);
 
 		// draw title
@@ -104,8 +102,8 @@ public class Menu extends JFrame implements MenuObject {
 		}
 
 	}
-	
-	
+
+
 
 	@Override
 	public void update(Game game) {

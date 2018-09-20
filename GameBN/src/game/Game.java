@@ -50,7 +50,7 @@ public class Game extends JFrame implements Runnable {
 	private SpriteSheet alphabetSheet;
 
 	private int selectedTileID = 2;
-	private int selectedLayer = 1;
+	private int selectedLayer = 0;
 
 	private Rectangle testRectangle = new Rectangle(30,30,100,100);
 
@@ -74,7 +74,7 @@ public class Game extends JFrame implements Runnable {
 	private Load load;
 
 	private boolean boy = true;
-	
+
 	public static enum STATE{
 		MENU,
 		NAME,
@@ -87,7 +87,6 @@ public class Game extends JFrame implements Runnable {
 	public static STATE State = STATE.MENU;
 
 	public Game() {
-		getContentPane().setBackground(Color.GRAY);
 		setTitle("UpClose");
 
 		// make our prog shutdown when we exit
@@ -99,28 +98,32 @@ public class Game extends JFrame implements Runnable {
 		//put our frame in center of screen
 		setLocationRelativeTo(null);
 
-		//frame cannot be resize
-		setResizable(true);
-		canvas.setForeground(Color.GRAY);
-		canvas.setBackground(Color.GRAY);
-
-		//color bg for panel
-		getContentPane().setSize(1000, 800);
-
 		// add graphics component
-		getContentPane().add(canvas);
-
-		//set focus on canvas - so player dont have to click on screen everytime
-		canvas.setFocusable(true);
-		canvas.requestFocus();	
+		add(canvas);
 
 		//make frame visible
-		setVisible(true);		
+		setVisible(true);
+
+		//frame cannot be resize
+		setResizable(true);
+		
+		getContentPane().setBackground(Color.BLACK);
 
 		// create obj for buffer strat
 		canvas.createBufferStrategy(3);	
 
 
+
+
+		//color bg for panel
+		//		getContentPane().setBackground(Color.CYAN);
+
+		//		canvas.setBackground(Color.GRAY);
+
+
+		//set focus on canvas - so player dont have to click on screen everytime
+		canvas.setFocusable(true);
+		canvas.requestFocus();	
 
 		renderer = new RenderHandler(getWidth(), getHeight());
 
@@ -172,7 +175,7 @@ public class Game extends JFrame implements Runnable {
 
 		// load objects
 		objects = new GameObject[2];
-		player = new Player(boyAni);
+		player = new Player(boyAni, xZoom, yZoom);
 		objects[0] = player;
 		objects[1] = gui;
 
@@ -188,9 +191,10 @@ public class Game extends JFrame implements Runnable {
 		canvas.addFocusListener(keyListener);
 		canvas.addMouseListener(mouseListener);
 		canvas.addMouseMotionListener(mouseListener);
-		
+
 		addComponentListener(new ComponentListener() {
-			
+
+			@Override
 			public void componentResized(ComponentEvent e) {
 				int newWidth = canvas.getWidth();
 				int newHeight = canvas.getHeight();
@@ -205,21 +209,21 @@ public class Game extends JFrame implements Runnable {
 				renderer.getCamera().h = newHeight;
 				canvas.setSize(newWidth, newHeight);
 				pack();
-				
+
 			}
-			
+
 			@Override
 			public void componentHidden(ComponentEvent e) {
 			}
 
 			@Override
 			public void componentMoved(ComponentEvent e) {
-			}
+			} 
 
 			@Override
 			public void componentShown(ComponentEvent e) {
 			}
-			
+
 		});
 	}
 
@@ -306,15 +310,15 @@ public class Game extends JFrame implements Runnable {
 
 		map.render(renderer, objects, xZoom, yZoom);
 
-//		for(int i = 0; i < objects.length; i++) {
-//			objects[i].render(renderer, xZoom, yZoom);
-//		}
+		//		for(int i = 0; i < objects.length; i++) {
+		//			objects[i].render(renderer, xZoom, yZoom);
+		//		}
 
 		if(State == STATE.GAME) {
 			int chosen1 = gender.getLoadChoice();
-//			System.out.println(chosen1);
-		renderer.render(graphics);
-		
+			//			System.out.println(chosen1);
+			renderer.render(graphics);
+
 		}
 
 		else if(State == STATE.MENU) {
@@ -399,13 +403,26 @@ public class Game extends JFrame implements Runnable {
 	public RenderHandler getRenderer() {
 		return renderer;
 	}
-	
+
+	public Map getMap() {
+		return map;
+
+	}
+
 	public boolean isBoy() {
 		return boy;
 	}
 
 	public void setBoy(boolean boy) {
 		this.boy = boy;
+	}
+
+	public int getXZoom() {
+		return xZoom;
+	}
+
+	public int getYZoom() {
+		return yZoom;
 	}
 
 

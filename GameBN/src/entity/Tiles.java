@@ -29,6 +29,12 @@ public class Tiles {
 					int spriteX = Integer.parseInt(splitString[1]);
 					int spriteY = Integer.parseInt(splitString[2]);
 					Tile tile = new Tile(tileName, spriteSheet.getSprite(spriteX, spriteY));
+					
+					if(splitString.length >= 4) {
+						tile.collide = true;
+						tile.collisionType = Integer.parseInt(splitString[3]);
+					}
+					
 					tilesList.add(tile);
 				}
 			}
@@ -63,10 +69,22 @@ public class Tiles {
 		return sprites;
 	}
 	
+	public int collisionType(int tileID) {
+		if(tileID >= 0 && tilesList.size() > tileID) {
+			return tilesList.get(tileID).collisionType;
+		}
+		else {
+			System.out.println("TileID " + tileID + " is not within range " + tilesList.size());
+		}
+		return -1;
+	}
+	
 	//Struct
 	class Tile{
 		public String tileName;
 		public Sprite sprite;
+		public boolean collide = false;
+		public int collisionType = -1;
 		
 		public Tile(String tileName, Sprite sprite) {
 			this.tileName = tileName;
