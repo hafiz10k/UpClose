@@ -95,9 +95,7 @@ public class screen1 {
 		//		System.out.println(addedChar);
 
 		//		x += speed;
-		if(girlAni != null) {
-			girlAni.setAnimationRange(direction * 4, (direction * 4) + 4);
-
+		if(girlAni != null && boyAni != null) {
 			boolean didMove = false;
 			int newDirection = direction;
 			
@@ -105,11 +103,22 @@ public class screen1 {
 			didMove = true;
 			x += speed;		
 			
-			girlAni.incSprite();
+			if(!didMove) {
+				girlAni.reset();
+				boyAni.reset();
+			}
+			
+			if(didMove) {
+				girlAni.incSprite();
+				boyAni.incSprite();
+			}
+			
+			
 
 			if(newDirection != direction) {
 				direction = newDirection;
 				girlAni.setAnimationRange(direction * 4, (direction * 4) + 4);
+				boyAni.setAnimationRange(direction * 4, (direction * 4) + 4);
 			}
 		}
 
@@ -124,7 +133,7 @@ public class screen1 {
 
 			Thread.sleep(500);
 			System.out.println(addedChar);
-
+			
 
 		} 	
 
