@@ -13,14 +13,12 @@ import javax.swing.JTextField;
 import game.Game;
 import handler.KeyBoardListener;
 
-public class CreateName implements MenuObject, ActionListener{
+public class CreateName implements MenuObject{
 
 	private Color titleColor;
 	private Font titleFont;
 
 	private Font font;
-
-	private JTextField txtInput = new JTextField("");
 
 	private char[] name = {'A', 'A', 'A', 'A', 'A'};
 	private int currentChoice = 0;
@@ -32,7 +30,7 @@ public class CreateName implements MenuObject, ActionListener{
 			titleColor = new Color(100, 128, 128);
 			titleFont = new Font("Broadway", Font.BOLD, 50);
 
-			font = new Font("Arial", Font.PLAIN, 30);		
+			font = new Font("Arial", Font.PLAIN, 30);	
 
 
 		}
@@ -69,11 +67,11 @@ public class CreateName implements MenuObject, ActionListener{
 		try {
 			KeyBoardListener keyListener = game.getKeyListener();
 			boolean didMove = false;
-			
+
 			if(keyListener.enter()) {
 				String fullName = new String(name);
 				System.out.println(fullName);
-//				Game.State = Game.STATE.GAME;
+				//				Game.State = Game.STATE.GAME;
 				Game.State = Game.STATE.GENDER;
 			}
 
@@ -101,16 +99,12 @@ public class CreateName implements MenuObject, ActionListener{
 				}
 			}
 
-				Thread.sleep(150);
+			Thread.sleep(150);
+
+
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		//		input = txtInput.getText(); 
-		//       System.out.println(input);
 	}
 
 }

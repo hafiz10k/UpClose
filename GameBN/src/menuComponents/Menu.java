@@ -1,22 +1,13 @@
 package menuComponents;
 
-import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.util.concurrent.TimeUnit;
 
-import javax.swing.JFrame;
-
-import entity.AnimatedSprite;
-import entity.Sprite;
-import entity.SpriteSheet;
 import game.Game;
+import handler.Audio;
+import handler.Background;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
 
@@ -40,17 +31,12 @@ public class Menu implements MenuObject {
 	private Font font;
 
 	private BufferedImage logo;
-	private BufferedImage grass;
+	private Background bg;
 
-	private Image girl;
+	private Audio aud;
 
-	private AnimatedSprite boyAni;
-	private AnimatedSprite girlAni;
 
-	private SpriteSheet boySheet;
-	private SpriteSheet girlSheet;
-
-	public Menu() {		
+	public Menu(Game game) {		
 
 
 		try {
@@ -61,8 +47,14 @@ public class Menu implements MenuObject {
 			font = new Font("Caviar Dreams", Font.PLAIN, 50);
 
 			//load bg
-			logo = Game.loadImage("/title_logo_nobg.png");
-			grass = Game.loadImage("/grass_bg.png");
+			logo = game.loadImage("/title_logo_nobg.png");
+
+
+			bg = new Background("/bg.png", 1);
+			bg.setVector(-1, 0);
+
+			aud = new Audio("/army-forTitlePage.mp3.mp3");
+			aud.play();
 
 		}
 		catch (Exception e)
@@ -72,18 +64,21 @@ public class Menu implements MenuObject {
 
 	}
 
-	@Override
-	public void render(Graphics graphics) {
 
-		graphics.drawImage(logo, 230, 10, game);
-		//	graphics.drawImage(grass, 0, 300, game);
+	public void render(RenderHandler renderer, Graphics graphics, Game game, int xZoom, int yZoom) {
 
-		graphics.drawImage(girl, 100, 100, game);
+//		renderer.renderImage(logo, 230, 10, xZoom, yZoom, true);
+		bg.render(game, graphics);
+		bg.update();
+
 
 		// draw title
 		//		graphics.setColor(titleColor);
 		//		graphics.setFont(titleFont);
 		//		graphics.drawString("UpClose", 275, 120);
+		
+		graphics.drawImage(logo, (logo.getWidth()/2) % (game.getWidth()/2), 10, game);
+//		System.out.println((logo.getWidth()/2) % (game.getWidth()/2));
 
 
 		//draw menu options
@@ -98,7 +93,7 @@ public class Menu implements MenuObject {
 			{
 				graphics.setColor(Color.YELLOW);
 			}
-			graphics.drawString(options[i], 375 , 270 + i * 130);
+			graphics.drawString(options[i], 400 , 270 + i * 130);
 		}
 
 	}
@@ -107,8 +102,9 @@ public class Menu implements MenuObject {
 
 	@Override
 	public void update(Game game) {
-
+		
 		try {
+
 			KeyBoardListener keyListener = game.getKeyListener();
 
 			boolean didMove = false;
@@ -135,8 +131,8 @@ public class Menu implements MenuObject {
 					currentChoice = 0;
 				}
 			}
-
 			if(didMove) {
+
 				Thread.sleep(150);
 			}
 
@@ -144,14 +140,15 @@ public class Menu implements MenuObject {
 			e.printStackTrace();
 		}
 
+
+
 	}
 
 	private void select()
 	{
 		if(currentChoice == 0)
 		{
-			// start
-			//			Game.State = Game.STATE.GAME;	
+			// start	
 			Game.State = Game.STATE.NAME;
 			//			Game.State = Game.STATE.GENDER;
 
@@ -177,5 +174,20 @@ public class Menu implements MenuObject {
 
 	public KeyBoardListener getKeyListener() {
 		return keyListener;
+	}
+
+	public Audio getAud() {
+		return aud;
+	}
+	
+	public Background getBg() {
+		return bg;
+	}
+
+
+	@Override
+	public void render(Graphics graphics) {
+		// TODO Auto-generated method stub
+
 	}
 }

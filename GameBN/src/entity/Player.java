@@ -37,7 +37,7 @@ public class Player implements GameObject {
 		collisionRectangle = new Rectangle(0, 0, 15*xZoom, 25*yZoom);
 	}
 
-	private void updateDirection() {
+	public void updateDirection() {
 		if(animatedSprite != null) {
 			animatedSprite.setAnimationRange(direction * 4, (direction * 4) + 4);
 		}

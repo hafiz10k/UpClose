@@ -16,7 +16,7 @@ public class Load implements MenuObject{
 	private Font titleFont;
 
 	private Font font;
-	
+
 	private int loadChoice = 0;
 
 	private String[] load = 
@@ -72,13 +72,13 @@ public class Load implements MenuObject{
 			KeyBoardListener keyListener = game.getKeyListener();
 
 			boolean loading = false;
-			
+
 			if(keyListener.enter()) {
 				loading = true;
 				select();
-				
+
 			}
-			
+
 			if(keyListener.left()) {
 				loading = true;
 				loadChoice --;
@@ -96,8 +96,10 @@ public class Load implements MenuObject{
 					loadChoice = 0;
 				}
 			}
+
 				Thread.sleep(150);
-			
+
+
 		}
 		catch (InterruptedException e) {
 			e.printStackTrace();

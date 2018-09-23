@@ -1,11 +1,11 @@
 package game;
 
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -24,6 +24,7 @@ import entity.Tiles;
 import gui.GUI;
 import gui.GUIButton;
 import gui.SDKButton;
+import handler.Audio;
 import handler.KeyBoardListener;
 import handler.MouseEventListener;
 import handler.MouseInput;
@@ -33,7 +34,7 @@ import menuComponents.Gender;
 import menuComponents.Help;
 import menuComponents.Load;
 import menuComponents.Menu;
-import java.awt.Color;
+import screenMap.screen1;
 
 @SuppressWarnings({ "serial", "unused" })
 public class Game extends JFrame implements Runnable {
@@ -49,6 +50,8 @@ public class Game extends JFrame implements Runnable {
 	private SpriteSheet girlSheet;
 	private SpriteSheet alphabetSheet;
 
+	private BufferedImage bedroom;
+
 	private int selectedTileID = 2;
 	private int selectedLayer = 0;
 
@@ -63,6 +66,8 @@ public class Game extends JFrame implements Runnable {
 	private MouseInput mouseListener2 = new MouseInput();
 
 	public Player player;
+	
+	private Audio vilAud;
 
 	private int xZoom = 3;
 	private int yZoom = 3;
@@ -72,6 +77,7 @@ public class Game extends JFrame implements Runnable {
 	private Gender gender;
 	private Help help;
 	private Load load;
+	private screen1 screen1;
 
 	private boolean boy = true;
 
@@ -79,6 +85,7 @@ public class Game extends JFrame implements Runnable {
 		MENU,
 		NAME,
 		GENDER,
+		SCREEN1,
 		GAME,
 		LOAD,
 		HELP
@@ -106,20 +113,11 @@ public class Game extends JFrame implements Runnable {
 
 		//frame cannot be resize
 		setResizable(true);
-		
+
 		getContentPane().setBackground(Color.BLACK);
 
 		// create obj for buffer strat
 		canvas.createBufferStrategy(3);	
-
-
-
-
-		//color bg for panel
-		//		getContentPane().setBackground(Color.CYAN);
-
-		//		canvas.setBackground(Color.GRAY);
-
 
 		//set focus on canvas - so player dont have to click on screen everytime
 		canvas.setFocusable(true);
@@ -158,6 +156,10 @@ public class Game extends JFrame implements Runnable {
 		map = new Map(new File("Map.txt"), tiles);
 
 
+		//load audio
+		vilAud = new Audio("/Gentle-Closure.mp3.mp3");
+
+
 		// testSprite = sheet.getSprite(4, 1);
 
 
@@ -180,11 +182,13 @@ public class Game extends JFrame implements Runnable {
 		objects[1] = gui;
 
 		//new java class load
-		menu = new Menu();
+		menu = new Menu(this);
 		name = new CreateName();
 		gender = new Gender();
 		help = new Help();
 		load = new Load();
+
+		screen1 = new screen1(this);
 
 		// add listeners
 		canvas.addKeyListener(keyListener);
@@ -235,30 +239,40 @@ public class Game extends JFrame implements Runnable {
 		if(State == STATE.GAME) {
 			for(int i = 0; i < objects.length; i++) {
 				objects[i].update(this);
-			}
-		}
-		else if(State == STATE.MENU) {
-			menu.update(this);
+				
+			}			
+			menu.getAud().close();
+			
+			vilAud.play();
 		}
 
-		else if(State == STATE.GENDER) {
+		if(State == STATE.MENU) {
+			menu.update(this);
+			
+		}
+
+		if(State == STATE.GENDER) {
 			gender.update(this);
 		}
 
-		else if(State == STATE.LOAD) {
+		if(State == STATE.LOAD) {
 			load.update(this);
 		}
 
-		else if(State == STATE.HELP) {
+		if(State == STATE.HELP) {
 			help.update(this);
 		}
 
-		else if(State == STATE.NAME) {
+		if(State == STATE.NAME) {
 			name.update(this);
+		}
+
+		if(State == STATE.SCREEN1) {
+			screen1.update(this);
 		}
 	}
 
-	public static BufferedImage loadImage(String path) {
+	public BufferedImage loadImage(String path) {
 		try {
 			BufferedImage loadedImage = ImageIO.read(Game.class.getResourceAsStream(path));
 			BufferedImage formattedImage = new BufferedImage(loadedImage.getWidth(), loadedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
@@ -308,39 +322,47 @@ public class Game extends JFrame implements Runnable {
 		Graphics graphics = bufferStrategy.getDrawGraphics();
 		super.paint(graphics);
 
-		map.render(renderer, objects, xZoom, yZoom);
-
-		//		for(int i = 0; i < objects.length; i++) {
-		//			objects[i].render(renderer, xZoom, yZoom);
-		//		}
+		renderer.render(graphics);
 
 		if(State == STATE.GAME) {
+			map.render(renderer, objects, xZoom, yZoom);
 			int chosen1 = gender.getLoadChoice();
-			//			System.out.println(chosen1);
+//			for(int i = 0; i < objects.length; i++) {
+//				objects[i].render(renderer, xZoom, yZoom);
+//			}
 			renderer.render(graphics);
-
+			
+			
 		}
 
-		else if(State == STATE.MENU) {
-			menu.render(graphics);
-			//menu.render(renderer, xZoom, yZoom);
+		if(State == STATE.MENU) {
+			//			menu.render(graphics);
+			menu.render(renderer, graphics, this, xZoom, yZoom);
 		}
 
-		else if(State == STATE.NAME) {
+		if(State == STATE.NAME) {
 			name.render(graphics);
 		}
 
-		else if(State == STATE.GENDER) {
+		if(State == STATE.GENDER) {
 			gender.render(graphics);
 		}
 
-		else if(State == STATE.HELP) {
+		if(State == STATE.HELP) {
 			help.render(graphics);
 		}
 
-		else if(State == STATE.LOAD) {
+		if(State == STATE.LOAD) {
 			load.render(graphics);
 		}
+
+		if(State == STATE.SCREEN1) {
+			
+			screen1.render(renderer, this, xZoom, yZoom);
+			renderer.render(graphics);
+			screen1.render(this, graphics);
+		}
+		
 
 		graphics.dispose();
 		bufferStrategy.show();

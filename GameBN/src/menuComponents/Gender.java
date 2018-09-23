@@ -18,8 +18,8 @@ public class Gender implements MenuObject{
 
 	private Color titleColor;
 	private Font titleFont;
-	
-	
+
+
 	private Font font;
 
 	private int loadChoice = 0;
@@ -29,8 +29,23 @@ public class Gender implements MenuObject{
 				"Boy",
 				"Girl"
 		};
-	
 
+	public Gender() {
+
+		try 
+		{
+
+			titleColor = new Color(100, 128, 128);
+			titleFont = new Font("Broadway", Font.BOLD, 50);
+
+			font = new Font("Arial", Font.PLAIN, 30);
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
 
 
 	@Override
@@ -54,9 +69,9 @@ public class Gender implements MenuObject{
 				graphics.setColor(Color.WHITE);
 			}
 			graphics.drawString(gen[i], 350 + i * 250, 350);
-			
+
 		}
-		
+
 	}
 
 	@Override
@@ -89,57 +104,46 @@ public class Gender implements MenuObject{
 				loading = true;
 				if(loadChoice == 0) {
 					//male
-					BufferedImage playerSheetImage = Game.loadImage("/mainAnimated.png");
+					BufferedImage playerSheetImage = game.loadImage("/mainAnimated.png");
 					SpriteSheet boySheet = new SpriteSheet(playerSheetImage);
 					boySheet.loadSprites(24, 32);
 
 					AnimatedSprite boyAni = new AnimatedSprite(boySheet, 10);
-					
+
 					game.player.changeSprite(boyAni);
 				} else {
 					// female
-					BufferedImage girlSheetImage = Game.loadImage("/girl-main-anim.png");
+					BufferedImage girlSheetImage = game.loadImage("/girl-main-anim.png");
 					SpriteSheet girlSheet = new SpriteSheet(girlSheetImage);
 					girlSheet.loadSprites(24, 32);
-					
+
 					AnimatedSprite girlAni = new AnimatedSprite(girlSheet, 10);
 					game.player.changeSprite(girlAni);
 				}
-//				System.out.println(gen[loadChoice]);
-				
-				Game.State = Game.STATE.GAME;
+
+				Game.State = Game.STATE.SCREEN1;
+//				Game.State = Game.STATE.GAME;
 
 			}
-			Thread.sleep(150);
+			if(loading) {
+				Thread.sleep(150);
+			}
 		}
 		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
 	}
-	public Gender() {
-		
-		try 
-		{
-			
-			titleColor = new Color(100, 128, 128);
-			titleFont = new Font("Broadway", Font.BOLD, 50);
-
-			font = new Font("Arial", Font.PLAIN, 30);
-
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
+	
+	
 	public void setLoadChoice(int loadChoice) {
 		this.loadChoice = loadChoice;
 	}
+	
 	public int getLoadChoice() {
-		
+
 		return loadChoice;
 	}
-	
+
 }
 
