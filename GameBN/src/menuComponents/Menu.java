@@ -5,6 +5,9 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import entity.AnimatedSprite;
+import entity.Sprite;
+import entity.SpriteSheet;
 import game.Game;
 import handler.Audio;
 import handler.Background;
@@ -32,6 +35,8 @@ public class Menu implements MenuObject {
 
 	private BufferedImage logo;
 	private Background bg;
+	
+	private Sprite logoSp;
 
 	private Audio aud;
 
@@ -47,8 +52,11 @@ public class Menu implements MenuObject {
 			font = new Font("Caviar Dreams", Font.PLAIN, 50);
 
 			//load bg
-			logo = game.loadImage("/title_logo_nobg.png");
-
+			logo = game.loadImage("/title_logo.png");
+			SpriteSheet logoSheet = new SpriteSheet(logo);
+			logoSheet.loadSprites(104, 40);
+			
+			logoSp = logoSheet.getSprite(0, 0);
 
 			bg = new Background("/bg.png", 1);
 			bg.setVector(-1, 0);
@@ -63,23 +71,11 @@ public class Menu implements MenuObject {
 		}
 
 	}
-
-
-	public void render(RenderHandler renderer, Graphics graphics, Game game, int xZoom, int yZoom) {
-
-//		renderer.renderImage(logo, 230, 10, xZoom, yZoom, true);
+	
+	@Override
+	public void render(Graphics graphics) {
 		bg.render(game, graphics);
 		bg.update();
-
-
-		// draw title
-		//		graphics.setColor(titleColor);
-		//		graphics.setFont(titleFont);
-		//		graphics.drawString("UpClose", 275, 120);
-		
-		graphics.drawImage(logo, (logo.getWidth()/2) % (game.getWidth()/2), 10, game);
-//		System.out.println((logo.getWidth()/2) % (game.getWidth()/2));
-
 
 		//draw menu options
 		graphics.setFont(font);
@@ -93,8 +89,17 @@ public class Menu implements MenuObject {
 			{
 				graphics.setColor(Color.YELLOW);
 			}
-			graphics.drawString(options[i], 400 , 270 + i * 130);
+			graphics.drawString(options[i], 400 , 300 + i * 130);
 		}
+	}
+
+
+	public void render(RenderHandler renderer, Game game, int xZoom, int yZoom) {
+		
+//		graphics.drawImage(logo, (logo.getWidth()/2) % (game.getWidth()/2), 10, null);
+		renderer.renderSprite(logoSp, 200, 15, xZoom*2, yZoom*2, true);
+		System.out.println(logoSp.getWidth());
+
 
 	}
 
@@ -185,9 +190,5 @@ public class Menu implements MenuObject {
 	}
 
 
-	@Override
-	public void render(Graphics graphics) {
-		// TODO Auto-generated method stub
-
-	}
+	
 }

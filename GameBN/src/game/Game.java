@@ -34,7 +34,7 @@ import menuComponents.Gender;
 import menuComponents.Help;
 import menuComponents.Load;
 import menuComponents.Menu;
-import screenMap.screen1;
+import screenMap.Scene01;
 
 @SuppressWarnings({ "serial", "unused" })
 public class Game extends JFrame implements Runnable {
@@ -66,7 +66,7 @@ public class Game extends JFrame implements Runnable {
 	private MouseInput mouseListener2 = new MouseInput();
 
 	public Player player;
-	
+
 	private Audio vilAud;
 
 	private int xZoom = 3;
@@ -77,7 +77,7 @@ public class Game extends JFrame implements Runnable {
 	private Gender gender;
 	private Help help;
 	private Load load;
-	private screen1 screen1;
+	private Scene01 scene01;
 
 	private boolean boy = true;
 
@@ -160,7 +160,7 @@ public class Game extends JFrame implements Runnable {
 		vilAud = new Audio("/Gentle-Closure.mp3.mp3");
 
 
-		// testSprite = sheet.getSprite(4, 1);
+		//		 testSprite = sheet.getSprite(4, 1);
 
 
 		//load SDK GUI
@@ -188,7 +188,7 @@ public class Game extends JFrame implements Runnable {
 		help = new Help();
 		load = new Load();
 
-		screen1 = new screen1(this);
+		scene01 = new Scene01(this);
 
 		// add listeners
 		canvas.addKeyListener(keyListener);
@@ -239,16 +239,16 @@ public class Game extends JFrame implements Runnable {
 		if(State == STATE.GAME) {
 			for(int i = 0; i < objects.length; i++) {
 				objects[i].update(this);
-				
+
 			}			
 			menu.getAud().close();
-			
+
 			vilAud.play();
 		}
 
 		if(State == STATE.MENU) {
 			menu.update(this);
-			
+
 		}
 
 		if(State == STATE.GENDER) {
@@ -268,7 +268,7 @@ public class Game extends JFrame implements Runnable {
 		}
 
 		if(State == STATE.SCREEN1) {
-			screen1.update(this);
+			scene01.update(this, player);
 		}
 	}
 
@@ -327,17 +327,21 @@ public class Game extends JFrame implements Runnable {
 		if(State == STATE.GAME) {
 			map.render(renderer, objects, xZoom, yZoom);
 			int chosen1 = gender.getLoadChoice();
-//			for(int i = 0; i < objects.length; i++) {
-//				objects[i].render(renderer, xZoom, yZoom);
-//			}
+			//			for(int i = 0; i < objects.length; i++) {
+			//				objects[i].render(renderer, xZoom, yZoom);
+			//			}
 			renderer.render(graphics);
-			
-			
+
+
 		}
 
 		if(State == STATE.MENU) {
 			//			menu.render(graphics);
-			menu.render(renderer, graphics, this, xZoom, yZoom);
+
+			menu.render(renderer, this, xZoom, yZoom); // sword
+			renderer.render(graphics);	
+			menu.render(graphics); // menu list
+
 		}
 
 		if(State == STATE.NAME) {
@@ -357,12 +361,12 @@ public class Game extends JFrame implements Runnable {
 		}
 
 		if(State == STATE.SCREEN1) {
-			
-			screen1.render(renderer, this, xZoom, yZoom);
+
+			scene01.render(renderer, this, player, xZoom, yZoom);
 			renderer.render(graphics);
-			screen1.render(this, graphics);
+			scene01.render(this, graphics, player);
 		}
-		
+
 
 		graphics.dispose();
 		bufferStrategy.show();
