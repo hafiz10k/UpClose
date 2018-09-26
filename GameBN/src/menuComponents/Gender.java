@@ -107,7 +107,7 @@ public class Gender implements MenuObject{
 				}
 //				System.out.println(gen[loadChoice]);
 				
-				Game.State = Game.STATE.GAME;
+				Game.State = Game.STATE.SAVE;
 
 			}
 			Thread.sleep(150);

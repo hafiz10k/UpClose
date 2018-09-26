@@ -24,6 +24,7 @@ public class CreateName implements MenuObject, ActionListener{
 
 	private char[] name = {'A', 'A', 'A', 'A', 'A'};
 	private int currentChoice = 0;
+	public String fullName = "";
 
 	public CreateName() {
 		try 
@@ -71,8 +72,8 @@ public class CreateName implements MenuObject, ActionListener{
 			boolean didMove = false;
 			
 			if(keyListener.enter()) {
-				String fullName = new String(name);
-				System.out.println(fullName);
+				fullName = new String(name);
+				
 //				Game.State = Game.STATE.GAME;
 				Game.State = Game.STATE.GENDER;
 			}

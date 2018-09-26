@@ -33,6 +33,8 @@ import menuComponents.Gender;
 import menuComponents.Help;
 import menuComponents.Load;
 import menuComponents.Menu;
+import menuComponents.Save;
+
 import java.awt.Color;
 
 @SuppressWarnings({ "serial", "unused" })
@@ -68,11 +70,12 @@ public class Game extends JFrame implements Runnable {
 	private int yZoom = 3;
 
 	private Menu menu;
-	private CreateName name;
-	private Gender gender;
+	public CreateName name;
+	public Gender gender;
 	private Help help;
 	private Load load;
-
+	public Save save;
+	
 	private boolean boy = true;
 
 	public static enum STATE{
@@ -81,7 +84,8 @@ public class Game extends JFrame implements Runnable {
 		GENDER,
 		GAME,
 		LOAD,
-		HELP
+		HELP,
+		SAVE
 	};
 
 	public static STATE State = STATE.MENU;
@@ -185,7 +189,8 @@ public class Game extends JFrame implements Runnable {
 		gender = new Gender();
 		help = new Help();
 		load = new Load();
-
+		save = new Save(this);
+		
 		// add listeners
 		canvas.addKeyListener(keyListener);
 		canvas.addFocusListener(keyListener);
@@ -255,6 +260,9 @@ public class Game extends JFrame implements Runnable {
 
 		else if(State == STATE.NAME) {
 			name.update(this);
+		}
+		else if(State == STATE.SAVE) {
+			save.update(this);
 		}
 	}
 
@@ -341,6 +349,11 @@ public class Game extends JFrame implements Runnable {
 		else if(State == STATE.LOAD) {
 			load.render(graphics);
 		}
+		else if(State == STATE.SAVE) {
+			save.render(graphics);
+		}
+	
+	
 
 		graphics.dispose();
 		bufferStrategy.show();
