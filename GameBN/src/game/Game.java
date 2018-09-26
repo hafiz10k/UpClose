@@ -86,6 +86,7 @@ public class Game extends JFrame implements Runnable {
 	private Scene03 scene03;
 
 	private boolean boy = true;
+	private boolean playedGameMusic = false;
 
 	public static enum STATE{
 		MENU,
@@ -247,14 +248,19 @@ public class Game extends JFrame implements Runnable {
 				objects[i].update(this);
 
 			}			
-			menu.getAud().close();
 
-			vilAud.play();
+			if(!playedGameMusic) {
+				menu.getAud().close();
+				vilAud.play();
+				playedGameMusic = true;
+			}
 		}
 
 		if(State == STATE.MENU) {
 			menu.update(this);
-
+			
+			vilAud.stop();
+			playedGameMusic = false;
 		}
 
 		if(State == STATE.GENDER) {

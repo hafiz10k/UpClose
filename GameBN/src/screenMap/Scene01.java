@@ -69,6 +69,7 @@ public class Scene01 {
 
 	private int i = 0;	
 	private String addedChar = "";
+	private int addedCharCounter = 0;
 
 	private String welcome = "Would you like to play a game?";
 
@@ -218,15 +219,20 @@ public class Scene01 {
 
 			// ANIMATING DIALOGS
 
-			//			char textChar[] = adik.toCharArray();
-			//			int arrayNumber = textChar.length;
-			//
-			//			String blank = "";
-			//			addedChar = blank + textChar[i];
-			//			i++;
+			char textChar[] = girl[i].toCharArray();
+			if(addedCharCounter <= textChar.length-1) {
+				addedChar = addedChar + textChar[addedCharCounter];
+			}
+			addedCharCounter++;
+			
+//			int arrayNumber = textChar.length;
+//			
+//			String blank = "";
+//			addedChar = blank + textChar[i];
+//			i++;
 
-			//			
-			//			System.out.println(addedChar);
+			
+			System.out.println(addedChar);
 
 
 			//			for (int i = 0; i < welcome.length(); i++) {
@@ -287,7 +293,8 @@ public class Scene01 {
 
 		if(girlRect.x > 600) {
 			graphics.setColor(Color.MAGENTA);
-			graphics.drawString(girl[i], 70, 650);
+//			graphics.drawString(girl[i], 70, 650);
+			graphics.drawString(addedChar, 70, 650);
 		}
 
 		if(girlRect.x <= 600) {
