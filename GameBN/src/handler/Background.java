@@ -55,14 +55,14 @@ public class Background {
 	{
 		graphics.drawImage(image, (int)x, (int)y, game);
 
-		if (x <= 0)
-		{
-			graphics.drawImage(image, (int)x - 100, (int)y, game);
-		} 
-		if (x >= 0)
-		{
-			graphics.drawImage(image, (int)x + 100, (int)y, game);
-		}
+//		if (x <= 0)
+//		{
+//			graphics.drawImage(image, (int)x - 100, (int)y, game);
+//		} 
+//		if (x >= 0)
+//		{
+//			graphics.drawImage(image, (int)x + 100, (int)y, game);
+//		}
 	}
 
 }

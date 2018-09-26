@@ -34,7 +34,8 @@ public class Menu implements MenuObject {
 	private Font font;
 
 	private BufferedImage logo;
-	private Background bg;
+	private BufferedImage bg;
+//	private Background bg;
 	
 	private Sprite logoSp;
 
@@ -57,9 +58,11 @@ public class Menu implements MenuObject {
 			logoSheet.loadSprites(104, 40);
 			
 			logoSp = logoSheet.getSprite(0, 0);
+			
+			bg = game.loadImage("/bg.png");
 
-			bg = new Background("/bg.png", 1);
-			bg.setVector(-1, 0);
+//			bg = new Background("/bg.png", 20);
+//			bg.setVector(-1, 0);
 
 			aud = new Audio("/army-forTitlePage.mp3.mp3");
 			aud.play();
@@ -74,8 +77,8 @@ public class Menu implements MenuObject {
 	
 	@Override
 	public void render(Graphics graphics) {
-		bg.render(game, graphics);
-		bg.update();
+//		bg.render(game, graphics);
+//		bg.update();
 
 		//draw menu options
 		graphics.setFont(font);
@@ -97,8 +100,8 @@ public class Menu implements MenuObject {
 	public void render(RenderHandler renderer, Game game, int xZoom, int yZoom) {
 		
 //		graphics.drawImage(logo, (logo.getWidth()/2) % (game.getWidth()/2), 10, null);
+		renderer.renderImage(bg, 0, 0, xZoom/3, yZoom/3, true);
 		renderer.renderSprite(logoSp, 200, 15, xZoom*2, yZoom*2, true);
-		System.out.println(logoSp.getWidth());
 
 
 	}
@@ -167,7 +170,8 @@ public class Menu implements MenuObject {
 		if(currentChoice == 2)
 		{
 			// help
-			Game.State = Game.STATE.HELP;
+			Game.State = Game.STATE.SCENE02;
+			
 		}
 		if(currentChoice == 3)
 		{
@@ -185,9 +189,9 @@ public class Menu implements MenuObject {
 		return aud;
 	}
 	
-	public Background getBg() {
-		return bg;
-	}
+//	public Background getBg() {
+//		return bg;
+//	}
 
 
 	

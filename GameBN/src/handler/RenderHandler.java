@@ -109,6 +109,15 @@ public class RenderHandler
 	public int getMaxHeight() {
 		return maxScreenHeight;
 	}
+	
+	public int[] getPixels() {
+		return pixels;
+	}
+	
+	
+	public BufferedImage getView() {
+		return view;
+	}
 
 	public void clear()
 	{

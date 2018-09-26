@@ -35,6 +35,8 @@ import menuComponents.Help;
 import menuComponents.Load;
 import menuComponents.Menu;
 import screenMap.Scene01;
+import screenMap.Scene02;
+import screenMap.Scene03;
 
 @SuppressWarnings({ "serial", "unused" })
 public class Game extends JFrame implements Runnable {
@@ -77,7 +79,11 @@ public class Game extends JFrame implements Runnable {
 	private Gender gender;
 	private Help help;
 	private Load load;
+	
+	// cutscenes
 	private Scene01 scene01;
+	private Scene02 scene02;
+	private Scene03 scene03;
 
 	private boolean boy = true;
 
@@ -85,7 +91,9 @@ public class Game extends JFrame implements Runnable {
 		MENU,
 		NAME,
 		GENDER,
-		SCREEN1,
+		SCENE01,
+		SCENE02,
+		SCENE03,
 		GAME,
 		LOAD,
 		HELP
@@ -140,11 +148,6 @@ public class Game extends JFrame implements Runnable {
 		girlSheet = new SpriteSheet(girlSheetImage);
 		girlSheet.loadSprites(24, 32);
 
-		// font
-		BufferedImage alphabetSheetImage = loadImage("/alpha.png");
-		alphabetSheet = new SpriteSheet(alphabetSheetImage);
-		alphabetSheet.loadSprites(8, 8);
-
 		//load player animated sprite
 		AnimatedSprite boyAni = new AnimatedSprite(boySheet, 10);
 		AnimatedSprite girlAni = new AnimatedSprite(girlSheet, 10);
@@ -188,7 +191,10 @@ public class Game extends JFrame implements Runnable {
 		help = new Help();
 		load = new Load();
 
+		// CUTSCENES
 		scene01 = new Scene01(this);
+		scene02 = new Scene02(this);
+		scene03 = new Scene03(this);
 
 		// add listeners
 		canvas.addKeyListener(keyListener);
@@ -267,8 +273,17 @@ public class Game extends JFrame implements Runnable {
 			name.update(this);
 		}
 
-		if(State == STATE.SCREEN1) {
+		if(State == STATE.SCENE01) {
 			scene01.update(this, player);
+		}
+		
+		if(State == STATE.SCENE02){
+			scene02.update(this);
+			menu.getAud().close();
+		}
+		
+		if(State == STATE.SCENE03) {
+			scene03.update(this, player);
 		}
 	}
 
@@ -360,11 +375,23 @@ public class Game extends JFrame implements Runnable {
 			load.render(graphics);
 		}
 
-		if(State == STATE.SCREEN1) {
+		if(State == STATE.SCENE01) {
 
-			scene01.render(renderer, this, player, xZoom, yZoom);
+			scene01.render(renderer, this, player, xZoom, yZoom); // dialogs
+			renderer.render(graphics); // both
+			scene01.render(this, graphics, player); // images, players
+		}
+		
+		if(State == STATE.SCENE02) {
+			scene02.render(renderer, graphics, xZoom, yZoom);
 			renderer.render(graphics);
-			scene01.render(this, graphics, player);
+			scene02.render(graphics);
+		}
+		
+		if(State == STATE.SCENE03) {
+			scene03.render(renderer, this, player, xZoom, yZoom);
+			renderer.render(graphics);
+			scene03.render(graphics);
 		}
 
 

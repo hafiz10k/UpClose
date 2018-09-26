@@ -3,8 +3,8 @@ package screenMap;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
@@ -16,7 +16,7 @@ import entity.Player;
 import entity.Rectangle;
 import entity.SpriteSheet;
 import game.Game;
-import handler.Background;
+import handler.KeyBoardListener;
 import handler.RenderHandler;
 
 public class Scene01 {
@@ -25,24 +25,47 @@ public class Scene01 {
 	private JTextArea textArea;
 
 	private BufferedImage room;
+	private BufferedImage bh;
 
 	private AnimatedSprite boyAni;
 	private AnimatedSprite girlAni;
 
+	private AnimatedSprite bhAni;
+
 	private Rectangle rect;
+	private Rectangle boyRect;
+	private Rectangle girlRect;
 
 	private int x = 0;
 	private int y = 0;
-	private int speed = 8;
-	private int direction = 0;
+	private int speed = 10;
+	private int boyDir = 0;
+	private int girlDir = 0;
+
+	private Font f = new Font("arial", Font.PLAIN, 30);
+	private Font fontKey = new Font("arial", Font.PLAIN, 20);
+
 
 	public Player player;
 
 	Timer timer;
 
 	// dialog
-	private String adik = "Abang! Abang! Abang!";
-	private String abang = "adik! what?!";
+	private String[] girl =
+		{
+				"Abang! Abang! Abang!",
+				"adik dialog 2",
+				"adik dialog 3"
+		};
+
+	private String[] boy = 
+		{
+				"adik! what?!",
+				"abang dialog 2",
+				"abang dialog 3"
+		};
+
+	private String key = "[press enter]";
 
 	private int i = 0;	
 	private String addedChar = "";
@@ -54,20 +77,36 @@ public class Scene01 {
 		//bedroom bg
 		room = game.loadImage("/bedroom-scene.png");
 
+		//blackhole
+		bh = game.loadImage("/blackHole.png");
+		SpriteSheet bhSheet = new SpriteSheet(bh);
+		bhSheet.loadSprites(128, 96);
+
+		bhAni = new AnimatedSprite(bhSheet, 10);
+
 		//male
 		BufferedImage playerSheetImage = game.loadImage("/mainAnimated.png");
 		SpriteSheet boySheet = new SpriteSheet(playerSheetImage);
 		boySheet.loadSprites(24, 32);
 
-		boyAni = new AnimatedSprite(boySheet, 10);
+		boyAni = new AnimatedSprite(boySheet, speed);
 
 		// female
 		BufferedImage girlSheetImage = game.loadImage("/girl-main-anim.png");
 		SpriteSheet girlSheet = new SpriteSheet(girlSheetImage);
 		girlSheet.loadSprites(24, 32);
 
-		girlAni = new AnimatedSprite(girlSheet, 10);
+		girlAni = new AnimatedSprite(girlSheet, speed);
 
+		//boy rect
+		boyRect = new Rectangle(320, 400, 24, 32);
+		boyRect.generateGraphics(3, 0x0000ff);
+
+		//girl rect
+		girlRect = new Rectangle(1000, 400, 24, 32);
+		girlRect.generateGraphics(3, 0xf303d2);
+
+		// dialog
 		rect = new Rectangle(40, 600, 300, 50);
 		rect.generateGraphics(0xeff0f1);
 
@@ -99,46 +138,85 @@ public class Scene01 {
 
 		//		x += speed;
 		try {
-			if(girlAni != null && boyAni != null) {
-				boolean didMove = false;
-				int newDirection = direction;
 
-				newDirection = 2;
+			// 0 - Down, 
+			// 1 - Left, 
+			// 2 - Right, 
+			// 3 - Up
+			
+			// GIRL MOVEMENT
+			if(girlAni != null) {
+				boolean didMove = false;
+				int newDirection = girlDir;
+
+				newDirection = 1;
 				didMove = true;
-				//			x += speed;		
 
 				if(!didMove) {
 					girlAni.reset();
-					boyAni.reset();
 				}
 
 				if(didMove) {
 					girlAni.incSprite();
-					boyAni.incSprite();
-					player.getRectangle().x += speed;
+					girlRect.x -= speed;
+
 				}
 
-				// 0 - Down, 1 - Left, 2 - Right, 3 - Up
-
-				if(newDirection != direction) {
-					direction = newDirection;
-					girlAni.setAnimationRange(direction * 4, (direction * 4) + 4);
-					boyAni.setAnimationRange(direction * 4, (direction * 4) + 4);
+				if(newDirection != girlDir) {
+					girlDir = newDirection;
+					girlAni.setAnimationRange(girlDir * 4, (girlDir * 4) + 4);
 				}
 
-				System.out.println(player.getRectangle().x);
-
-				if(player.getRectangle().x >= 50) {
+				if(girlRect.x <= 600) {
 					didMove = true;
 					girlAni.reset();
-					boyAni.reset();
-					player.getRectangle().x = 50;
-					newDirection = 1;
-					boyAni.setAnimationRange(newDirection * 4, (newDirection * 4) + 4);
+										
+					girlRect.x = 600;
+					newDirection = 0;
 
 				}
+				
+				System.out.println(girlRect.x);
+
+				Thread.sleep(150);
+			}
+			
+			//BOY MOVEMENT
+			// 0 - Down, 1 - Left, 2 - Right, 3 - Up
+
+			if(boyAni != null) {
+				boolean didMove = false;
+				int newDirection = boyDir;
+
+				newDirection = 3;
+
+				if(!didMove) {
+					boyAni.reset();
+				}
+
+				if(didMove) {
+					boyAni.incSprite();
+				}
+
+				if(newDirection != boyDir) {
+					boyDir = newDirection;
+					boyAni.setAnimationRange(boyDir * 4, (boyDir * 4) + 4);
+				}
+
+				
+				
+				if(girlRect.x <= 600) {
+					didMove = true;
+					boyAni.reset();
+					
+					newDirection = 2;
+					boyAni.setAnimationRange(newDirection * 4, (newDirection * 4) + 4);
+				}
+				
+				Thread.sleep(50);
 			}
 
+			// ANIMATING DIALOGS
 
 			//			char textChar[] = adik.toCharArray();
 			//			int arrayNumber = textChar.length;
@@ -147,7 +225,7 @@ public class Scene01 {
 			//			addedChar = blank + textChar[i];
 			//			i++;
 
-			Thread.sleep(500);
+			//			
 			//			System.out.println(addedChar);
 
 
@@ -161,6 +239,22 @@ public class Scene01 {
 			//			    
 			//			}
 
+
+			if(girlRect.x <= 600) {
+				KeyBoardListener keyListener = game.getKeyListener();
+				boolean didMove = false;
+
+				if(keyListener.enter()) {
+					didMove = true;
+					Game.State = Game.STATE.SCENE02;
+					Scene02 scene02 = new Scene02(game);
+
+					scene02.getAudio().play();
+				}
+
+				Thread.sleep(150);
+			}
+
 		} 	
 
 		catch (InterruptedException e) {
@@ -173,34 +267,59 @@ public class Scene01 {
 
 	public void render(RenderHandler renderer, Game game, Player player, int xZoom, int yZoom) {
 		renderer.renderImage(room, 10, 150, xZoom, yZoom, true);
-		renderer.renderSprite(boyAni, player.getRectangle().x + 350, 400, xZoom, yZoom, true);
-		renderer.renderSprite(girlAni, player.getRectangle().x + 300, 400, xZoom, yZoom, false);
+		renderer.renderSprite(boyAni, boyRect.x, boyRect.y, xZoom, yZoom, false);
+		renderer.renderSprite(girlAni, girlRect.x, girlRect.y, xZoom, yZoom, false);
 
 		renderer.renderRectangle(rect, xZoom, yZoom, true);
 
+		if(girlRect.x <= 600) {
 
+			renderer.renderSprite(bhAni, 600, 200, xZoom, yZoom, false);
+
+
+		}
 
 	}
 
 	public void render(Game game, Graphics graphics, Player player) {
 
-		Font f = new Font("arial", Font.PLAIN, 30);
 		graphics.setFont(f);
 
-		if(player.getRectangle().x < 50) {
+		if(girlRect.x > 600) {
 			graphics.setColor(Color.MAGENTA);
-			graphics.drawString(adik, 70, 650);
+			graphics.drawString(girl[i], 70, 650);
 		}
 
-		if(player.getRectangle().x >= 50) {
+		if(girlRect.x <= 600) {
+
+
 			graphics.setColor(Color.BLUE);
-			graphics.drawString(abang, 70, 650);
+			//				for(int i = 0; i < abang.length; i++) {
+			graphics.drawString(boy[i], 70, 650);
+
+
+			graphics.setFont(fontKey);
+			graphics.setColor(Color.BLACK);
+			graphics.drawString(key, 800, 740);
+
+			//			int i = 0;
+
+			//			AffineTransform at = AffineTransform.getTranslateInstance(100, 100);
+			//			at.rotate(Math.toRadians(i++), bh.getWidth()/2, bh.getHeight()/2);
+			//			
+			//			Graphics2D g2d = (Graphics2D) graphics;
+			//			
+			//			g2d.drawImage(bh, 100, 100, null);
+			//			g2d.rotate(Math.toRadians(i++), bhAni.getWidth()/2, bhAni.getHeight()/2);
+			//			g2d.rotate(-90, bhAni.getWidth()/2, bhAni.getHeight()/2);
+			//				}
+
 		}
-
-		//		graphics.drawString(addedChar, 70 + i * 100, 300);
-
 	}
 
-
+	//		graphics.drawString(addedChar, 70 + i * 100, 300);
 
 }
+
+
+

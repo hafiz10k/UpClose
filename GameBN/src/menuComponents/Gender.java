@@ -121,7 +121,7 @@ public class Gender implements MenuObject{
 					game.player.changeSprite(girlAni);
 				}
 
-				Game.State = Game.STATE.SCREEN1;
+				Game.State = Game.STATE.SCENE01;
 //				Game.State = Game.STATE.GAME;
 
 			}
