@@ -111,7 +111,9 @@ public class Gender implements MenuObject{
 					AnimatedSprite boyAni = new AnimatedSprite(boySheet, 10);
 
 					game.player.changeSprite(boyAni);
-				} else {
+				} 
+				
+				else {
 					// female
 					BufferedImage girlSheetImage = game.loadImage("/girl-main-anim.png");
 					SpriteSheet girlSheet = new SpriteSheet(girlSheetImage);
@@ -120,7 +122,9 @@ public class Gender implements MenuObject{
 					AnimatedSprite girlAni = new AnimatedSprite(girlSheet, 10);
 					game.player.changeSprite(girlAni);
 				}
-
+//				System.out.println(gen[loadChoice]);
+				
+//				Game.State = Game.STATE.SAVE;
 				Game.State = Game.STATE.SCENE01;
 //				Game.State = Game.STATE.GAME;
 

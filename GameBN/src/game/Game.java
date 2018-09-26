@@ -37,6 +37,9 @@ import menuComponents.Menu;
 import screenMap.Scene01;
 import screenMap.Scene02;
 import screenMap.Scene03;
+import menuComponents.Save;
+
+import java.awt.Color;
 
 @SuppressWarnings({ "serial", "unused" })
 public class Game extends JFrame implements Runnable {
@@ -75,8 +78,8 @@ public class Game extends JFrame implements Runnable {
 	private int yZoom = 3;
 
 	private Menu menu;
-	private CreateName name;
-	private Gender gender;
+	public CreateName name;
+	public Gender gender;
 	private Help help;
 	private Load load;
 	
@@ -85,6 +88,8 @@ public class Game extends JFrame implements Runnable {
 	private Scene02 scene02;
 	private Scene03 scene03;
 
+	public Save save;
+	
 	private boolean boy = true;
 	private boolean playedGameMusic = false;
 
@@ -97,7 +102,8 @@ public class Game extends JFrame implements Runnable {
 		SCENE03,
 		GAME,
 		LOAD,
-		HELP
+		HELP,
+		SAVE
 	};
 
 	public static STATE State = STATE.MENU;
@@ -197,6 +203,8 @@ public class Game extends JFrame implements Runnable {
 		scene02 = new Scene02(this);
 		scene03 = new Scene03(this);
 
+		save = new Save(this);
+		
 		// add listeners
 		canvas.addKeyListener(keyListener);
 		canvas.addFocusListener(keyListener);
@@ -291,6 +299,10 @@ public class Game extends JFrame implements Runnable {
 		if(State == STATE.SCENE03) {
 			scene03.update(this, player);
 		}
+		
+		if(State == STATE.SAVE) {
+			save.update(this);
+		}
 	}
 
 	public BufferedImage loadImage(String path) {
@@ -380,6 +392,12 @@ public class Game extends JFrame implements Runnable {
 		if(State == STATE.LOAD) {
 			load.render(graphics);
 		}
+		
+		if(State == STATE.SAVE) {
+			save.render(graphics);
+		}
+	
+	
 
 		if(State == STATE.SCENE01) {
 
