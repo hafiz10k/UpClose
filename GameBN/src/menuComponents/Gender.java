@@ -4,22 +4,27 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import game.Game;
 import entity.AnimatedSprite;
-import entity.Player;
+import entity.Rectangle;
 import entity.SpriteSheet;
+import game.Game;
+import game.Game.STATE;
 import handler.KeyBoardListener;
+import handler.RenderHandler;
 
 public class Gender implements MenuObject{
-	public Rectangle backButton =  new Rectangle (10, 10, 200, 50);
-
+	private AnimatedSprite boy;
+	private AnimatedSprite girl;
+	
+	private int speed = 10;
+	
+	private BufferedImage boyRect;
+	private BufferedImage girlRect;
+	
 	private Color titleColor;
 	private Font titleFont;
-
-
 	private Font font;
 
 	private int loadChoice = 0;
@@ -30,19 +35,42 @@ public class Gender implements MenuObject{
 				"Girl"
 		};
 
-	public Gender() {
+	public Gender(Game game) {
 
-		try 
-		{
+		try {
+			
+			//male
+			BufferedImage playerSheetImage = game.loadImage("/boy-main.png");
+			SpriteSheet boySheet = new SpriteSheet(playerSheetImage);
+			boySheet.loadSprites(24, 32);
+
+			boy = new AnimatedSprite(boySheet, speed);
+
+			// female
+			BufferedImage girlSheetImage = game.loadImage("/girl-main.png");
+			SpriteSheet girlSheet = new SpriteSheet(girlSheetImage);
+			girlSheet.loadSprites(24, 32);
+
+			girl = new AnimatedSprite(girlSheet, speed);
+			
+//			//boy rect
+//			boyRect = new Rectangle(0, 300, 100, 100);
+//			boyRect.generateGraphics(0x0000ff);
+			boyRect = game.loadImage("/gender-boy-rect.png");
+			
+			girlRect = game.loadImage("/gender-girl-rect.png");
+
+//			//girl rect
+//			girlRect = new Rectangle(100, 300, 24, 32);
+//			girlRect.generateGraphics(0xf303d2);
 
 			titleColor = new Color(100, 128, 128);
 			titleFont = new Font("Broadway", Font.BOLD, 50);
 
-			font = new Font("Arial", Font.PLAIN, 30);
+			font = new Font("Arial", Font.BOLD, 35);
 
 		}
-		catch (Exception e)
-		{
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -68,10 +96,22 @@ public class Gender implements MenuObject{
 			{
 				graphics.setColor(Color.WHITE);
 			}
-			graphics.drawString(gen[i], 350 + i * 250, 350);
+			graphics.drawString(gen[i], 300 + i * 310, 350);
 
 		}
 
+	}
+	
+	public void render(RenderHandler renderer, int xZoom, int yZoom) {
+		renderer.renderImage(boyRect, -20, 230, xZoom*3, yZoom*3, true);
+		renderer.renderImage(girlRect, 590, 230, xZoom*3, yZoom*3, true);
+//		renderer.renderRectangle(girlRect, xZoom, yZoom, true);
+		
+		renderer.renderSprite(boy, 100, 300, xZoom*2, yZoom*2, true);
+		renderer.renderSprite(girl, 700, 300, xZoom*2, yZoom*2, true);
+		
+		
+		
 	}
 
 	@Override
@@ -87,7 +127,7 @@ public class Gender implements MenuObject{
 				loadChoice --;
 				if(loadChoice == -1)
 				{
-					loadChoice = gen.length -1;
+					loadChoice = gen.length - 1;
 				}
 			}
 
@@ -111,6 +151,8 @@ public class Gender implements MenuObject{
 					AnimatedSprite boyAni = new AnimatedSprite(boySheet, 10);
 
 					game.player.changeSprite(boyAni);
+					
+					Game.State = STATE.SCENE03;
 				} 
 				
 				else {
@@ -121,14 +163,12 @@ public class Gender implements MenuObject{
 
 					AnimatedSprite girlAni = new AnimatedSprite(girlSheet, 10);
 					game.player.changeSprite(girlAni);
+					
+					Game.State = STATE.SCENE04;
 				}
-//				System.out.println(gen[loadChoice]);
-				
-//				Game.State = Game.STATE.SAVE;
-				Game.State = Game.STATE.SCENE01;
-//				Game.State = Game.STATE.GAME;
 
 			}
+			
 			if(loading) {
 				Thread.sleep(150);
 			}

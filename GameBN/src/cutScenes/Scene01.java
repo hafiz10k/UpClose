@@ -1,4 +1,4 @@
-package screenMap;
+package cutScenes;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -19,10 +19,8 @@ import game.Game;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
 
+// siblings fight in room
 public class Scene01 {
-
-	private JPanel panel;
-	private JTextArea textArea;
 
 	private BufferedImage room;
 	private BufferedImage bh;
@@ -35,6 +33,7 @@ public class Scene01 {
 	private Rectangle rect;
 	private Rectangle boyRect;
 	private Rectangle girlRect;
+	private Rectangle timerRect;
 
 	private int x = 0;
 	private int y = 0;
@@ -45,33 +44,34 @@ public class Scene01 {
 	private Font f = new Font("arial", Font.PLAIN, 30);
 	private Font fontKey = new Font("arial", Font.PLAIN, 20);
 
-
 	public Player player;
-
-	Timer timer;
 
 	// dialog
 	private String[] girl =
 		{
-				"Abang! Abang! Abang!",
-				"adik dialog 2",
+				"Abang! Abang! Abaaaang!",
+				"Help me with my history project please..",
 				"adik dialog 3"
 		};
 
+
 	private String[] boy = 
 		{
-				"adik! what?!",
-				"abang dialog 2",
+				"adik! what?! stop coming into my room as you please..",
+				"i'm busy rehearsing for my History play.",
 				"abang dialog 3"
 		};
 
-	private String key = "[press enter]";
+	private String key = "press [A]";
 
-	private int i = 0;	
-	private String addedChar = "";
-	private int addedCharCounter = 0;
+	private int g = 0;	
+	private int b = 0;
 
-	private String welcome = "Would you like to play a game?";
+	private String addedGirlChar = "";
+	private String addedBoyChar = "";
+
+	private int addedGirlCharCounter = 0;
+	private int addedBoyCharCounter = 0;
 
 	public Scene01(Game game) {
 
@@ -111,40 +111,21 @@ public class Scene01 {
 		rect = new Rectangle(40, 600, 300, 50);
 		rect.generateGraphics(0xeff0f1);
 
-
-
+		// TIMER RECT
+		timerRect = new Rectangle(0, 0, 10, 32);
+		timerRect.generateGraphics(1, 0xffffff);
 	}
 
-	public void update(Game game, Player player ) {
-		//		timer = new Timer(10000, new ActionListener() {
-		//
-		//			@Override
-		//			public void actionPerformed(ActionEvent arg0) {
-		//				char textChar[] = text.toCharArray();
-		//				int arrayNumber = textChar.length;
-		//
-		//				String blank = "";
-		//
-		//				addedChar = blank + textChar[i];
-		//				i++;
-		//				
-		//				textArea.append(addedChar);
-		//				
-		//			}
-		//
-		//		});
-		//		timer.start();
-		//		
-		//		System.out.println(addedChar);
+	public void update(Game game) {
+		timerRect.x++;
 
-		//		x += speed;
 		try {
 
 			// 0 - Down, 
 			// 1 - Left, 
 			// 2 - Right, 
 			// 3 - Up
-			
+
 			// GIRL MOVEMENT
 			if(girlAni != null) {
 				boolean didMove = false;
@@ -171,17 +152,15 @@ public class Scene01 {
 				if(girlRect.x <= 600) {
 					didMove = true;
 					girlAni.reset();
-										
+
 					girlRect.x = 600;
 					newDirection = 0;
 
 				}
-				
-				System.out.println(girlRect.x);
 
-				Thread.sleep(150);
 			}
-			
+
+
 			//BOY MOVEMENT
 			// 0 - Down, 1 - Left, 2 - Right, 3 - Up
 
@@ -204,70 +183,73 @@ public class Scene01 {
 					boyAni.setAnimationRange(boyDir * 4, (boyDir * 4) + 4);
 				}
 
-				
-				
+
+
 				if(girlRect.x <= 600) {
 					didMove = true;
 					boyAni.reset();
-					
+
 					newDirection = 2;
 					boyAni.setAnimationRange(newDirection * 4, (newDirection * 4) + 4);
 				}
-				
-				Thread.sleep(50);
+
 			}
 
-			// ANIMATING DIALOGS
 
-			char textChar[] = girl[i].toCharArray();
-			if(addedCharCounter <= textChar.length-1) {
-				addedChar = addedChar + textChar[addedCharCounter];
+			//DIALOGS
+
+			if(timerRect.x > 10 && timerRect.x <= 40) {
+				// ANIMATING DIALOGS - GIRL
+				char girlChar[] = girl[g].toCharArray();
+
+				if(addedGirlCharCounter <= girlChar.length-1) {
+					addedGirlChar = addedGirlChar + girlChar[addedGirlCharCounter];
+					addedGirlCharCounter++;
+				}
 			}
-			addedCharCounter++;
-			
-//			int arrayNumber = textChar.length;
-//			
-//			String blank = "";
-//			addedChar = blank + textChar[i];
-//			i++;
 
-			
-			System.out.println(addedChar);
+			if(timerRect.x > 40 && timerRect.x < 100) {
+				// ANIMATING DIALOGS - BOY
+				char boyChar[] = boy[b].toCharArray();
+				if(addedBoyCharCounter <= boyChar.length-1) {
+					addedBoyChar = addedBoyChar + boyChar[addedBoyCharCounter];
+					addedBoyCharCounter++;
+				}
 
 
-			//			for (int i = 0; i < welcome.length(); i++) {
-			//				
-			//				addedChar = "" + welcome.charAt(i);
-			//				Thread.sleep(500);
-			//			    System.out.print(addedChar);
-			//							   
-			//				continue;
-			//			    
-			//			}
+			}
+
+
+			if(timerRect.x > 100) {
+
+				String adik2 = "adik dialog 2";
+				// ANIMATING DIALOGS - GIRL
+				char girlChar[] = adik2.toCharArray();
+				if(addedGirlCharCounter <= girlChar.length-1) {
+					addedGirlChar = addedGirlChar + girlChar[addedGirlCharCounter];
+					addedGirlCharCounter++;
+				}
+			}
 
 
 			if(girlRect.x <= 600) {
 				KeyBoardListener keyListener = game.getKeyListener();
-				boolean didMove = false;
 
-				if(keyListener.enter()) {
-					didMove = true;
+				if(keyListener.a()) {
 					Game.State = Game.STATE.SCENE02;
 					Scene02 scene02 = new Scene02(game);
-
 					scene02.getAudio().play();
 				}
 
-				Thread.sleep(150);
 			}
+
+			Thread.sleep(100);
 
 		} 	
 
 		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
-
 
 	}
 
@@ -276,13 +258,14 @@ public class Scene01 {
 		renderer.renderSprite(boyAni, boyRect.x, boyRect.y, xZoom, yZoom, false);
 		renderer.renderSprite(girlAni, girlRect.x, girlRect.y, xZoom, yZoom, false);
 
-		renderer.renderRectangle(rect, xZoom, yZoom, true);
+		if(timerRect.x > 10) {
+			renderer.renderRectangle(rect, xZoom, yZoom, true);
+		}
+		
+		renderer.renderRectangle(timerRect, xZoom, yZoom, false);
 
-		if(girlRect.x <= 600) {
-
+		if(timerRect.x >= 100) {
 			renderer.renderSprite(bhAni, 600, 200, xZoom, yZoom, false);
-
-
 		}
 
 	}
@@ -291,42 +274,36 @@ public class Scene01 {
 
 		graphics.setFont(f);
 
-		if(girlRect.x > 600) {
+		if(timerRect.x > 10 && timerRect.x < 40) {
+
 			graphics.setColor(Color.MAGENTA);
-//			graphics.drawString(girl[i], 70, 650);
-			graphics.drawString(addedChar, 70, 650);
+			graphics.drawString(addedGirlChar, 70, 650);
+
+
 		}
 
-		if(girlRect.x <= 600) {
-
+		if(timerRect.x >= 40 && timerRect.x < 100) {
 
 			graphics.setColor(Color.BLUE);
-			//				for(int i = 0; i < abang.length; i++) {
-			graphics.drawString(boy[i], 70, 650);
-
+			graphics.drawString(addedBoyChar, 70, 650);
 
 			graphics.setFont(fontKey);
-			graphics.setColor(Color.BLACK);
 			graphics.drawString(key, 800, 740);
-
-			//			int i = 0;
-
-			//			AffineTransform at = AffineTransform.getTranslateInstance(100, 100);
-			//			at.rotate(Math.toRadians(i++), bh.getWidth()/2, bh.getHeight()/2);
-			//			
-			//			Graphics2D g2d = (Graphics2D) graphics;
-			//			
-			//			g2d.drawImage(bh, 100, 100, null);
-			//			g2d.rotate(Math.toRadians(i++), bhAni.getWidth()/2, bhAni.getHeight()/2);
-			//			g2d.rotate(-90, bhAni.getWidth()/2, bhAni.getHeight()/2);
-			//				}
+			System.out.println(addedGirlChar);
 
 		}
+
+		if(timerRect.x > 100) {
+			graphics.setColor(Color.MAGENTA);
+			graphics.drawString(addedGirlChar, 70, 650);
+
+		}
+
 	}
 
-	//		graphics.drawString(addedChar, 70 + i * 100, 300);
-
 }
+
+
 
 
 

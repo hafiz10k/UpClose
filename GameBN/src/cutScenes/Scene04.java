@@ -1,4 +1,4 @@
-package screenMap;
+package cutScenes;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -10,25 +10,27 @@ import entity.Player;
 import entity.Rectangle;
 import entity.SpriteSheet;
 import game.Game;
+import game.Game.STATE;
 import handler.Audio;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
 
-public class Scene03 {
+//pg bendahara found GIRL blackout
+public class Scene04 {
 
 	private BufferedImage land;
 
 	private AnimatedSprite pbsAni;
-	private AnimatedSprite boyAni;
+	private AnimatedSprite girlAni;
 
-	private int speed = 4;
+	private int speed = 10;
 
 	//direction
 	private int pgDir = 0;
-	private int boyDir = 0;
+	private int girlDir = 0;
 
 	private Rectangle pbsRect;
-	private Rectangle boyRect;
+	private Rectangle girlRect;
 	private Rectangle rect;
 
 	private Font f = new Font("arial", Font.PLAIN, 30);
@@ -36,21 +38,14 @@ public class Scene03 {
 
 	private String[] pgDialog =
 		{
-				"Hmm? what is this boy doing sleeping in the middle of the woods?",
-				"Little boy! WAKE UP!!",
+				"Hmm? what is this little girl doing sleeping here?",
+				"Little girl, wake up!",
 				"adik dialog 3"
-		};
-
-	private String[] boy = 
-		{
-				"ugh.. hmm?",
-				"abang dialog 2",
-				"abang dialog 3"
 		};
 
 	private int i = 0;
 
-	public Scene03(Game game) {
+	public Scene04(Game game) {
 		// land
 		land = game.loadImage("/scene03.png");
 
@@ -61,20 +56,20 @@ public class Scene03 {
 
 		pbsAni = new AnimatedSprite(pbsSheet, speed);
 
-		//male
-		BufferedImage playerSheetImage = game.loadImage("/blackout.png");
-		SpriteSheet boySheet = new SpriteSheet(playerSheetImage);
-		boySheet.loadSprites(24, 32);
+		// female
+		BufferedImage girlSheetImage = game.loadImage("/girl-blackout.png");
+		SpriteSheet girlSheet = new SpriteSheet(girlSheetImage);
+		girlSheet.loadSprites(24, 32);
 
-		boyAni = new AnimatedSprite(boySheet, speed);
+		girlAni = new AnimatedSprite(girlSheet, speed);
 
 		//pbs rectangle
 		pbsRect = new Rectangle(400, 150, 16, 40);
 		pbsRect.generateGraphics(3, 0x00ff00);
 
-		//boy rect
-		boyRect = new Rectangle(700, 320, 24, 32);
-		boyRect.generateGraphics(3, 0x0000ff);
+		//girl rect
+		girlRect = new Rectangle(700, 320, 24, 32);
+		girlRect.generateGraphics(3, 0x0000ff);
 
 		//DIALOG BOX
 		rect = new Rectangle(40, 600, 300, 50);
@@ -123,52 +118,29 @@ public class Scene03 {
 
 				}
 
-				Thread.sleep(50);
-
 			}
 
-			// BOY MOVEMENT
-			if(boyAni != null) {
+			// GIRL MOVEMENT
+			if(girlAni != null) {
 				boolean didMove = false;
-				int newDirection = boyDir;
-
-
-
-				if(pbsRect.x >= 640) {
-					didMove = true;
-
-					if(!didMove) {
-						boyAni.reset();
-					}
-
-					if(didMove) {
-						boyAni.incSprite();
-
-					}
-
-					if(newDirection != boyDir) {
-						boyDir = newDirection;
-						boyAni.setAnimationRange(boyDir * 4, (boyDir * 4) + 4);
-					}
-					Thread.sleep(200);
-
-				}
+				int newDirection = girlDir;
 			}
-			
+
 			if(pbsRect.x >= 640) {
 				KeyBoardListener keyListener = game.getKeyListener();
 				boolean didMove = false;
 
 				if(keyListener.enter()) {
 					didMove = true;
-					Game.State = Game.STATE.GAME;
+					Game.State = STATE.SCENE06;
 				}
-				
+
 				if(didMove) {
-				Thread.sleep(150);
+					Thread.sleep(150);
 				}
 			}
-
+			
+			Thread.sleep(150);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -177,7 +149,7 @@ public class Scene03 {
 
 	public void render(RenderHandler renderer, Game game, Player player, int xZoom, int yZoom) {
 		renderer.renderImage(land, 10, 150, xZoom, yZoom, true);
-		renderer.renderSprite(boyAni, boyRect.x, boyRect.y, xZoom, yZoom, false);
+		renderer.renderSprite(girlAni, girlRect.x, girlRect.y, xZoom, yZoom, false);
 		renderer.renderSprite(pbsAni, pbsRect.x, pbsRect.y, xZoom, yZoom, false);
 
 		renderer.renderRectangle(rect, xZoom, yZoom, true);
@@ -185,19 +157,16 @@ public class Scene03 {
 
 	public void render(Graphics graphics) {
 		graphics.setFont(f);
-
+		graphics.setColor(Color.GREEN);
+		
 		if(pbsRect.x < 640) {
-			graphics.setColor(Color.GREEN);
-
 			//		for(int i = 0; i < pgDialog.length; i++) {
 			graphics.drawString(pgDialog[i], 60, 650);
 			//		}
 		}
 
 		if(pbsRect.x >= 640) {
-
-			graphics.setColor(Color.BLUE);
-			graphics.drawString(boy[i], 70, 650);
+			graphics.drawString(pgDialog[i+1], 60, 650);
 
 			graphics.setFont(fontKey);
 			graphics.setColor(Color.BLACK);

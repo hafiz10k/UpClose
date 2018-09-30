@@ -69,7 +69,7 @@ public class Save implements MenuObject{
 
 
 	public void save() {
-		String name = game.name.fullName;
+		String name = game.name.fullName; 
 		int gender = game.gender.getLoadChoice();
 		
 		String fileName = "details.txt";

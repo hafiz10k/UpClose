@@ -5,12 +5,11 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import entity.AnimatedSprite;
+import entity.Rectangle;
 import entity.Sprite;
 import entity.SpriteSheet;
 import game.Game;
 import handler.Audio;
-import handler.Background;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
 
@@ -24,6 +23,15 @@ public class Menu implements MenuObject {
 				"Quit"
 		};
 
+	private String[] key = 
+		{
+				"↑ - Up",
+				"↓ - Down",
+				"← - Left",
+				"→ - Right",
+				"[ENTER] - Select"
+		};
+
 	private Game game;
 
 	private KeyBoardListener keyListener = new KeyBoardListener(game);
@@ -32,15 +40,16 @@ public class Menu implements MenuObject {
 	private Font titleFont;
 
 	private Font font;
+	private Font fontKey;
 
 	private BufferedImage logo;
 	private BufferedImage bg;
-//	private Background bg;
-	
+
 	private Sprite logoSp;
 
 	private Audio aud;
 
+	private Rectangle keyRect;
 
 	public Menu(Game game) {		
 
@@ -51,21 +60,22 @@ public class Menu implements MenuObject {
 			titleFont = new Font("Broadway", Font.BOLD, 100);
 
 			font = new Font("Caviar Dreams", Font.PLAIN, 50);
+			fontKey = new Font("Arial", Font.PLAIN, 20);
 
 			//load bg
 			logo = game.loadImage("/title_logo.png");
 			SpriteSheet logoSheet = new SpriteSheet(logo);
 			logoSheet.loadSprites(104, 40);
-			
-			logoSp = logoSheet.getSprite(0, 0);
-			
-			bg = game.loadImage("/bg.png");
 
-//			bg = new Background("/bg.png", 20);
-//			bg.setVector(-1, 0);
+			logoSp = logoSheet.getSprite(0, 0);
+
+			bg = game.loadImage("/main_menu_bg.png");
 
 			aud = new Audio("/army-forTitlePage.mp3.mp3");
 			aud.play();
+
+			keyRect = new Rectangle(0, 720, 400, 20);
+			keyRect.generateGraphics(0xebebeb);
 
 		}
 		catch (Exception e)
@@ -74,11 +84,9 @@ public class Menu implements MenuObject {
 		}
 
 	}
-	
+
 	@Override
 	public void render(Graphics graphics) {
-//		bg.render(game, graphics);
-//		bg.update();
 
 		//draw menu options
 		graphics.setFont(font);
@@ -94,14 +102,21 @@ public class Menu implements MenuObject {
 			}
 			graphics.drawString(options[i], 400 , 300 + i * 130);
 		}
+		
+		for(int k = 0; k < key.length; k++) {
+			graphics.setFont(fontKey);
+			graphics.setColor(Color.BLACK);
+			graphics.drawString("" + key[k], 150 + k * 150, 740);
+		}
 	}
 
 
-	public void render(RenderHandler renderer, Game game, int xZoom, int yZoom) {
-		
-//		graphics.drawImage(logo, (logo.getWidth()/2) % (game.getWidth()/2), 10, null);
-		renderer.renderImage(bg, 0, 0, xZoom/3, yZoom/3, true);
+	public void render(RenderHandler renderer, int xZoom, int yZoom) {
+
+		renderer.renderImage(bg, 0, 0, 2, 2, true);
 		renderer.renderSprite(logoSp, 200, 15, xZoom*2, yZoom*2, true);
+
+		renderer.renderRectangle(keyRect, xZoom, yZoom, true);
 
 
 	}
@@ -110,7 +125,7 @@ public class Menu implements MenuObject {
 
 	@Override
 	public void update(Game game) {
-		
+
 		try {
 
 			KeyBoardListener keyListener = game.getKeyListener();
@@ -157,8 +172,7 @@ public class Menu implements MenuObject {
 		if(currentChoice == 0)
 		{
 			// start	
-			Game.State = Game.STATE.NAME;
-			//			Game.State = Game.STATE.GENDER;
+			Game.State = Game.STATE.SCENE01;
 
 		}
 		if(currentChoice == 1)
@@ -170,8 +184,8 @@ public class Menu implements MenuObject {
 		if(currentChoice == 2)
 		{
 			// help
-			Game.State = Game.STATE.SCENE02;
-			
+			Game.State = Game.STATE.GENDER;
+
 		}
 		if(currentChoice == 3)
 		{
@@ -188,11 +202,7 @@ public class Menu implements MenuObject {
 	public Audio getAud() {
 		return aud;
 	}
-	
-//	public Background getBg() {
-//		return bg;
-//	}
 
 
-	
+
 }

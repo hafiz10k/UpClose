@@ -21,8 +21,6 @@ public class CreateName implements MenuObject, ActionListener{
 
 	private Font font;
 
-	private JTextField txtInput = new JTextField("");
-
 	private char[] name = {'A', 'A', 'A', 'A', 'A'};
 	private int currentChoice = 0;
 	public String fullName = "";
@@ -58,7 +56,7 @@ public class CreateName implements MenuObject, ActionListener{
 				graphics.setColor(Color.RED);
 			}
 			else {
-				graphics.setColor(Color.WHITE);
+				graphics.setColor(Color.YELLOW);
 			}
 
 			graphics.drawString("" + name[i], 260 + i * 100, 300);
@@ -74,8 +72,7 @@ public class CreateName implements MenuObject, ActionListener{
 			
 			if(keyListener.enter()) {
 				fullName = new String(name);
-				
-//				Game.State = Game.STATE.GAME;
+
 				Game.State = Game.STATE.GENDER;
 			}
 
@@ -107,6 +104,10 @@ public class CreateName implements MenuObject, ActionListener{
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public String getName() {
+		return fullName.toLowerCase();
 	}
 
 	@Override

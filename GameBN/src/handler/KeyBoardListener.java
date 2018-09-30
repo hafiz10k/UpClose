@@ -70,6 +70,10 @@ public class KeyBoardListener implements KeyListener, FocusListener{
 	public boolean enter() {
 		return keys[KeyEvent.VK_ENTER];
 	}
+	
+	public boolean a() {
+		return keys[KeyEvent.VK_A];
+	}
 
 
 

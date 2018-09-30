@@ -103,56 +103,60 @@ public class Player implements GameObject {
 
 
 
-		if (didMove) {
-			
+		if(didMove) {
+
+
 			collisionRectangle.x += xCollisionOffset;
 			collisionRectangle.y += yCollisionOffset;
-			
+
 			Rectangle axisCheck = new Rectangle(collisionRectangle.x, playerRectangle.y + yCollisionOffset, collisionRectangle.w, collisionRectangle.h);
-			
-			//checkXaxis
-			if(!game.getMap().checkCollision(axisCheck, layer, game.getXZoom(), game.getYZoom()) &&
-					!game.getMap().checkCollision(axisCheck, layer + 1, game.getXZoom(), game.getYZoom())) {
+
+			//Check the X axis
+			if(!game.getMap().checkCollision(axisCheck, layer, game.getXZoom(), game.getYZoom()) && 
+				!game.getMap().checkCollision(axisCheck, layer + 1, game.getXZoom(), game.getYZoom())) {
 				playerRectangle.x = collisionRectangle.x - xCollisionOffset;
 			}
-			
+
 			axisCheck.x = playerRectangle.x + xCollisionOffset;
 			axisCheck.y = collisionRectangle.y;
 			axisCheck.w = collisionRectangle.w;
 			axisCheck.h = collisionRectangle.h;
-//			axisCheck = new Rectangle(playerRectangle.x, collisionRectangle.y, collisionRectangle.w, collisionRectangle.h);
-			
-			//checkYaxis
-			if(!game.getMap().checkCollision(axisCheck, layer, game.getXZoom(), game.getYZoom()) &&
-					!game.getMap().checkCollision(axisCheck, layer + 1, game.getXZoom(), game.getYZoom())) {
+			//axisCheck = new Rectangle(playerRectangle.x, collisionRectangle.y, collisionRectangle.w, collisionRectangle.h);
+
+			//Check the Y axis
+			if(!game.getMap().checkCollision(axisCheck, layer, game.getXZoom(), game.getYZoom()) && 
+				!game.getMap().checkCollision(axisCheck, layer + 1, game.getXZoom(), game.getYZoom())) {
 				playerRectangle.y = collisionRectangle.y - yCollisionOffset;
 			}
-			
-			animatedSprite.update(game);
 
+
+			animatedSprite.update(game);
 		}
+
 		
 		updateCamera(game.getRenderer().getCamera());
 
 	}
 
 	public void updateCamera(Rectangle camera) {
-		if(playerRectangle.x >= 1000) {
-			camera.x = 500;
-			if(playerRectangle.x >= 1500) {
-				Game.State = Game.STATE.MENU;
-			}
-		} else {
-			camera.x = playerRectangle.x - (camera.w / 2);
-		}
-		if(playerRectangle.x <= 32) {
-			camera.x = -468;
-			if(playerRectangle.x <= -550) {
-				Game.State = Game.STATE.MENU;
-			}
-		} else {
-			camera.x = playerRectangle.x - (camera.w / 2);
-		}
+		camera.x = playerRectangle.x - (camera.w / 2);
+		camera.y = playerRectangle.y - (camera.h / 2);
+//		if(playerRectangle.x >= 1000) {
+//			camera.x = 500;
+//			if(playerRectangle.x >= 1500) {
+//				Game.State = Game.STATE.MENU;
+//			}
+//		} else {
+//			camera.x = playerRectangle.x - (camera.w / 2);
+//		}
+//		if(playerRectangle.x <= 32) {
+//			camera.x = -468;
+//			if(playerRectangle.x <= -550) {
+//				Game.State = Game.STATE.MENU;
+//			}
+//		} else {
+			
+//		}
 
 		//		if(playerRectangle.x >= -488 && playerRectangle.x <= 400 && playerRectangle.y >= -392 && playerRectangle.y <= -268) {
 		//			playerRectangle.x = 200;
@@ -160,10 +164,6 @@ public class Player implements GameObject {
 		//		}
 
 		//		System.out.println(playerRectangle.x + " " + playerRectangle.y);
-
-		camera.y = -384;
-
-		//		camera.y = playerRectangle.y - (camera.h / 2);
 
 	}
 

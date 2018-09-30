@@ -14,6 +14,19 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
+import battleScenes.FranciscoBattle;
+import battleScenes.dummyBattle;
+import battleScenes.lailaRatna;
+import cutScenes.Scene01;
+import cutScenes.Scene02;
+import cutScenes.Scene03;
+import cutScenes.Scene04;
+import cutScenes.Scene05;
+import cutScenes.Scene06;
+import cutScenes.Scene07;
+import cutScenes.Scene08;
+import cutScenes.Scene09;
+import cutScenes.Scene10;
 import entity.AnimatedSprite;
 import entity.Map;
 import entity.Player;
@@ -34,12 +47,7 @@ import menuComponents.Gender;
 import menuComponents.Help;
 import menuComponents.Load;
 import menuComponents.Menu;
-import screenMap.Scene01;
-import screenMap.Scene02;
-import screenMap.Scene03;
 import menuComponents.Save;
-
-import java.awt.Color;
 
 @SuppressWarnings({ "serial", "unused" })
 public class Game extends JFrame implements Runnable {
@@ -58,7 +66,7 @@ public class Game extends JFrame implements Runnable {
 	private BufferedImage bedroom;
 
 	private int selectedTileID = 2;
-	private int selectedLayer = 0;
+	private int selectedLayer = 1;
 
 	private Rectangle testRectangle = new Rectangle(30,30,100,100);
 
@@ -82,14 +90,26 @@ public class Game extends JFrame implements Runnable {
 	public Gender gender;
 	private Help help;
 	private Load load;
-	
+
 	// cutscenes
 	private Scene01 scene01;
 	private Scene02 scene02;
 	private Scene03 scene03;
+	private Scene04 scene04;
+	private Scene05 scene05;
+	private Scene06 scene06;
+	private Scene07 scene07;
+	private Scene08 scene08;
+	private Scene09 scene09;
+	private Scene10 scene10;
+
+	//battle scenes
+	private dummyBattle dummy;
+	private lailaRatna lailaRatna;
+	private FranciscoBattle francisco;
 
 	public Save save;
-	
+
 	private boolean boy = true;
 	private boolean playedGameMusic = false;
 
@@ -100,6 +120,16 @@ public class Game extends JFrame implements Runnable {
 		SCENE01,
 		SCENE02,
 		SCENE03,
+		SCENE04,
+		SCENE05,
+		SCENE06,
+		SCENE07,
+		SCENE08,
+		SCENE09,
+		SCENE10,
+		DUMMY,
+		LAILARATNA,
+		FRANCISCO,
 		GAME,
 		LOAD,
 		HELP,
@@ -129,7 +159,7 @@ public class Game extends JFrame implements Runnable {
 		//frame cannot be resize
 		setResizable(true);
 
-		getContentPane().setBackground(Color.BLACK);
+		canvas.setBackground(Color.DARK_GRAY);
 
 		// create obj for buffer strat
 		canvas.createBufferStrategy(3);	
@@ -165,13 +195,8 @@ public class Game extends JFrame implements Runnable {
 		// load map
 		map = new Map(new File("Map.txt"), tiles);
 
-
 		//load audio
-		vilAud = new Audio("/Gentle-Closure.mp3.mp3");
-
-
-		//		 testSprite = sheet.getSprite(4, 1);
-
+		vilAud = new Audio("/Village-Scene234.mp3");
 
 		//load SDK GUI
 		GUIButton[] buttons = new GUIButton[tiles.size()];
@@ -194,7 +219,7 @@ public class Game extends JFrame implements Runnable {
 		//new java class load
 		menu = new Menu(this);
 		name = new CreateName();
-		gender = new Gender();
+		gender = new Gender(this);
 		help = new Help();
 		load = new Load();
 
@@ -202,9 +227,21 @@ public class Game extends JFrame implements Runnable {
 		scene01 = new Scene01(this);
 		scene02 = new Scene02(this);
 		scene03 = new Scene03(this);
+		scene04 = new Scene04(this);
+		scene05 = new Scene05(this);
+		scene06 = new Scene06(this);
+		scene07 = new Scene07(this);
+		scene08 = new Scene08(this);
+		scene09 = new Scene09(this);
+		scene10 = new Scene10(this);
+
+		//BATTLE
+		dummy = new dummyBattle(this);
+		lailaRatna = new lailaRatna(this);
+		francisco = new FranciscoBattle(this);
 
 		save = new Save(this);
-		
+
 		// add listeners
 		canvas.addKeyListener(keyListener);
 		canvas.addFocusListener(keyListener);
@@ -251,6 +288,7 @@ public class Game extends JFrame implements Runnable {
 		//		for(int i = 0; i < objects.length; i++) {
 		//			objects[i].update(this);
 		//		}
+
 		if(State == STATE.GAME) {
 			for(int i = 0; i < objects.length; i++) {
 				objects[i].update(this);
@@ -262,17 +300,22 @@ public class Game extends JFrame implements Runnable {
 				vilAud.play();
 				playedGameMusic = true;
 			}
+
 		}
 
 		if(State == STATE.MENU) {
 			menu.update(this);
-			
+
 			vilAud.stop();
 			playedGameMusic = false;
 		}
 
 		if(State == STATE.GENDER) {
 			gender.update(this);
+		}
+
+		if(State == STATE.SAVE) {
+			save.update(this);
 		}
 
 		if(State == STATE.LOAD) {
@@ -288,21 +331,58 @@ public class Game extends JFrame implements Runnable {
 		}
 
 		if(State == STATE.SCENE01) {
-			scene01.update(this, player);
+			scene01.update(this);
 		}
-		
+
 		if(State == STATE.SCENE02){
 			scene02.update(this);
 			menu.getAud().close();
 		}
-		
+
 		if(State == STATE.SCENE03) {
 			scene03.update(this, player);
 		}
-		
-		if(State == STATE.SAVE) {
-			save.update(this);
+
+		if(State == STATE.SCENE04) {
+			scene04.update(this, player);
 		}
+
+		if(State == STATE.SCENE05) {
+			scene05.update(this, player);
+		}
+
+		if(State == STATE.SCENE06) {
+			scene06.update(this);
+		}
+
+		if(State == STATE.SCENE07) {
+			scene07.update(this, player);
+		}
+
+		if(State == STATE.SCENE08) {
+			scene08.update(this, player);
+		}
+
+		if(State == STATE.SCENE09) {
+			scene09.update(this, player);
+		}
+		
+		if(State == STATE.SCENE10) {
+			scene10.update(this);
+		}
+
+		if(State == STATE.DUMMY) {
+			dummy.update(this);
+		}
+
+		if(State == STATE.LAILARATNA) {
+			lailaRatna.update(this);
+		}
+
+		if(State == STATE.FRANCISCO) {
+			francisco.update(this);
+		}
+
 	}
 
 	public BufferedImage loadImage(String path) {
@@ -369,9 +449,7 @@ public class Game extends JFrame implements Runnable {
 		}
 
 		if(State == STATE.MENU) {
-			//			menu.render(graphics);
-
-			menu.render(renderer, this, xZoom, yZoom); // sword
+			menu.render(renderer, xZoom, yZoom); // sword
 			renderer.render(graphics);	
 			menu.render(graphics); // menu list
 
@@ -382,6 +460,8 @@ public class Game extends JFrame implements Runnable {
 		}
 
 		if(State == STATE.GENDER) {
+			gender.render(renderer, xZoom, yZoom);
+			renderer.render(graphics);
 			gender.render(graphics);
 		}
 
@@ -392,12 +472,10 @@ public class Game extends JFrame implements Runnable {
 		if(State == STATE.LOAD) {
 			load.render(graphics);
 		}
-		
+
 		if(State == STATE.SAVE) {
 			save.render(graphics);
 		}
-	
-	
 
 		if(State == STATE.SCENE01) {
 
@@ -405,19 +483,78 @@ public class Game extends JFrame implements Runnable {
 			renderer.render(graphics); // both
 			scene01.render(this, graphics, player); // images, players
 		}
-		
+
 		if(State == STATE.SCENE02) {
 			scene02.render(renderer, graphics, xZoom, yZoom);
 			renderer.render(graphics);
 			scene02.render(graphics);
 		}
-		
+
 		if(State == STATE.SCENE03) {
 			scene03.render(renderer, this, player, xZoom, yZoom);
 			renderer.render(graphics);
 			scene03.render(graphics);
 		}
 
+		if(State == STATE.SCENE04) {
+			scene04.render(renderer, this, player, xZoom, yZoom);
+			renderer.render(graphics);
+			scene04.render(graphics);
+		}
+
+		if(State == STATE.SCENE05) {
+			scene05.render(renderer, this, player, xZoom, yZoom);
+			renderer.render(graphics);
+			scene05.render(graphics, this);
+		}
+
+		if(State == STATE.SCENE06) {
+			scene06.render(renderer, this, player, xZoom, yZoom);
+			renderer.render(graphics);
+			scene06.render(graphics, this); 
+		}
+
+		if(State == STATE.SCENE07) {
+			scene07.render(renderer, this, player, xZoom, yZoom);
+			renderer.render(graphics);
+			scene07.render(graphics);
+		}
+
+		if(State == STATE.SCENE08) {
+			scene08.render(renderer, this, player, xZoom, yZoom);
+			renderer.render(graphics);
+			scene08.render(graphics);
+		}
+
+		if(State == STATE.SCENE09) {
+			scene09.render(renderer, this, player, xZoom, yZoom);
+			renderer.render(graphics);
+			scene09.render(graphics, this);
+		}
+		
+		if(State == STATE.SCENE10) {
+			scene10.render(renderer, this, player, xZoom, yZoom);
+			renderer.render(graphics);
+			scene10.render(graphics, this);
+		}
+
+		if(State == STATE.DUMMY) {
+			dummy.render(renderer, xZoom, yZoom);
+			renderer.render(graphics);
+			dummy.render(graphics);
+		}
+
+		if(State == STATE.LAILARATNA) {
+			lailaRatna.render(renderer, xZoom, yZoom);
+			renderer.render(graphics);
+			lailaRatna.render(graphics);
+		}
+
+		if(State == STATE.FRANCISCO) {
+			francisco.render(renderer, xZoom, yZoom);
+			renderer.render(graphics);
+			francisco.render(graphics);
+		}
 
 		graphics.dispose();
 		bufferStrategy.show();

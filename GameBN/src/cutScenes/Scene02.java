@@ -1,4 +1,4 @@
-package screenMap;
+package cutScenes;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -12,6 +12,7 @@ import handler.KeyBoardListener;
 import handler.RenderHandler;
 import menuComponents.Menu;
 
+// player being sucked in the blackhole
 public class Scene02 {
 	private Audio a;
 
@@ -56,30 +57,18 @@ public class Scene02 {
 
 		System.out.println(timerRect.x);
 
-		try {
+		if(timerRect.x >= 80) {
 
-			if(timerRect.x >= 80) {
+			KeyBoardListener keyListener = game.getKeyListener();
 
-				KeyBoardListener keyListener = game.getKeyListener();
-
-				boolean didMove = false;
-				if(keyListener.enter()) {
-					didMove = true;
-					Game.State = Game.STATE.SCENE03;
-
-				}
-
-				if(didMove) {
-					Thread.sleep(150);
-				}
-
+			boolean didMove = false;
+			if(keyListener.a()) {
+				didMove = true;
+				Game.State = Game.STATE.NAME;
 			}
 
+		}
 
-		}
-		catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 
 	}
 
@@ -112,11 +101,8 @@ public class Scene02 {
 
 			graphics.setFont(fontKey);
 			graphics.setColor(Color.BLACK);
-			graphics.drawString("[press enter]", 800, 740);
+			graphics.drawString("press [A]", 800, 740);
 		}
-
-
-
 
 	}
 

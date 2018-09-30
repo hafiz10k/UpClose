@@ -1,8 +1,9 @@
 /.metadata/
 /RemoteSystemsTempFiles/
+/battleScenes/
+/cutScenes/
 /entity/
 /game/
 /gui/
 /handler/
 /menuComponents/
-/screenMap/
