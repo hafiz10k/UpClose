@@ -23,7 +23,6 @@ public class lailaRatna {
 	private String options[] = {
 		"Attack",
 		"Taunt",
-		"Items",
 		"Stats"
 	};
 	
@@ -52,11 +51,11 @@ public class lailaRatna {
 			KeyBoardListener keyListener = game.getKeyListener();
 
 			boolean didMove = false;
-//			if(keyListener.enter()) {
-//				didMove = true;
-//				select();
-//
-//			}
+			if(keyListener.enter()) {
+				didMove = true;
+				select();
+
+			}
 
 			if(keyListener.left()) {
 				didMove = true;
@@ -81,6 +80,27 @@ public class lailaRatna {
 
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public void select() {
+		if(currentChoice == 0)
+		{
+			// attack	
+			Game.State = Game.STATE.GAME;
+
+		}
+		if(currentChoice == 1)
+		{
+			// taunt
+			Game.State = Game.STATE.LOAD;
+
+		}
+		if(currentChoice == 2)
+		{
+			// stats
+			Game.State = Game.STATE.MENU;
+
 		}
 	}
 	

@@ -281,7 +281,7 @@ public class Scene06 {
 		}
 		
 		if(timerRect.x >= 180) {
-			Game.State = STATE.SCENE07;
+			Game.State = STATE.SCENE08;
 		}
 
 	}

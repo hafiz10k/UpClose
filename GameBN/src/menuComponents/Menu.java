@@ -43,9 +43,9 @@ public class Menu implements MenuObject {
 	private Font fontKey;
 
 	private BufferedImage logo;
-	private BufferedImage bg;
-
 	private Sprite logoSp;
+	
+	private BufferedImage bg;
 
 	private Audio aud;
 
@@ -62,7 +62,7 @@ public class Menu implements MenuObject {
 			font = new Font("Caviar Dreams", Font.PLAIN, 50);
 			fontKey = new Font("Arial", Font.PLAIN, 20);
 
-			//load bg
+			//load logo
 			logo = game.loadImage("/title_logo.png");
 			SpriteSheet logoSheet = new SpriteSheet(logo);
 			logoSheet.loadSprites(104, 40);
@@ -184,7 +184,7 @@ public class Menu implements MenuObject {
 		if(currentChoice == 2)
 		{
 			// help
-			Game.State = Game.STATE.GENDER;
+			Game.State = Game.STATE.LRS;
 
 		}
 		if(currentChoice == 3)

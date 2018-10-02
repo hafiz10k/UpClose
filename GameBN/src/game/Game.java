@@ -27,6 +27,7 @@ import cutScenes.Scene07;
 import cutScenes.Scene08;
 import cutScenes.Scene09;
 import cutScenes.Scene10;
+import cutScenes.lailaRatnaScene;
 import entity.AnimatedSprite;
 import entity.Map;
 import entity.Player;
@@ -48,6 +49,7 @@ import menuComponents.Help;
 import menuComponents.Load;
 import menuComponents.Menu;
 import menuComponents.Save;
+import placeScene.hospitalScene;
 
 @SuppressWarnings({ "serial", "unused" })
 public class Game extends JFrame implements Runnable {
@@ -61,14 +63,9 @@ public class Game extends JFrame implements Runnable {
 	private SpriteSheet sheet;
 	private SpriteSheet boySheet;
 	private SpriteSheet girlSheet;
-	private SpriteSheet alphabetSheet;
-
-	private BufferedImage bedroom;
-
+	
 	private int selectedTileID = 2;
-	private int selectedLayer = 1;
-
-	private Rectangle testRectangle = new Rectangle(30,30,100,100);
+	private int selectedLayer = 0;
 
 	private Tiles tiles;
 	private Map map;
@@ -85,11 +82,14 @@ public class Game extends JFrame implements Runnable {
 	private int xZoom = 3;
 	private int yZoom = 3;
 
+	//class
 	private Menu menu;
 	public CreateName name;
 	public Gender gender;
 	private Help help;
 	private Load load;
+	public Save save;
+	private gamePlay gamePlay;
 
 	// cutscenes
 	private Scene01 scene01;
@@ -102,13 +102,17 @@ public class Game extends JFrame implements Runnable {
 	private Scene08 scene08;
 	private Scene09 scene09;
 	private Scene10 scene10;
+	private lailaRatnaScene LR;
+	
+	//places Scenes
+	private hospitalScene hosp;
 
 	//battle scenes
 	private dummyBattle dummy;
 	private lailaRatna lailaRatna;
 	private FranciscoBattle francisco;
-
-	public Save save;
+	
+	private Rectangle dialogRect;
 
 	private boolean boy = true;
 	private boolean playedGameMusic = false;
@@ -127,13 +131,16 @@ public class Game extends JFrame implements Runnable {
 		SCENE08,
 		SCENE09,
 		SCENE10,
+		LRS,
 		DUMMY,
 		LAILARATNA,
 		FRANCISCO,
 		GAME,
+		GAMEPLAY,
 		LOAD,
 		HELP,
-		SAVE
+		SAVE,
+		HOSP
 	};
 
 	public static STATE State = STATE.MENU;
@@ -145,7 +152,7 @@ public class Game extends JFrame implements Runnable {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// set pos n size of frame
-		setBounds(0, 0, 1000, 800);
+		setBounds(0, 0, 1000, 1000);
 
 		//put our frame in center of screen
 		setLocationRelativeTo(null);
@@ -171,7 +178,7 @@ public class Game extends JFrame implements Runnable {
 		renderer = new RenderHandler(getWidth(), getHeight());
 
 		// load assets
-		BufferedImage tilemapImage = loadImage("/Tiles3.png");
+		BufferedImage tilemapImage = loadImage("/tilesheet_320x160.png");
 		sheet = new SpriteSheet(tilemapImage);
 		sheet.loadSprites(16, 16);
 
@@ -188,7 +195,7 @@ public class Game extends JFrame implements Runnable {
 		//load player animated sprite
 		AnimatedSprite boyAni = new AnimatedSprite(boySheet, 10);
 		AnimatedSprite girlAni = new AnimatedSprite(girlSheet, 10);
-
+		
 		// load tiles
 		tiles = new Tiles(new File("tile.txt"), sheet);
 
@@ -203,12 +210,13 @@ public class Game extends JFrame implements Runnable {
 		Sprite[] tileSprites = tiles.getSprites();
 
 		for(int i = 0; i < buttons.length; i++) {
-			Rectangle tileRectangle = new Rectangle(0, i*(16*xZoom + 2), 16*xZoom, 16*yZoom);
+			Rectangle tileRectangle = new Rectangle(0, i*(16*xZoom), 16*xZoom, 16*yZoom);
 
 			buttons[i] = new SDKButton(this, i, tileSprites[i], tileRectangle);
 		}
 
 		GUI gui = new GUI(buttons, 5, 5, true);
+
 
 		// load objects
 		objects = new GameObject[2];
@@ -222,6 +230,8 @@ public class Game extends JFrame implements Runnable {
 		gender = new Gender(this);
 		help = new Help();
 		load = new Load();
+		save = new Save(this);
+		gamePlay = new gamePlay(this);
 
 		// CUTSCENES
 		scene01 = new Scene01(this);
@@ -234,13 +244,15 @@ public class Game extends JFrame implements Runnable {
 		scene08 = new Scene08(this);
 		scene09 = new Scene09(this);
 		scene10 = new Scene10(this);
+		LR = new lailaRatnaScene(this);
 
 		//BATTLE
 		dummy = new dummyBattle(this);
 		lailaRatna = new lailaRatna(this);
 		francisco = new FranciscoBattle(this);
 
-		save = new Save(this);
+		//PLACES SCENES
+		hosp = new hospitalScene(this);
 
 		// add listeners
 		canvas.addKeyListener(keyListener);
@@ -293,7 +305,8 @@ public class Game extends JFrame implements Runnable {
 			for(int i = 0; i < objects.length; i++) {
 				objects[i].update(this);
 
-			}			
+			}		
+			gamePlay.update(this);
 
 			if(!playedGameMusic) {
 				menu.getAud().close();
@@ -366,9 +379,13 @@ public class Game extends JFrame implements Runnable {
 		if(State == STATE.SCENE09) {
 			scene09.update(this, player);
 		}
-		
+
 		if(State == STATE.SCENE10) {
 			scene10.update(this);
+		}
+		
+		if(State == STATE.LRS) {
+			LR.update(this);
 		}
 
 		if(State == STATE.DUMMY) {
@@ -382,10 +399,14 @@ public class Game extends JFrame implements Runnable {
 		if(State == STATE.FRANCISCO) {
 			francisco.update(this);
 		}
+		
+		if(State == STATE.HOSP) {
+			hosp.update(this);
+		}
 
 	}
 
-	public BufferedImage loadImage(String path) {
+	public static BufferedImage loadImage(String path) {
 		try {
 			BufferedImage loadedImage = ImageIO.read(Game.class.getResourceAsStream(path));
 			BufferedImage formattedImage = new BufferedImage(loadedImage.getWidth(), loadedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
@@ -431,21 +452,22 @@ public class Game extends JFrame implements Runnable {
 	}
 
 	public void render() {
+		
 		BufferStrategy bufferStrategy = canvas.getBufferStrategy();
 		Graphics graphics = bufferStrategy.getDrawGraphics();
 		super.paint(graphics);
 
 		renderer.render(graphics);
-
+		
 		if(State == STATE.GAME) {
 			map.render(renderer, objects, xZoom, yZoom);
-			int chosen1 = gender.getLoadChoice();
+			int chosen1 = gender.getLoadChoice();	
+			
 			//			for(int i = 0; i < objects.length; i++) {
 			//				objects[i].render(renderer, xZoom, yZoom);
 			//			}
+			gamePlay.render(renderer, player, xZoom, yZoom);
 			renderer.render(graphics);
-
-
 		}
 
 		if(State == STATE.MENU) {
@@ -531,11 +553,18 @@ public class Game extends JFrame implements Runnable {
 			renderer.render(graphics);
 			scene09.render(graphics, this);
 		}
-		
+
 		if(State == STATE.SCENE10) {
 			scene10.render(renderer, this, player, xZoom, yZoom);
 			renderer.render(graphics);
 			scene10.render(graphics, this);
+		}
+		
+		if(State == STATE.LRS) {
+
+			LR.render(renderer, xZoom, yZoom); 
+			renderer.render(graphics); 
+			LR.render(graphics); 
 		}
 
 		if(State == STATE.DUMMY) {
@@ -554,6 +583,12 @@ public class Game extends JFrame implements Runnable {
 			francisco.render(renderer, xZoom, yZoom);
 			renderer.render(graphics);
 			francisco.render(graphics);
+		}
+		
+		if(State == STATE.HOSP) {
+			hosp.render(renderer, xZoom, yZoom, this);
+			renderer.render(graphics);
+			
 		}
 
 		graphics.dispose();

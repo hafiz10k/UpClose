@@ -72,6 +72,9 @@ public class Scene01 {
 
 	private int addedGirlCharCounter = 0;
 	private int addedBoyCharCounter = 0;
+	
+	private boolean beginBoy = false;
+	private boolean beginGirl = false;
 
 	public Scene01(Game game) {
 
@@ -201,7 +204,11 @@ public class Scene01 {
 			if(timerRect.x > 10 && timerRect.x <= 40) {
 				// ANIMATING DIALOGS - GIRL
 				char girlChar[] = girl[g].toCharArray();
-
+				if(beginGirl == false) {
+					addedGirlChar = "";
+					addedGirlCharCounter = 0;
+					beginGirl = true;
+				}
 				if(addedGirlCharCounter <= girlChar.length-1) {
 					addedGirlChar = addedGirlChar + girlChar[addedGirlCharCounter];
 					addedGirlCharCounter++;
@@ -211,9 +218,17 @@ public class Scene01 {
 			if(timerRect.x > 40 && timerRect.x < 100) {
 				// ANIMATING DIALOGS - BOY
 				char boyChar[] = boy[b].toCharArray();
+				if(beginBoy == false) {
+					addedBoyChar = "";
+					addedBoyCharCounter = 0;
+					beginBoy = true;
+					g++;
+				}
 				if(addedBoyCharCounter <= boyChar.length-1) {
 					addedBoyChar = addedBoyChar + boyChar[addedBoyCharCounter];
 					addedBoyCharCounter++;
+				} else {
+					beginGirl = false;
 				}
 
 
@@ -224,7 +239,13 @@ public class Scene01 {
 
 				String adik2 = "adik dialog 2";
 				// ANIMATING DIALOGS - GIRL
-				char girlChar[] = adik2.toCharArray();
+				char girlChar[] = girl[g].toCharArray();
+				if(beginGirl == false) {
+					addedGirlChar = "";
+					addedGirlCharCounter = 0;
+					beginGirl = true;
+					b++;
+				}
 				if(addedGirlCharCounter <= girlChar.length-1) {
 					addedGirlChar = addedGirlChar + girlChar[addedGirlCharCounter];
 					addedGirlCharCounter++;
@@ -288,6 +309,7 @@ public class Scene01 {
 			graphics.drawString(addedBoyChar, 70, 650);
 
 			graphics.setFont(fontKey);
+			graphics.setColor(Color.BLACK);
 			graphics.drawString(key, 800, 740);
 			System.out.println(addedGirlChar);
 
@@ -296,7 +318,7 @@ public class Scene01 {
 		if(timerRect.x > 100) {
 			graphics.setColor(Color.MAGENTA);
 			graphics.drawString(addedGirlChar, 70, 650);
-
+			System.out.println("Hello");
 		}
 
 	}

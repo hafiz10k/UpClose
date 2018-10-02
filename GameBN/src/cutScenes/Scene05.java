@@ -19,7 +19,6 @@ import menuComponents.CreateName;
 
 // BOY - in pg bendahara house
 public class Scene05 {
-	private Game game;
 
 	private BufferedImage room;
 	private BufferedImage bh;

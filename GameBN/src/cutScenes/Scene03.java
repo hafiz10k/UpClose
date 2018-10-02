@@ -43,6 +43,8 @@ public class Scene03 {
 		};
 
 	private int i = 0;
+	
+	private Audio sceneAud;
 
 	public Scene03(Game game) {
 		// land
@@ -73,6 +75,8 @@ public class Scene03 {
 		//DIALOG BOX
 		rect = new Rectangle(40, 600, 300, 50);
 		rect.generateGraphics(0xeff0f1);
+		
+		//custscenes audio
 
 	}
 
@@ -131,9 +135,9 @@ public class Scene03 {
 				KeyBoardListener keyListener = game.getKeyListener();
 				boolean didMove = false;
 
-				if(keyListener.enter()) {
+				if(keyListener.a()) {
 					didMove = true;
-					Game.State = Game.STATE.SCENE05;
+					Game.State = Game.STATE.HOSP;
 				}
 				
 				if(didMove) {
@@ -172,7 +176,7 @@ public class Scene03 {
 
 			graphics.setFont(fontKey);
 			graphics.setColor(Color.BLACK);
-			graphics.drawString("[press enter]", 800, 740);
+			graphics.drawString("press [A]", 800, 740);
 		}
 
 

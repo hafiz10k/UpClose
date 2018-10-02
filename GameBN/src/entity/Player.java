@@ -1,5 +1,7 @@
 package entity;
 
+import java.awt.Graphics;
+
 import game.Game;
 import game.GameObject;
 import handler.KeyBoardListener;
@@ -9,8 +11,8 @@ public class Player implements GameObject {
 
 	private Rectangle playerRectangle;
 	private Rectangle collisionRectangle;
-
-	private int speed = 4;
+	
+	private int speed = 5;
 
 	// 0 - Down, 1 - Left, 2 - Right, 3 - Up
 	private int direction = 0;
@@ -19,7 +21,7 @@ public class Player implements GameObject {
 
 	private Sprite sprite;
 	private AnimatedSprite animatedSprite = null;
-	
+
 	private final int xCollisionOffset = 15;
 	private final int yCollisionOffset = 35;
 
@@ -35,6 +37,7 @@ public class Player implements GameObject {
 		playerRectangle.generateGraphics(3, 0xFF00FF90);
 
 		collisionRectangle = new Rectangle(0, 0, 15*xZoom, 25*yZoom);
+		
 	}
 
 	public void updateDirection() {
@@ -45,13 +48,15 @@ public class Player implements GameObject {
 
 	@Override
 	public void render(RenderHandler renderer, int xZoom, int yZoom) {
-		// renderer.renderRectangle(playerRectangle, xZoom, yZoom);
+		 
 		if(animatedSprite != null) {
 			renderer.renderSprite(animatedSprite, playerRectangle.x, playerRectangle.y, xZoom, yZoom, false);
+			
 		}
 		else if(sprite != null) {
 			renderer.renderSprite(sprite, playerRectangle.x, playerRectangle.y, xZoom, yZoom, false);
 		}
+
 		else {
 			renderer.renderRectangle(playerRectangle, xZoom, yZoom, false);
 		}
@@ -113,7 +118,7 @@ public class Player implements GameObject {
 
 			//Check the X axis
 			if(!game.getMap().checkCollision(axisCheck, layer, game.getXZoom(), game.getYZoom()) && 
-				!game.getMap().checkCollision(axisCheck, layer + 1, game.getXZoom(), game.getYZoom())) {
+					!game.getMap().checkCollision(axisCheck, layer + 1, game.getXZoom(), game.getYZoom())) {
 				playerRectangle.x = collisionRectangle.x - xCollisionOffset;
 			}
 
@@ -125,7 +130,7 @@ public class Player implements GameObject {
 
 			//Check the Y axis
 			if(!game.getMap().checkCollision(axisCheck, layer, game.getXZoom(), game.getYZoom()) && 
-				!game.getMap().checkCollision(axisCheck, layer + 1, game.getXZoom(), game.getYZoom())) {
+					!game.getMap().checkCollision(axisCheck, layer + 1, game.getXZoom(), game.getYZoom())) {
 				playerRectangle.y = collisionRectangle.y - yCollisionOffset;
 			}
 
@@ -133,37 +138,30 @@ public class Player implements GameObject {
 			animatedSprite.update(game);
 		}
 
-		
+
 		updateCamera(game.getRenderer().getCamera());
 
 	}
 
 	public void updateCamera(Rectangle camera) {
+
+		System.out.println("x: " + playerRectangle.x + "\n" + "y: " + playerRectangle.y);
 		camera.x = playerRectangle.x - (camera.w / 2);
 		camera.y = playerRectangle.y - (camera.h / 2);
-//		if(playerRectangle.x >= 1000) {
-//			camera.x = 500;
-//			if(playerRectangle.x >= 1500) {
-//				Game.State = Game.STATE.MENU;
-//			}
-//		} else {
-//			camera.x = playerRectangle.x - (camera.w / 2);
-//		}
-//		if(playerRectangle.x <= 32) {
-//			camera.x = -468;
-//			if(playerRectangle.x <= -550) {
-//				Game.State = Game.STATE.MENU;
-//			}
-//		} else {
-			
-//		}
 
-		//		if(playerRectangle.x >= -488 && playerRectangle.x <= 400 && playerRectangle.y >= -392 && playerRectangle.y <= -268) {
-		//			playerRectangle.x = 200;
-		//			playerRectangle.y = -200;
-		//		}
+		if(camera.x <= -590) {
+			camera.x = -590;
+			if(playerRectangle.x <= -606) {
+				playerRectangle.x = -606;
+			}
+		}
 
-		//		System.out.println(playerRectangle.x + " " + playerRectangle.y);
+		if(camera.y <= -1344) {
+			camera.y = -1344;
+			if(playerRectangle.y <= -1360) {
+				playerRectangle.y = -1360;
+			}
+		}
 
 	}
 

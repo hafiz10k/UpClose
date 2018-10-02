@@ -152,7 +152,7 @@ public class Gender implements MenuObject{
 
 					game.player.changeSprite(boyAni);
 					
-					Game.State = STATE.SCENE03;
+					Game.State = STATE.GAME;
 				} 
 				
 				else {
@@ -164,7 +164,7 @@ public class Gender implements MenuObject{
 					AnimatedSprite girlAni = new AnimatedSprite(girlSheet, 10);
 					game.player.changeSprite(girlAni);
 					
-					Game.State = STATE.SCENE04;
+					Game.State = STATE.GAME;
 				}
 
 			}

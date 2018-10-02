@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -8,6 +9,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import org.w3c.dom.css.Rect;
+
+import game.Game;
 import game.GameObject;
 import handler.RenderHandler;
 
@@ -43,6 +47,7 @@ public class Map
 
 		int maxX = Integer.MIN_VALUE;
 		int maxY = Integer.MIN_VALUE;
+		
 
 		try {
 			Scanner scanner = new Scanner(mapFile);
@@ -361,8 +366,7 @@ public class Map
 		}
 	}
 
-	public void render(RenderHandler renderer, GameObject[] objects, int xZoom, int yZoom)
-	{
+	public void render(RenderHandler renderer, GameObject[] objects, int xZoom, int yZoom)	{
 		int tileWidth = 16 * xZoom;
 		int tileHeight = 16 * yZoom;
 
@@ -449,6 +453,7 @@ public class Map
 				objects[i].render(renderer, xZoom, yZoom);
 			}
 		}
+		
 	}
 
 
