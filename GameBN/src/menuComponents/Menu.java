@@ -184,7 +184,7 @@ public class Menu implements MenuObject {
 		if(currentChoice == 2)
 		{
 			// help
-			Game.State = Game.STATE.LRS;
+			Game.State = Game.STATE.HOSP;
 
 		}
 		if(currentChoice == 3)

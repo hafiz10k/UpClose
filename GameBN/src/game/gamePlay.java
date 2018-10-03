@@ -1,5 +1,9 @@
 package game;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import entity.Player;
@@ -11,16 +15,25 @@ import handler.RenderHandler;
 public class gamePlay {
 	public Player player;
 
-	private BufferedImage logo;
-	private Sprite logoSp;
+	private Sprite dialogBtn;
+	private Sprite charInfoRect;
+	
+	private Font f = new Font("arial", Font.PLAIN, 50);
 
 	public gamePlay(Game game) {
 		//load dialog
-		logo = game.loadImage("/dialogRect.png");
-		SpriteSheet logoSheet = new SpriteSheet(logo);
-		logoSheet.loadSprites(64, 40);
+		BufferedImage buttonDialog = game.loadImage("/dialogRect.png");
+		SpriteSheet buttonDialogSheet = new SpriteSheet(buttonDialog);
+		buttonDialogSheet.loadSprites(64, 40);
 
-		logoSp = logoSheet.getSprite(0, 0);
+		dialogBtn = buttonDialogSheet.getSprite(0, 0);
+
+		//load dialog
+		BufferedImage charInfo = game.loadImage("/character_info_rect.png");
+		SpriteSheet charInfoSheet = new SpriteSheet(charInfo);
+		charInfoSheet.loadSprites(64, 40);
+
+		charInfoRect = charInfoSheet.getSprite(0, 0);
 
 	}
 
@@ -28,19 +41,19 @@ public class gamePlay {
 
 
 		if(game.player.getRectangle().x >= 2220 && game.player.getRectangle().x <= 2290 && game.player.getRectangle().y <= 0 && game.player.getRectangle().y >= -155) {
-			
-			
+
+
 			KeyBoardListener keyListener = game.getKeyListener();
 			try {	
-			if(keyListener.a()) {
+				if(keyListener.a()) {
 
 					Game.State = Game.STATE.LRS;
-					
-					game.player.getRectangle().x = 2420;
-					game.player.getRectangle().y = -20;
-					
+
+					game.player.getRectangle().x = 2890;
+					game.player.getRectangle().y = -75;
+
 				} 
-				
+
 				Thread.sleep(150);
 
 			}catch (InterruptedException e) {
@@ -53,14 +66,22 @@ public class gamePlay {
 	}
 
 	public void render(RenderHandler renderer, Player player, int xZoom, int yZoom) {
-		//		System.out.println(player.getRectangle().x + ", " + player.getRectangle().y);
+		renderer.renderSprite(charInfoRect, 0, 0, 5, 5, true);
+		
 		if(player.getRectangle().x <= -10 && player.getRectangle().x >= -40 && player.getRectangle().y <= -990) {
-			renderer.renderSprite(logoSp, 0, 0, xZoom, yZoom, true);
+			renderer.renderSprite(dialogBtn, 40, 600, xZoom, yZoom, true);
 		}
 
 		if(player.getRectangle().x >= 2220 && player.getRectangle().x <= 2290 && player.getRectangle().y <= 0 && player.getRectangle().y >= -155) {
-			renderer.renderSprite(logoSp, 0, 0, xZoom, yZoom, true);
+			renderer.renderSprite(dialogBtn, 40, 600, xZoom, yZoom, true);
 		}
+	}
+	
+	public void render(Graphics graphics, Game game) {
+		graphics.setFont(f);
+		graphics.setColor(Color.BLACK);
+		graphics.drawString(game.name.getName(), 10, 60);
+		System.out.println(game.name.getName());
 	}
 
 

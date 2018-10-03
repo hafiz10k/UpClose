@@ -197,6 +197,7 @@ public class Scene01 {
 				}
 
 			}
+			System.out.println(timerRect.x);
 
 
 			//DIALOGS
@@ -235,7 +236,7 @@ public class Scene01 {
 			}
 
 
-			if(timerRect.x > 100) {
+			if(timerRect.x > 100 && timerRect.x < 160) {
 
 				String adik2 = "adik dialog 2";
 				// ANIMATING DIALOGS - GIRL
@@ -249,6 +250,26 @@ public class Scene01 {
 				if(addedGirlCharCounter <= girlChar.length-1) {
 					addedGirlChar = addedGirlChar + girlChar[addedGirlCharCounter];
 					addedGirlCharCounter++;
+				}
+				else {
+					beginBoy = false;
+				}
+			}
+			
+			if(timerRect.x > 160 && timerRect.x <= 300) {
+				// ANIMATING DIALOGS - BOY
+				char boyChar[] = boy[b].toCharArray();
+				if(beginBoy == false) {
+					addedBoyChar = "";
+					addedBoyCharCounter = 0;
+					beginBoy = true;
+					g++;
+				}
+				if(addedBoyCharCounter <= boyChar.length-1) {
+					addedBoyChar = addedBoyChar + boyChar[addedBoyCharCounter];
+					addedBoyCharCounter++;
+				} else {
+					beginGirl = false;
 				}
 			}
 
@@ -279,7 +300,7 @@ public class Scene01 {
 		renderer.renderSprite(boyAni, boyRect.x, boyRect.y, xZoom, yZoom, false);
 		renderer.renderSprite(girlAni, girlRect.x, girlRect.y, xZoom, yZoom, false);
 
-		if(timerRect.x > 10) {
+		if(timerRect.x > 10 && timerRect.x <= 300) {
 			renderer.renderRectangle(rect, xZoom, yZoom, true);
 		}
 		
@@ -311,14 +332,24 @@ public class Scene01 {
 			graphics.setFont(fontKey);
 			graphics.setColor(Color.BLACK);
 			graphics.drawString(key, 800, 740);
-			System.out.println(addedGirlChar);
 
 		}
 
-		if(timerRect.x > 100) {
+		if(timerRect.x > 100 && timerRect.x < 160) {
 			graphics.setColor(Color.MAGENTA);
 			graphics.drawString(addedGirlChar, 70, 650);
-			System.out.println("Hello");
+			
+		}
+		
+		if(timerRect.x > 160 && timerRect.x <= 300) {
+
+			graphics.setColor(Color.BLUE);
+			graphics.drawString(addedBoyChar, 70, 650);
+
+			graphics.setFont(fontKey);
+			graphics.setColor(Color.BLACK);
+			graphics.drawString(key, 800, 740);
+
 		}
 
 	}

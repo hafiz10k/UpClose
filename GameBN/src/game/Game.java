@@ -468,6 +468,7 @@ public class Game extends JFrame implements Runnable {
 			//			}
 			gamePlay.render(renderer, player, xZoom, yZoom);
 			renderer.render(graphics);
+			gamePlay.render(graphics, this);
 		}
 
 		if(State == STATE.MENU) {

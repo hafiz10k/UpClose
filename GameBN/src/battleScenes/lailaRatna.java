@@ -121,7 +121,7 @@ public class lailaRatna {
 			{
 				graphics.setColor(Color.YELLOW);
 			}
-			graphics.drawString(options[i], 150 + i * 200 , 650);
+			graphics.drawString(options[i], 150 + i * 300 , 650);
 		}
 	}
 
