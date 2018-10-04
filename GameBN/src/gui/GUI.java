@@ -24,6 +24,7 @@ public class GUI implements GameObject{
 		if(backgroundSprite != null) {
 			rect.w = backgroundSprite.getWidth();
 			rect.h = backgroundSprite.getHeight();
+			
 		}
 	}
 

@@ -22,7 +22,7 @@ public class Gender implements MenuObject{
 	
 	private Font font;
 
-	private int loadChoice = 0;
+	public int loadChoice = 0;
 
 	private String[] gen = 
 		{

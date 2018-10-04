@@ -28,14 +28,17 @@ import handler.KeyBoardListener;
 import handler.MouseEventListener;
 import handler.MouseInput;
 import handler.RenderHandler;
+import menuComponents.CharacterInfo;
 import menuComponents.CreateName;
 import menuComponents.Gender;
 import menuComponents.Help;
 import menuComponents.Load;
 import menuComponents.Menu;
+import menuComponents.MenuObject;
 import menuComponents.Save;
 
 import java.awt.Color;
+import java.awt.Font;
 
 @SuppressWarnings({ "serial", "unused" })
 public class Game extends JFrame implements Runnable {
@@ -75,6 +78,8 @@ public class Game extends JFrame implements Runnable {
 	private Help help;
 	private Load load;
 	public Save save;
+	public CharacterInfo Cinfo;
+	private Font font;
 	
 	private boolean boy = true;
 
@@ -85,12 +90,14 @@ public class Game extends JFrame implements Runnable {
 		GAME,
 		LOAD,
 		HELP,
-		SAVE
+		SAVE,
+		CINFO
 	};
 
 	public static STATE State = STATE.MENU;
 
 	public Game() {
+		Rectangle backButton =  new Rectangle (80, 80, 200, 50);
 		setTitle("UpClose");
 
 		// make our prog shutdown when we exit
@@ -117,7 +124,7 @@ public class Game extends JFrame implements Runnable {
 		canvas.createBufferStrategy(3);	
 
 
-
+		font = new Font("Arial", Font.PLAIN, 12);
 
 		//color bg for panel
 		//		getContentPane().setBackground(Color.CYAN);
@@ -190,6 +197,7 @@ public class Game extends JFrame implements Runnable {
 		help = new Help();
 		load = new Load();
 		save = new Save(this);
+		Cinfo = new CharacterInfo(this);
 		
 		// add listeners
 		canvas.addKeyListener(keyListener);
@@ -317,15 +325,60 @@ public class Game extends JFrame implements Runnable {
 		super.paint(graphics);
 
 		map.render(renderer, objects, xZoom, yZoom);
-
+		
 		//		for(int i = 0; i < objects.length; i++) {
 		//			objects[i].render(renderer, xZoom, yZoom);
 		//		}
 
 		if(State == STATE.GAME) {
-			int chosen1 = gender.getLoadChoice();
-			//			System.out.println(chosen1);
 			renderer.render(graphics);
+			graphics.fillRect(0, 0, 140, 180);
+			graphics.setColor(Color.WHITE);
+			graphics.setFont(font);
+			graphics.drawString("Name =", 20, 50);
+			
+			if(name.fullName != null && !name.fullName.isEmpty()) {
+				graphics.setColor(Color.WHITE);
+				graphics.setFont(font);
+				graphics.drawString(name.fullName, 80, 50);
+				
+			}else {
+				graphics.setColor(Color.WHITE);
+				graphics.setFont(font);
+				graphics.drawString(load.nameLoad, 80, 50);
+			}
+			graphics.setColor(Color.WHITE);
+			graphics.setFont(font);
+			graphics.drawString("Gender =", 20, 70);
+			if(gender.getLoadChoice() == 1) {
+				graphics.setColor(Color.WHITE);
+				graphics.setFont(font);
+				graphics.drawString("Girl", 80, 70);
+			}
+			else if(gender.getLoadChoice() == 0){
+				graphics.setColor(Color.WHITE);
+				graphics.setFont(font);
+				graphics.drawString("Boy", 80, 70);
+			}
+			graphics.setColor(Color.WHITE);
+			graphics.setFont(font);
+			graphics.drawString("Level =", 20, 90);
+			graphics.setColor(Color.WHITE);
+			graphics.setFont(font);
+			graphics.drawString("1", 80, 90);
+			graphics.setColor(Color.WHITE);
+			graphics.setFont(font);
+			graphics.drawString("Experience =", 20, 110);
+			graphics.setColor(Color.WHITE);
+			graphics.setFont(font);
+			graphics.drawString("0", 90, 110);
+			graphics.setColor(Color.WHITE);
+			graphics.setFont(font);
+			graphics.drawString("Weapon =", 20, 130);
+			
+			
+			
+//			System.out.println(name.fullName);
 
 		}
 
@@ -352,7 +405,9 @@ public class Game extends JFrame implements Runnable {
 		else if(State == STATE.SAVE) {
 			save.render(graphics);
 		}
-	
+		else if(State == STATE.CINFO) {
+			Cinfo.render(graphics);
+		}
 	
 
 		graphics.dispose();

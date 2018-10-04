@@ -5,6 +5,10 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 import game.Game;
 import handler.KeyBoardListener;
@@ -14,6 +18,9 @@ public class Load implements MenuObject{
 
 	private Color titleColor;
 	private Font titleFont;
+	public String nameLoad;
+	public String genderLoad;
+	public String hpLoad;
 
 	private Font font;
 	
@@ -28,7 +35,15 @@ public class Load implements MenuObject{
 	public Load() {
 		try 
 		{
-
+			try {
+				BufferedReader br = new BufferedReader(new FileReader("Details.txt"));
+				nameLoad = br.readLine();
+				genderLoad = br.readLine();
+				
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			titleColor = new Color(100, 128, 128);
 			titleFont = new Font("Broadway", Font.BOLD, 80);
 
@@ -39,6 +54,30 @@ public class Load implements MenuObject{
 		{
 			e.printStackTrace();
 		}
+	}
+
+	public String getNameLoad() {
+		return nameLoad;
+	}
+
+	public void setNameLoad(String nameLoad) {
+		this.nameLoad = nameLoad;
+	}
+
+	public String getGenderLoad() {
+		return genderLoad;
+	}
+
+	public void setGenderLoad(String genderLoad) {
+		this.genderLoad = genderLoad;
+	}
+
+	public String getHpLoad() {
+		return hpLoad;
+	}
+
+	public void setHpLoad(String hpLoad) {
+		this.hpLoad = hpLoad;
 	}
 
 	@Override
@@ -104,10 +143,25 @@ public class Load implements MenuObject{
 		}
 
 	}
+	
+//	public void loadData() throws NumberFormatException, IOException {
+//		try {
+//			BufferedReader br = new BufferedReader(new FileReader("Details.txt"));
+//			nameLoad = br.readLine();
+//			genderLoad = Integer.parseInt(br.readLine());
+//			
+//		} catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//	}
 
 	private void select() {
 
 		if(loadChoice == 0) {
+			System.out.println(nameLoad);
+			System.out.println(genderLoad);
 			Game.State = Game.STATE.GAME;
 		}
 

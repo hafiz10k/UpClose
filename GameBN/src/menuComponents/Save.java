@@ -5,7 +5,10 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import entity.Map;
@@ -19,6 +22,8 @@ public class Save implements MenuObject{
 	private Font titleFont;
 	private Map map;
 	private Font font;
+	private String name;
+	private int gender;
 
 	private int saveChoice = 0;
 
@@ -69,8 +74,8 @@ public class Save implements MenuObject{
 
 
 	public void save() {
-		String name = game.name.fullName;
-		int gender = game.gender.getLoadChoice();
+		 name = game.name.fullName;
+		 gender = game.gender.getLoadChoice();
 		
 		String fileName = "details.txt";
 		PrintWriter writer = null;
@@ -113,7 +118,19 @@ public class Save implements MenuObject{
 		}
 
 	}
-
+	
+	public void loadData() throws NumberFormatException, IOException {
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("Details.txt"));
+			name = br.readLine();
+			gender = Integer.parseInt(br.readLine());
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 
 
 

@@ -140,7 +140,7 @@ public class Player implements GameObject {
 		if(playerRectangle.x >= 1000) {
 			camera.x = 500;
 			if(playerRectangle.x >= 1500) {
-				Game.State = Game.STATE.MENU;
+				Game.State = Game.STATE.CINFO;
 			}
 		} else {
 			camera.x = playerRectangle.x - (camera.w / 2);
