@@ -589,7 +589,7 @@ public class Game extends JFrame implements Runnable {
 		if(State == STATE.HOSP) {
 			hosp.render(renderer, xZoom, yZoom, this);
 			renderer.render(graphics);
-			
+			hosp.render(graphics);
 		}
 
 		graphics.dispose();

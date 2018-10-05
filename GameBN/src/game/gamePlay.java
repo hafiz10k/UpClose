@@ -66,7 +66,7 @@ public class gamePlay {
 	}
 
 	public void render(RenderHandler renderer, Player player, int xZoom, int yZoom) {
-		renderer.renderSprite(charInfoRect, 0, 0, 5, 5, true);
+//		renderer.renderSprite(charInfoRect, 0, 0, 5, 5, true);
 		
 		if(player.getRectangle().x <= -10 && player.getRectangle().x >= -40 && player.getRectangle().y <= -990) {
 			renderer.renderSprite(dialogBtn, 40, 600, xZoom, yZoom, true);
