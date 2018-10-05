@@ -11,7 +11,7 @@ public class Player implements GameObject {
 
 	private Rectangle playerRectangle;
 	private Rectangle collisionRectangle;
-	
+
 	private int speed = 5;
 
 	// 0 - Down, 1 - Left, 2 - Right, 3 - Up
@@ -37,7 +37,7 @@ public class Player implements GameObject {
 		playerRectangle.generateGraphics(3, 0xFF00FF90);
 
 		collisionRectangle = new Rectangle(0, 0, 15*xZoom, 25*yZoom);
-		
+
 	}
 
 	public void updateDirection() {
@@ -48,10 +48,10 @@ public class Player implements GameObject {
 
 	@Override
 	public void render(RenderHandler renderer, int xZoom, int yZoom) {
-		 
+
 		if(animatedSprite != null) {
 			renderer.renderSprite(animatedSprite, playerRectangle.x, playerRectangle.y, xZoom, yZoom, false);
-			
+
 		}
 		else if(sprite != null) {
 			renderer.renderSprite(sprite, playerRectangle.x, playerRectangle.y, xZoom, yZoom, false);
@@ -162,28 +162,27 @@ public class Player implements GameObject {
 				playerRectangle.y = -1360;
 			}
 		}
-
 	}
 
-	@Override
-	public int getLayer() {
-		return layer;
-	}
-
-
-	public boolean handleMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) { return false; }
-
-	public void changeSprite(Sprite sprite) {
-		this.sprite = sprite;
-		if(sprite != null && sprite instanceof AnimatedSprite) {
-			animatedSprite = (AnimatedSprite) sprite; 
+		@Override
+		public int getLayer() {
+			return layer;
 		}
+
+
+		public boolean handleMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) { return false; }
+
+		public void changeSprite(Sprite sprite) {
+			this.sprite = sprite;
+			if(sprite != null && sprite instanceof AnimatedSprite) {
+				animatedSprite = (AnimatedSprite) sprite; 
+			}
+		}
+
+		@Override
+		public Rectangle getRectangle() {
+			return playerRectangle;
+		}
+
+
 	}
-
-	@Override
-	public Rectangle getRectangle() {
-		return playerRectangle;
-	}
-
-
-}

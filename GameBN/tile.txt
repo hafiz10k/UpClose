@@ -1,7 +1,7 @@
 //TileName-SpriteX-SpriteY-CollisionType
 //if not collisionType, tile have no collision
 grass-0-0
-sand-0-2-2
+sand-0-2
 ocean-0-3-4
 verticalPath1-0-4
 verticalPath2-1-4

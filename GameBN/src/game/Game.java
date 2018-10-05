@@ -43,13 +43,18 @@ import handler.KeyBoardListener;
 import handler.MouseEventListener;
 import handler.MouseInput;
 import handler.RenderHandler;
+import menuComponents.CharacterInfo;
 import menuComponents.CreateName;
 import menuComponents.Gender;
 import menuComponents.Help;
 import menuComponents.Load;
 import menuComponents.Menu;
+import menuComponents.MenuObject;
 import menuComponents.Save;
 import placeScene.hospitalScene;
+
+import java.awt.Color;
+import java.awt.Font;
 
 @SuppressWarnings({ "serial", "unused" })
 public class Game extends JFrame implements Runnable {
@@ -111,6 +116,8 @@ public class Game extends JFrame implements Runnable {
 	private dummyBattle dummy;
 	private lailaRatna lailaRatna;
 	private FranciscoBattle francisco;
+	public CharacterInfo Cinfo;
+	private Font font;
 	
 	private Rectangle dialogRect;
 
@@ -140,19 +147,21 @@ public class Game extends JFrame implements Runnable {
 		LOAD,
 		HELP,
 		SAVE,
-		HOSP
+		HOSP,
+		CINFO
 	};
 
 	public static STATE State = STATE.MENU;
 
 	public Game() {
+//		Rectangle backButton =  new Rectangle (80, 80, 200, 50);
 		setTitle("UpClose");
 
 		// make our prog shutdown when we exit
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// set pos n size of frame
-		setBounds(0, 0, 1000, 1000);
+		setBounds(0, 0, 1000, 800);
 
 		//put our frame in center of screen
 		setLocationRelativeTo(null);
@@ -170,6 +179,8 @@ public class Game extends JFrame implements Runnable {
 
 		// create obj for buffer strat
 		canvas.createBufferStrategy(3);	
+
+//		font = new Font("Arial", Font.PLAIN, 12);
 
 		//set focus on canvas - so player dont have to click on screen everytime
 		canvas.setFocusable(true);
@@ -232,6 +243,7 @@ public class Game extends JFrame implements Runnable {
 		load = new Load();
 		save = new Save(this);
 		gamePlay = new gamePlay(this);
+		Cinfo = new CharacterInfo(this);
 
 		// CUTSCENES
 		scene01 = new Scene01(this);
@@ -254,6 +266,8 @@ public class Game extends JFrame implements Runnable {
 		//PLACES SCENES
 		hosp = new hospitalScene(this);
 
+		
+		
 		// add listeners
 		canvas.addKeyListener(keyListener);
 		canvas.addFocusListener(keyListener);
@@ -470,6 +484,60 @@ public class Game extends JFrame implements Runnable {
 			renderer.render(graphics);
 			gamePlay.render(graphics, this);
 		}
+		
+
+//		if(State == STATE.GAME) {
+//			map.render(renderer, objects, xZoom, yZoom);
+//			renderer.render(graphics);
+//			graphics.fillRect(0, 0, 140, 180);
+//			graphics.setColor(Color.WHITE);
+//			graphics.setFont(font);
+//			graphics.drawString("Name =", 20, 50);
+//			
+//			if(name.fullName != null && !name.fullName.isEmpty()) {
+//				graphics.setColor(Color.WHITE);
+//				graphics.setFont(font);
+//				graphics.drawString(name.fullName, 80, 50);
+//				
+//			}else {
+//				graphics.setColor(Color.WHITE);
+//				graphics.setFont(font);
+//				graphics.drawString(load.nameLoad, 80, 50);
+//			}
+//			graphics.setColor(Color.WHITE);
+//			graphics.setFont(font);
+//			graphics.drawString("Gender =", 20, 70);
+//			if(gender.getLoadChoice() == 1) {
+//				graphics.setColor(Color.WHITE);
+//				graphics.setFont(font);
+//				graphics.drawString("Girl", 80, 70);
+//			}
+//			else if(gender.getLoadChoice() == 0){
+//				graphics.setColor(Color.WHITE);
+//				graphics.setFont(font);
+//				graphics.drawString("Boy", 80, 70);
+//			}
+//			graphics.setColor(Color.WHITE);
+//			graphics.setFont(font);
+//			graphics.drawString("Level =", 20, 90);
+//			graphics.setColor(Color.WHITE);
+//			graphics.setFont(font);
+//			graphics.drawString("1", 80, 90);
+//			graphics.setColor(Color.WHITE);
+//			graphics.setFont(font);
+//			graphics.drawString("Experience =", 20, 110);
+//			graphics.setColor(Color.WHITE);
+//			graphics.setFont(font);
+//			graphics.drawString("0", 90, 110);
+//			graphics.setColor(Color.WHITE);
+//			graphics.setFont(font);
+//			graphics.drawString("Weapon =", 20, 130);
+//			
+//			
+//			
+//			System.out.println(name.fullName);
+//
+//		}
 
 		if(State == STATE.MENU) {
 			menu.render(renderer, xZoom, yZoom); // sword
@@ -591,6 +659,10 @@ public class Game extends JFrame implements Runnable {
 			renderer.render(graphics);
 			hosp.render(graphics);
 		}
+		if(State == STATE.CINFO) {
+			Cinfo.render(graphics);
+		}
+	
 
 		graphics.dispose();
 		bufferStrategy.show();
