@@ -39,7 +39,7 @@ public class Scene03 {
 		{
 				"Hmm? what is this boy doing sleeping here?",
 				"Little boy, wake up!",
-				"adik dialog 3"
+				"*slap* *slap*"
 		};
 
 	private int i = 0;
