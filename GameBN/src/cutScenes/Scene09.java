@@ -17,7 +17,7 @@ import handler.KeyBoardListener;
 import handler.RenderHandler;
 import menuComponents.CreateName;
 
-// BOY - in pg bendahara house
+// BOY - dummy
 public class Scene09 {
 	private Game game;
 

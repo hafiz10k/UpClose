@@ -58,7 +58,7 @@ public class Scene06 {
 		{
 				"ugh.. where am i?",
 				"where's my brother?!",
-				"in the woods? i was just in my bedroom...",
+				"in the woods? i was just in my brother's bedroom...",
 				"wait why do you look so familiar.. who are you?",
 				"huh? warrior? wait.. you mean THAT pengiran bendahara sakam?!",
 				"what year is this?!",

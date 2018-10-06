@@ -17,7 +17,7 @@ public class gamePlay {
 
 	private Sprite dialogBtn;
 	private Sprite charInfoRect;
-	
+		
 	private Font f = new Font("arial", Font.PLAIN, 50);
 
 	public gamePlay(Game game) {
@@ -39,9 +39,7 @@ public class gamePlay {
 
 	public void update(Game game) {
 
-
 		if(game.player.getRectangle().x >= 2220 && game.player.getRectangle().x <= 2290 && game.player.getRectangle().y <= 0 && game.player.getRectangle().y >= -155) {
-
 
 			KeyBoardListener keyListener = game.getKeyListener();
 			try {	
@@ -82,6 +80,7 @@ public class gamePlay {
 		graphics.setColor(Color.BLACK);
 		graphics.drawString(game.name.getName(), 10, 60);
 		System.out.println(game.name.getName());
+		graphics.drawString(game.player.getHP() + "/ " + game.player.getMaxHP(), 10, 60);
 	}
 
 
