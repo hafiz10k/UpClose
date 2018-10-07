@@ -160,12 +160,12 @@ public class CharacterInfo {
 
 	private void select() {
 		if(saveChoice == 0) {
-			game.save.save();
+			game.save.save(game);
 			Game.State = Game.STATE.GAME;
 		}
 
 		if(saveChoice == 1) {
-			Game.State = Game.STATE.MENU;
+			Game.State = Game.STATE.GAME;
 		}
 
 	}

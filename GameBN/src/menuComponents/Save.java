@@ -32,11 +32,11 @@ public class Save implements MenuObject{
 				"Yes",
 				"No"
 		};
-	
+
 	private Game game;
 
 	public Save(Game game) {
-		
+
 		try 
 		{
 
@@ -51,37 +51,38 @@ public class Save implements MenuObject{
 		{
 			e.printStackTrace();
 		}
-//		String name = game.name.fullName;
-//		Gender gender = new Gender();
-//		
-//		String fileName = "details.txt";
-//		PrintWriter writer = null;
-//		
-//		try {
-//			writer = new PrintWriter(fileName);
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		for(int i = 0; i < 5; i++) {
-//			writer.println(gender.getLoadChoice() );
-//			
-//
-//		}
-//		writer.close();
-		
+		//		String name = game.name.fullName;
+		//		Gender gender = new Gender();
+		//		
+		//		String fileName = "details.txt";
+		//		PrintWriter writer = null;
+		//		
+		//		try {
+		//			writer = new PrintWriter(fileName);
+		//		} catch (FileNotFoundException e) {
+		//			// TODO Auto-generated catch block
+		//			e.printStackTrace();
+		//		}
+		//		for(int i = 0; i < 5; i++) {
+		//			writer.println(gender.getLoadChoice() );
+		//			
+		//
+		//		}
+		//		writer.close();
+
 	}
 
 
-	public void save() {
+	public void save(Game game) {
 		String name = game.name.fullName; 
 		int gender = game.gender.getLoadChoice();
-		 name = game.name.fullName;
-		 gender = game.gender.getLoadChoice();
+		int playerX = game.player.getRectangle().x;
+		int playerY = game.player.getRectangle().y;
 		
+
 		String fileName = "details.txt";
 		PrintWriter writer = null;
-		
+
 		try {
 			writer = new PrintWriter(fileName);
 		} catch (FileNotFoundException e) {
@@ -91,6 +92,8 @@ public class Save implements MenuObject{
 
 		writer.println(name);
 		writer.println(gender);
+		writer.println(playerX);
+		writer.println(playerY);
 
 		writer.close();
 	}
@@ -120,18 +123,18 @@ public class Save implements MenuObject{
 		}
 
 	}
-	
+
 	public void loadData() throws NumberFormatException, IOException {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("Details.txt"));
 			name = br.readLine();
 			gender = Integer.parseInt(br.readLine());
-			
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 
@@ -180,7 +183,7 @@ public class Save implements MenuObject{
 
 	private void select() {
 		if(saveChoice == 0) {
-			game.save.save();
+			game.save.save(game);
 			Game.State = Game.STATE.GAME;
 		}
 

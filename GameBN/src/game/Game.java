@@ -2,6 +2,7 @@ package game;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -49,12 +50,9 @@ import menuComponents.Gender;
 import menuComponents.Help;
 import menuComponents.Load;
 import menuComponents.Menu;
-import menuComponents.MenuObject;
 import menuComponents.Save;
+import menuComponents.retryGame;
 import placeScene.hospitalScene;
-
-import java.awt.Color;
-import java.awt.Font;
 
 @SuppressWarnings({ "serial", "unused" })
 public class Game extends JFrame implements Runnable {
@@ -92,9 +90,10 @@ public class Game extends JFrame implements Runnable {
 	public CreateName name;
 	public Gender gender;
 	private Help help;
-	private Load load;
+	public Load load;
 	public Save save;
 	private gamePlay gamePlay;
+	private retryGame retry;
 
 	// cutscenes
 	private Scene01 scene01;
@@ -147,6 +146,7 @@ public class Game extends JFrame implements Runnable {
 		LOAD,
 		HELP,
 		SAVE,
+		RETRY,
 		HOSP,
 		CINFO
 	};
@@ -237,11 +237,12 @@ public class Game extends JFrame implements Runnable {
 
 		//new java class load
 		menu = new Menu(this);
-		name = new CreateName();
+		name = new CreateName(this);
 		gender = new Gender(this);
 		help = new Help();
 		load = new Load();
 		save = new Save(this);
+		retry = new retryGame(this);
 		gamePlay = new gamePlay(this);
 		Cinfo = new CharacterInfo(this);
 
@@ -348,6 +349,11 @@ public class Game extends JFrame implements Runnable {
 		if(State == STATE.LOAD) {
 			load.update(this);
 		}
+		
+		if(State == STATE.RETRY) {
+			retry.update(this);
+		}
+
 
 		if(State == STATE.HELP) {
 			help.update(this);
@@ -547,6 +553,8 @@ public class Game extends JFrame implements Runnable {
 		}
 
 		if(State == STATE.NAME) {
+			name.render(renderer, xZoom, yZoom);
+			renderer.render(graphics);
 			name.render(graphics);
 		}
 
@@ -566,6 +574,10 @@ public class Game extends JFrame implements Runnable {
 
 		if(State == STATE.SAVE) {
 			save.render(graphics);
+		}
+		
+		if(State == STATE.RETRY) {
+			retry.render(graphics);
 		}
 
 		if(State == STATE.SCENE01) {

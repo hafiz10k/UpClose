@@ -14,13 +14,14 @@ import game.Game;
 import handler.KeyBoardListener;
 
 public class Load implements MenuObject{
-	public Rectangle backButton =  new Rectangle (10, 10, 200, 50);
-
 	private Color titleColor;
 	private Font titleFont;
 	public String nameLoad;
-	public String genderLoad;
+	public int genderLoad;
 	public String hpLoad;
+	
+	private int playerPosX;
+	private int playerPosY;
 
 	private Font font;
 
@@ -38,7 +39,9 @@ public class Load implements MenuObject{
 			try {
 				BufferedReader br = new BufferedReader(new FileReader("Details.txt"));
 				nameLoad = br.readLine();
-				genderLoad = br.readLine();
+				genderLoad = Integer.parseInt(br.readLine());
+				playerPosX = Integer.parseInt(br.readLine());
+				playerPosY = Integer.parseInt(br.readLine());
 				
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -64,11 +67,11 @@ public class Load implements MenuObject{
 		this.nameLoad = nameLoad;
 	}
 
-	public String getGenderLoad() {
+	public int getGenderLoad() {
 		return genderLoad;
 	}
 
-	public void setGenderLoad(String genderLoad) {
+	public void setGenderLoad(int genderLoad) {
 		this.genderLoad = genderLoad;
 	}
 
@@ -84,7 +87,7 @@ public class Load implements MenuObject{
 	public void render(Graphics graphics) {
 		Graphics2D g2d = (Graphics2D) graphics;
 
-		graphics.setColor(Color.WHITE);
+		graphics.setColor(titleColor);
 		graphics.setFont(titleFont);
 		graphics.drawString("Load", 380, 120);
 
@@ -108,6 +111,14 @@ public class Load implements MenuObject{
 	@Override
 	public void update(Game game) {
 		try {
+			try {
+				loadData();
+				
+			} catch (NumberFormatException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			KeyBoardListener keyListener = game.getKeyListener();
 
 			boolean loading = false;
@@ -146,18 +157,19 @@ public class Load implements MenuObject{
 
 	}
 	
-//	public void loadData() throws NumberFormatException, IOException {
-//		try {
-//			BufferedReader br = new BufferedReader(new FileReader("Details.txt"));
-//			nameLoad = br.readLine();
-//			genderLoad = Integer.parseInt(br.readLine());
-//			
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//	}
+	public void loadData() throws NumberFormatException, IOException {
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("Details.txt"));
+			nameLoad = br.readLine();
+			genderLoad = Integer.parseInt(br.readLine());
+			playerPosX = Integer.parseInt(br.readLine());
+			playerPosY = Integer.parseInt(br.readLine());
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 
 	private void select() {
 
