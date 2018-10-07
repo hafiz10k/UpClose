@@ -21,16 +21,16 @@ public class Scene02 {
 
 	private String[] girl =
 		{
-				"Abang!!!!!!!",
-				"adik dialog 2",
-				"adik dialog 3"
+				"Abang!!",
+				"I am hereeee!!",
+				"I dont know, I can't see anything."
 		};
 
 	private String[] boy = 
 		{
-				"HELLO??? ADIK WHERE ARE YOU?",
-				"abang dialog 2",
-				"abang dialog 3"
+				"HELLO?! ADIK WHERE ARE YOU?",
+				"Where are you?",
+				"Where is here? What do you mean? Ohh~~"
 		};
 
 	private int i = 0;
@@ -40,7 +40,7 @@ public class Scene02 {
 
 	public Scene02(Game game) {
 		a = new Audio("/portal-scene1,2,3.wav");
-		//		a.play();
+//				a.play();
 
 		rect = new Rectangle(40, 600, 300, 50);
 		rect.generateGraphics(0xeff0f1);

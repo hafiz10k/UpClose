@@ -161,7 +161,7 @@ public class Game extends JFrame implements Runnable {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// set pos n size of frame
-		setBounds(0, 0, 1000, 800);
+		setBounds(0, 0, 1000, 1000);
 
 		//put our frame in center of screen
 		setLocationRelativeTo(null);

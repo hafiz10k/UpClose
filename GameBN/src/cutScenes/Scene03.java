@@ -46,7 +46,8 @@ public class Scene03 {
 	private String[] pgDialog =
 		{
 				"Hmm? what is this boy doing sleeping here?",
-				"Little boy, wake up!"
+				"Little boy, wake up!",
+				"*slap* *slap*"
 		};
 
 	private Audio sceneAud;

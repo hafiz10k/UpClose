@@ -48,13 +48,19 @@ public class Scene10 {
 	// dialog
 	private String[] pgDialog =
 		{
-				"Little girl, are you awake now?",
-				"you are currently in Jerudong, our hideout.",
-				"little sister? I found you alone passed out in the woods",
-				"I'm Pengiran Bendahara Sakam, Brunei's mighty warrior!",
-				"did you hit your head so hard? it's year 1578.",
-				"what is your name, girl?",
+				"We have arrived at my training ground. My soldiers are training hard to prepare for upcoming war.",
+				"The spanish are interested in our land and they are planning to take over Brunei.",
+				"Would you like to join us in this battle?",
+				"Great, welcome to the team.",
 		};
+	
+	private String[] girl = 
+		{
+				"What do you mean they are preparing for war?!",
+				"*Speaking in own mind* This must be the Castilian War that I have learned before.",
+				"Yesss! It would be an honour to fight for my own country."
+		};
+	
 
 	private String key = "[press enter]";
 

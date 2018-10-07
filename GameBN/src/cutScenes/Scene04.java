@@ -40,7 +40,7 @@ public class Scene04 {
 		{
 				"Hmm? what is this little girl doing sleeping here?",
 				"Little girl, wake up!",
-				"adik dialog 3"
+				"*tap* *tap*"
 		};
 
 	private int i = 0;

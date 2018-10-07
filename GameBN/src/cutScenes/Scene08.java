@@ -49,9 +49,16 @@ public class Scene08 {
 	// dialog
 	private String[] pgDialog =
 		{
-				"follow me, let me show you the training ground.",
-				"pg Dialog 2",
-				"pg dialog 3"
+				"Follow me, let me show you the training ground.",
+				"I will show you where I and my soldiers trains.",
+				"No, the pleasure is mine."
+		};
+	
+	private String[] girl = 
+		{
+				"Okay, let's go",
+				"Sure it will be my pleasure",
+				"*Smile*"
 		};
 
 	private String key = "[press enter]";
