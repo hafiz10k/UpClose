@@ -39,9 +39,8 @@ public class Scene02 {
 	private Font fontKey = new Font("arial", Font.PLAIN, 20);
 
 	public Scene02(Game game) {
-		a = new Audio("/portal-scene1,2,3.wav");
-//				a.play();
-
+		a = new Audio("/sfx/portal-scene1,2,3.wav");
+		
 		rect = new Rectangle(40, 600, 300, 50);
 		rect.generateGraphics(0xeff0f1);
 
@@ -52,11 +51,10 @@ public class Scene02 {
 	}
 
 	public void update(Game game) {
-
 		timerRect.x++;
 
 		System.out.println(timerRect.x);
-
+		
 		if(timerRect.x >= 80) {
 
 			KeyBoardListener keyListener = game.getKeyListener();
@@ -76,7 +74,6 @@ public class Scene02 {
 	{
 		for(int index = 0; index < renderer.getPixels().length; index++) {
 			renderer.getPixels()[index] = (int)(Math.random() * 0xFFFFFF);
-
 		}
 
 		graphics.drawImage(renderer.getView(), 0, 0, renderer.getView().getWidth(), renderer.getView().getHeight(), null);

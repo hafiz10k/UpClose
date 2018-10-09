@@ -48,6 +48,7 @@ public class Menu implements MenuObject {
 	private BufferedImage bg;
 
 	private Audio aud;
+	private Audio sfx;
 
 	private Rectangle keyRect;
 
@@ -59,7 +60,7 @@ public class Menu implements MenuObject {
 			titleColor = new Color(246, 246, 246);
 			titleFont = new Font("Broadway", Font.BOLD, 100);
 
-			font = new Font("Caviar Dreams", Font.PLAIN, 50);
+			font = new Font("Caviar Dreams", Font.BOLD, 50);
 			fontKey = new Font("Arial", Font.PLAIN, 20);
 
 			//load logo
@@ -71,8 +72,10 @@ public class Menu implements MenuObject {
 
 			bg = game.loadImage("/main_menu_bg.png");
 
-			aud = new Audio("/army-forTitlePage.mp3.mp3");
+			aud = new Audio("/bgm/menu_bgm.mp3");
 			aud.play();
+			
+			sfx = new Audio("/sfx/menu_click.mp3");
 
 			keyRect = new Rectangle(0, 720, 400, 20);
 			keyRect.generateGraphics(0xebebeb);
@@ -129,16 +132,21 @@ public class Menu implements MenuObject {
 		try {
 
 			KeyBoardListener keyListener = game.getKeyListener();
+			
 
 			boolean didMove = false;
 			if(keyListener.enter()) {
 				didMove = true;
+				sfx.play();
+				
 				select();
 
 			}
 
 			if(keyListener.up()) {
 				didMove = true;
+				sfx.play();
+				
 				currentChoice --;
 				if(currentChoice == -1)
 				{
@@ -148,6 +156,8 @@ public class Menu implements MenuObject {
 
 			if(keyListener.down()) {
 				didMove = true;
+				sfx.play();
+				
 				currentChoice ++;
 				if(currentChoice == options.length)
 				{
@@ -184,7 +194,7 @@ public class Menu implements MenuObject {
 		if(currentChoice == 2)
 		{
 			// help
-			Game.State = Game.STATE.NAME;
+			Game.State = Game.STATE.LAILARATNA;
 		}
 		if(currentChoice == 3)
 		{

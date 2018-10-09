@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -14,6 +15,7 @@ import java.io.PrintWriter;
 import entity.Map;
 import game.Game;
 import handler.KeyBoardListener;
+import handler.RenderHandler;
 
 public class CharacterInfo {
 	public Rectangle backButton =  new Rectangle (10, 10, 200, 50);
@@ -24,52 +26,64 @@ public class CharacterInfo {
 	private Font font;
 	private String name;
 	private int gender;
+	private String gen;
 	private int  hp = 100;
 	private int level = 1;
-	private Save save;
-	
-	private int saveChoice = 0;
+	private int exp = 50;
 
-	
-	
+	private int saveChoice = 0;
 	private Game game;
-	
+
+	private BufferedImage bg;
 
 	public CharacterInfo(Game game) {
-		
-		try 
-		{
 
+		try {
+			this.game = game;
 			titleColor = new Color(100, 128, 128);
 			titleFont = new Font("Broadway", Font.BOLD, 80);
 
-			font = new Font("Arial", Font.PLAIN, 30);
-			this.game = game;
+			font = new Font("Arial", Font.BOLD, 50);
+			
+			name = game.load.getNameLoad();
+			gender = game.load.getGenderLoad();
+			
+			if(gender == 0) {
+				gen = "Boy";
+			}
+			else {
+				gen = "Girl";
+			}
+
+			bg = game.loadImage("/charmenu.png");
 
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
-//		String name = game.name.fullName;
-//		Gender gender = new Gender();
-//		
-//		String fileName = "details.txt";
-//		PrintWriter writer = null;
-//		
-//		try {
-//			writer = new PrintWriter(fileName);
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		for(int i = 0; i < 5; i++) {
-//			writer.println(gender.getLoadChoice() );
-//			
-//
-//		}
-//		writer.close();
-		
+
+	}
+	
+	public void update(Game game) {
+		try {
+			KeyBoardListener keyListener = game.getKeyListener();
+			boolean didMove = false;
+			
+			if(keyListener.esc()) {
+				Game.State = Game.STATE.GAME;
+				didMove = true;
+			}
+			
+			Thread.sleep(150);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void render(RenderHandler renderer, int xZoom, int yZoom) {
+		renderer.renderImage(bg, 0, 0, 2, 2, true);
 	}
 
 
@@ -79,84 +93,29 @@ public class CharacterInfo {
 		Graphics2D g2d = (Graphics2D) graphics;
 
 		graphics.setColor(Color.WHITE);
-		graphics.setFont(titleFont);
-		graphics.drawString("Character Info", 180, 120);
+
 		graphics.setFont(font);
-		
-//		graphics.drawString((load.getHpLoad()), 300, 300);
-//		graphics.drawString((Integer.toString(load.genderLoad)), 180, 200);
-		
-//
-//		for(int i = 0; i < CharacterInfo; i++) 
-//		{
-//			if (i == saveChoice)
-//			{
-//				graphics.setColor(Color.YELLOW);
-//			}
-//			else 
-//			{
-//				graphics.setColor(Color.WHITE);
-//			}
-//			graphics.drawString(save[i], 350 + i * 250, 350);
-//		}
+		graphics.drawString("weapon", 160, 390);
+		graphics.drawString(name, 450, 150);
+		graphics.drawString(gen, 450, 260);
+		graphics.drawString("" + hp, 570, 390);
+		graphics.drawString("" + level, 570, 510);
+		graphics.drawString("" + exp, 600, 620);
 
 	}
-	
-//	public void loadData() throws NumberFormatException, IOException {
-//		try {
-//			BufferedReader br = new BufferedReader(new FileReader("Details.txt"));
-//			name = br.readLine();
-//			gender = Integer.parseInt(br.readLine());
-//			
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//	}
 
-
-
-
-//	public void update(Game game) {
-//		try {
-//			KeyBoardListener keyListener = game.getKeyListener();
-//
-//			boolean loading = false;
-//
-//			if(keyListener.enter()) {
-//				loading = true;
-//				select();
-//
-//			}
-//
-//			if(keyListener.left()) {
-//				loading = true;
-//				saveChoice --;
-//				if(saveChoice == -1)
-//				{
-//					saveChoice = save.length -1;
-//				}
-//			}
-//
-//			if(keyListener.right()) {
-//				loading = true;
-//				saveChoice ++;
-//				if(saveChoice == save.length)
-//				{
-//					saveChoice = 0;
-//				}
-//			}
-//			Thread.sleep(150);
-//
-//		}
-//		catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//
-//	}
-
-
+	//	public void loadData() throws NumberFormatException, IOException {
+	//		try {
+	//			BufferedReader br = new BufferedReader(new FileReader("Details.txt"));
+	//			name = br.readLine();
+	//			gender = Integer.parseInt(br.readLine());
+	//			
+	//		} catch (FileNotFoundException e) {
+	//			// TODO Auto-generated catch block
+	//			e.printStackTrace();
+	//		}
+	//		
+	//	}
 
 	private void select() {
 		if(saveChoice == 0) {

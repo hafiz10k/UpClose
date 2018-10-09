@@ -116,7 +116,7 @@ public class Scene05 {
 		timerRect.generateGraphics(1, 0xffffff);
 	}
 
-	public void update(Game game, Player player ) {
+	public void update(Game game ) {
 		timerRect.x++;
 
 		try {
@@ -198,7 +198,7 @@ public class Scene05 {
 		renderer.renderSprite(boyAni, boyRect.x, boyRect.y, xZoom, yZoom, false);
 		renderer.renderSprite(pbsAni, pbsRect.x, pbsRect.y, xZoom, yZoom, false);
 
-		renderer.renderRectangle(timerRect, xZoom, yZoom, false);
+//		renderer.renderRectangle(timerRect, xZoom, yZoom, false);
 		
 		if(timerRect.x >= 22) {
 			renderer.renderRectangle(rect, xZoom, yZoom, true);

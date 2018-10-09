@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -12,6 +13,7 @@ import java.io.IOException;
 
 import game.Game;
 import handler.KeyBoardListener;
+import handler.RenderHandler;
 
 public class Load implements MenuObject{
 	private Color titleColor;
@@ -32,10 +34,18 @@ public class Load implements MenuObject{
 				"Yes",
 				"No"
 		};
+	
+	private BufferedImage bg;
 
-	public Load() {
+	public Load(Game game) {
 		try 
 		{
+			bg = game.loadImage("/name_bg.png");
+			titleColor = new Color(100, 128, 128);
+			titleFont = new Font("Broadway", Font.BOLD, 50);
+
+			font = new Font("Arial", Font.PLAIN, 40);
+			
 			try {
 				BufferedReader br = new BufferedReader(new FileReader("Details.txt"));
 				nameLoad = br.readLine();
@@ -47,10 +57,7 @@ public class Load implements MenuObject{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			titleColor = new Color(100, 128, 128);
-			titleFont = new Font("Broadway", Font.BOLD, 80);
-
-			font = new Font("Arial", Font.PLAIN, 30);
+			
 
 		}
 		catch (Exception e)
@@ -82,29 +89,31 @@ public class Load implements MenuObject{
 	public void setHpLoad(String hpLoad) {
 		this.hpLoad = hpLoad;
 	}
+	public void render(RenderHandler renderer, int xZoom, int yZoom) {
+		renderer.renderImage(bg, 0, 0, 2, 2, true);
+	}
 
 	@Override
 	public void render(Graphics graphics) {
 		Graphics2D g2d = (Graphics2D) graphics;
 
-		graphics.setColor(titleColor);
 		graphics.setFont(titleFont);
-		graphics.drawString("Load", 380, 120);
+		graphics.setColor(Color.BLACK);
+		graphics.drawString("Load Game?", 320, 150);
 
 		graphics.setFont(font);
-		graphics.drawString("load game?", 420, 250);
 
 		for(int i = 0; i < load.length; i++) 
 		{
 			if (i == loadChoice)
 			{
-				graphics.setColor(Color.YELLOW);
+				graphics.setColor(Color.RED);
 			}
 			else 
 			{
-				graphics.setColor(Color.WHITE);
+				graphics.setColor(Color.BLACK);
 			}
-			graphics.drawString(load[i], 350 + i * 250, 350);
+			graphics.drawString(load[i], 320 + i * 250, 350);
 		}
 	}
 

@@ -18,7 +18,7 @@ public class gamePlay {
 
 	private Sprite dialogBtn;
 	private Sprite charInfoRect;
-	
+
 	private Font f = new Font("arial", Font.PLAIN, 50);
 
 	public gamePlay(Game game) {
@@ -42,6 +42,10 @@ public class gamePlay {
 
 		KeyBoardListener keyListener = game.getKeyListener();
 		try {	
+			if(keyListener.esc()) {
+				Game.State = STATE.MENU;
+			}
+
 			if(game.player.getRectangle().x <= -10 && game.player.getRectangle().x >= -40 && game.player.getRectangle().y <= -990) {
 				if(keyListener.a()) {
 
@@ -49,7 +53,7 @@ public class gamePlay {
 					Thread.sleep(150);
 				} 
 			}
-			
+
 			if(game.player.getRectangle().x >= 2220 && game.player.getRectangle().x <= 2290 && game.player.getRectangle().y <= 0 && game.player.getRectangle().y >= -155) {
 				if(keyListener.a()) {
 
@@ -61,7 +65,7 @@ public class gamePlay {
 				} 
 
 			}
-			
+
 			if(game.player.getRectangle().x >= 1980 && game.player.getRectangle().x <= 2020 && game.player.getRectangle().y >= -200 && game.player.getRectangle().y <= -190) {
 				if(keyListener.a()) {
 					Game.State = STATE.SAVE;
@@ -69,7 +73,7 @@ public class gamePlay {
 			}
 
 
-			
+
 
 		}catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -80,7 +84,7 @@ public class gamePlay {
 
 
 	public void render(RenderHandler renderer, Player player, int xZoom, int yZoom) {
-		//		renderer.renderSprite(charInfoRect, 0, 0, 5, 5, true);
+		renderer.renderSprite(charInfoRect, 10, 10, 4, 3, true);
 
 		if(player.getRectangle().x <= -10 && player.getRectangle().x >= -40 && player.getRectangle().y <= -990) {
 			renderer.renderSprite(dialogBtn, 40, 600, xZoom, yZoom, true);
@@ -96,11 +100,11 @@ public class gamePlay {
 	}
 
 	public void render(Graphics graphics, Game game) {
-		graphics.setFont(f);
-		graphics.setColor(Color.BLACK);
-		graphics.drawString(game.load.nameLoad, 10, 60);
-		System.out.println(game.load.nameLoad);
-//		graphics.drawString(game.player.getHP() + "/ " + game.player.getMaxHP(), 10, 60);
+		//		graphics.setFont(f);
+		//		graphics.setColor(Color.BLACK);
+		//		graphics.drawString(game.load.nameLoad, 10, 60);
+		//		System.out.println(game.load.nameLoad);
+		//		graphics.drawString(game.player.getHP() + "/ " + game.player.getMaxHP(), 10, 60);
 	}
 
 

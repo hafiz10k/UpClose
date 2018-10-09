@@ -115,7 +115,7 @@ public class Scene08 {
 		timerRect.generateGraphics(1, 0xffffff);
 	}
 
-	public void update(Game game, Player player ) {
+	public void update(Game game ) {
 		KeyBoardListener keyListener = game.getKeyListener();
 		
 		timerRect.x++;

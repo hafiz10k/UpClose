@@ -111,7 +111,7 @@ public class Scene09 {
 		timerRect.generateGraphics(1, 0xffffff);
 	}
 
-	public void update(Game game, Player player ) {
+	public void update(Game game ) {
 		//		timerRect.x++;
 
 		System.out.println(boyRect.x + ", " + boyRect.y);
@@ -231,7 +231,7 @@ public class Scene09 {
 		renderer.renderSprite(boyAni, boyRect.x, boyRect.y, xZoom, yZoom, false);
 		renderer.renderSprite(pbsAni, pbsRect.x, pbsRect.y, xZoom, yZoom, false);
 
-		renderer.renderRectangle(timerRect, xZoom, yZoom, false);
+//		renderer.renderRectangle(timerRect, xZoom, yZoom, false);
 
 		if(boyRect.x == 480 && boyRect.y == 270) {
 			renderer.renderRectangle(rect, xZoom, yZoom, true);

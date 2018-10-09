@@ -77,7 +77,7 @@ public class Scene04 {
 
 	}
 
-	public void update(Game game, Player player) {
+	public void update(Game game) {
 		try {
 
 			// PBS MOVEMENT

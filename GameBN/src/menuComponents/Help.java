@@ -4,9 +4,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 import game.Game;
 import handler.KeyBoardListener;
+import handler.RenderHandler;
 
 public class Help implements MenuObject{
 
@@ -15,22 +17,16 @@ public class Help implements MenuObject{
 
 	private Font font;
 
-	private String[] help = 
-		{
-				"↑ arrow Up - to move Up",
-				"↓ arrow Down - to move Down",
-				"← arrow Left - to move Left",
-				"→ arrow Right - to move Right"
-		};
-
 	private int backChoice = 0;
 
 	private String[] back = 
 		{
 				"Back"
 		};
+	
+	private BufferedImage bg;
 
-	public Help() {
+	public Help(Game game) {
 		try 
 		{
 
@@ -38,6 +34,8 @@ public class Help implements MenuObject{
 			titleFont = new Font("Broadway", Font.BOLD, 80);
 
 			font = new Font("Arial", Font.PLAIN, 30);
+			
+			bg = game.loadImage("/help.png");
 
 		}
 		catch (Exception e)
@@ -45,18 +43,18 @@ public class Help implements MenuObject{
 			e.printStackTrace();
 		}
 	}
+	
+	public void render(RenderHandler renderer, int xZoom, int yZoom) {
+		renderer.renderImage(bg, 0, -20, 2, 2, true);
+	}
 
 	@Override
 	public void render(Graphics graphics) {
-		graphics.setColor(Color.WHITE);
+		graphics.setColor(Color.BLACK);
 		graphics.setFont(titleFont);
-		graphics.drawString("Help", 400, 120);
+		graphics.drawString("Help", 400, 140);
 
 		graphics.setFont(font);
-		for(int i = 0; i < help.length; i++) 
-		{
-			graphics.drawString(help[i], 300, 270 + i * 130);
-		}
 
 		for(int i = 0; i < back.length; i++) 
 		{
@@ -68,7 +66,7 @@ public class Help implements MenuObject{
 			{
 				graphics.setColor(Color.WHITE);
 			}
-			graphics.drawString(back[i], 50, 70);
+			graphics.drawString(back[i], 50, 120);
 		}
 
 	}

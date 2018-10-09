@@ -1,4 +1,4 @@
-package placeScene;
+package otherScene;
 
 import java.awt.Color;
 import java.awt.Font;

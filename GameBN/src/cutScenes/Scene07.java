@@ -115,7 +115,7 @@ public class Scene07 {
 		timerRect.generateGraphics(1, 0xffffff);
 	}
 
-	public void update(Game game, Player player ) {
+	public void update(Game game ) {
 		KeyBoardListener keyListener = game.getKeyListener();
 		timerRect.x++;
 		try {
@@ -256,7 +256,7 @@ public class Scene07 {
 			renderer.renderRectangle(rect, xZoom, yZoom, true);
 		}
 
-		renderer.renderRectangle(timerRect, xZoom, yZoom, false);
+//		renderer.renderRectangle(timerRect, xZoom, yZoom, false);
 
 	}
 

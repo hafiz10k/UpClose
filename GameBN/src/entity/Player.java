@@ -1,9 +1,10 @@
 package entity;
 
-import java.awt.Graphics;
+import java.util.HashMap;
 
 import game.Game;
 import game.GameObject;
+import handler.Audio;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
 
@@ -38,6 +39,9 @@ public class Player implements GameObject {
 
 	private final int xCollisionOffset = 15;
 	private final int yCollisionOffset = 35;
+	
+	private Audio sfx;
+	private HashMap<String, Sprite> weapon;
 
 
 	public Player(Sprite sprite, int xZoom, int yZoom) {
@@ -47,16 +51,17 @@ public class Player implements GameObject {
 		}
 
 		updateDirection();
-		playerRectangle = new Rectangle(-90, 0, 24, 32);
+		playerRectangle = new Rectangle(-606, -70, 24, 32);
 		playerRectangle.generateGraphics(3, 0xFF00FF90);
 
 		collisionRectangle = new Rectangle(0, 0, 15*xZoom, 25*yZoom);
 
 		HP = maxHP = 100;
-		exp = maxExp = 100;
+//		exp = maxExp = 100;
 		level = maxLevel = 4;
-		attack = maxAttack = 10;
-
+		attack = maxAttack = 40;
+		
+		sfx = new Audio("/sfx/steps.mp3");
 	}
 
 	public void updateDirection() {
@@ -80,7 +85,7 @@ public class Player implements GameObject {
 		}
 	}
 	
-	public void level() {
+	public void level(int exp) {
 		if(exp == 0) {
 			level = 1;
 			if(level == 1) {
@@ -112,7 +117,6 @@ public class Player implements GameObject {
  
 		if(animatedSprite != null) {
 			renderer.renderSprite(animatedSprite, playerRectangle.x, playerRectangle.y, xZoom, yZoom, false);
-
 		}
 		else if(sprite != null) {
 			renderer.renderSprite(sprite, playerRectangle.x, playerRectangle.y, xZoom, yZoom, false);
@@ -137,13 +141,15 @@ public class Player implements GameObject {
 		if(keyListener.left()) {
 			newDirection = 1;
 			didMove = true;
-			collisionRectangle.x -= speed;			
+			collisionRectangle.x -= speed;	
 		}
 
 		if(keyListener.right()) {
 			newDirection = 2;
 			didMove = true;
-			collisionRectangle.x += speed;			
+			
+			sfx.play();
+			collisionRectangle.x += speed;	
 		}
 
 		if(keyListener.up()) {
@@ -170,7 +176,6 @@ public class Player implements GameObject {
 
 
 		if(didMove) {
-
 
 			collisionRectangle.x += xCollisionOffset;
 			collisionRectangle.y += yCollisionOffset;

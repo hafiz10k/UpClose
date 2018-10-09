@@ -90,7 +90,7 @@ public class Scene03 {
 
 	}
 
-	public void update(Game game, Player player) {
+	public void update(Game game) {
 		timerRect.x++;
 
 		try {
