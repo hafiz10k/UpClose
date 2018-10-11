@@ -19,9 +19,15 @@ public class gamePlay {
 	private Sprite dialogBtn;
 	private Sprite charInfoRect;
 
+	//player
+	private String playerName;
+	private String playerHP;
+	private String playerLVL;
+
 	private Font f = new Font("arial", Font.PLAIN, 50);
 
 	public gamePlay(Game game) {
+		
 		//load dialog
 		BufferedImage buttonDialog = game.loadImage("/dialogRect.png");
 		SpriteSheet buttonDialogSheet = new SpriteSheet(buttonDialog);
@@ -35,6 +41,12 @@ public class gamePlay {
 		charInfoSheet.loadSprites(64, 40);
 
 		charInfoRect = charInfoSheet.getSprite(0, 0);
+		
+		// load player stats
+//		game.player.level(game.dummy.getAchievedExp());
+		playerName = game.name.getName();
+		playerHP = game.player.getHP() + "/" + game.player.getMaxHP();
+		playerLVL = "" + game.player.getExp();
 
 	}
 
@@ -44,6 +56,11 @@ public class gamePlay {
 		try {	
 			if(keyListener.esc()) {
 				Game.State = STATE.MENU;
+			}
+			
+			if(keyListener.enter()) {
+				game.player.getRectangle().x = 2890;
+				game.player.getRectangle().y = -75;
 			}
 
 			if(game.player.getRectangle().x <= -10 && game.player.getRectangle().x >= -40 && game.player.getRectangle().y <= -990) {
@@ -66,9 +83,15 @@ public class gamePlay {
 
 			}
 
-			if(game.player.getRectangle().x >= 1980 && game.player.getRectangle().x <= 2020 && game.player.getRectangle().y >= -200 && game.player.getRectangle().y <= -190) {
+			if(game.player.getRectangle().x >= 2169 && game.player.getRectangle().x <= 2194 && game.player.getRectangle().y >= -225 && game.player.getRectangle().y <= -145) {
 				if(keyListener.a()) {
 					Game.State = STATE.SAVE;
+				}
+			}
+			
+			if(game.player.getRectangle().x >= 3950 && game.player.getRectangle().x <= 4035 && game.player.getRectangle().y >= -1090 && game.player.getRectangle().y <= -1005) {
+				if(keyListener.a()) {
+					Game.State = STATE.LOOT;
 				}
 			}
 
@@ -94,17 +117,21 @@ public class gamePlay {
 			renderer.renderSprite(dialogBtn, 40, 600, xZoom, yZoom, true);
 		}
 
-		if(player.getRectangle().x >= 1980 && player.getRectangle().x <= 2020 && player.getRectangle().y >= -200 && player.getRectangle().y <= -190) {
+		if(player.getRectangle().x >= 2169 && player.getRectangle().x <= 2194 && player.getRectangle().y >= -225 && player.getRectangle().y <= -145) {
+			renderer.renderSprite(dialogBtn, 40, 600, xZoom, yZoom, true);
+		}
+		
+		if(player.getRectangle().x >= 3950 && player.getRectangle().x <= 4035 && player.getRectangle().y >= -1090 && player.getRectangle().y <= -1005) {
 			renderer.renderSprite(dialogBtn, 40, 600, xZoom, yZoom, true);
 		}
 	}
 
 	public void render(Graphics graphics, Game game) {
-		//		graphics.setFont(f);
-		//		graphics.setColor(Color.BLACK);
-		//		graphics.drawString(game.load.nameLoad, 10, 60);
-		//		System.out.println(game.load.nameLoad);
-		//		graphics.drawString(game.player.getHP() + "/ " + game.player.getMaxHP(), 10, 60);
+				graphics.setFont(f);
+				graphics.setColor(Color.WHITE);
+				graphics.drawString(game.load.nameLoad, 10, 60);
+				graphics.drawString(playerHP, 10, 100);
+//				graphics.drawString(playerLVL, 10, 160);
 	}
 
 

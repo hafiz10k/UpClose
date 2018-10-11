@@ -76,11 +76,11 @@ public class Scene05 {
 
 	private int addedPBSCharCounter = 0;
 	private int addedBoyCharCounter = 0;
+	
+	private boolean beginPG = false;
+	private boolean beginBoy = false;
 
 	public Scene05(Game game) {
-		
-		
-
 		//bedroom bg
 		room = game.loadImage("/pbs-bedroom.png");
 
@@ -93,7 +93,7 @@ public class Scene05 {
 
 
 		//pengiran bendahara sakam
-		BufferedImage pbsImage = game.loadImage("/PgBS.png");
+		BufferedImage pbsImage = game.loadImage("/pg-animation.png");
 		SpriteSheet pbsSheet = new SpriteSheet(pbsImage);
 		pbsSheet.loadSprites(16, 40);
 
@@ -178,6 +178,20 @@ public class Scene05 {
 						boyAni.setAnimationRange(boyDir * 4, (boyDir * 4) + 4);
 					}
 
+				}
+			}
+			
+			if(timerRect.x >= 0 ) {
+				KeyBoardListener keyListener = game.getKeyListener();
+				boolean didMove = false;
+
+				if(keyListener.a()) {
+					didMove = true;
+					Game.State = Game.STATE.SCENE07;
+				}
+
+				if(didMove) {
+					Thread.sleep(150);
 				}
 			}
 

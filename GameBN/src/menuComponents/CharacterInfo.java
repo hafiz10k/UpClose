@@ -13,28 +13,30 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import entity.Map;
+import entity.Sprite;
+import entity.SpriteSheet;
 import game.Game;
+import game.Game.STATE;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
 
 public class CharacterInfo {
 	public Rectangle backButton =  new Rectangle (10, 10, 200, 50);
-	private Load load;
 	private Color titleColor;
 	private Font titleFont;
-	private Map map;
 	private Font font;
 	private String name;
 	private int gender;
 	private String gen;
-	private int  hp = 100;
 	private int level = 1;
-	private int exp = 50;
+	private int exp;
 
 	private int saveChoice = 0;
 	private Game game;
 
 	private BufferedImage bg;
+	
+	boolean francisco = false;
 
 	public CharacterInfo(Game game) {
 
@@ -44,10 +46,10 @@ public class CharacterInfo {
 			titleFont = new Font("Broadway", Font.BOLD, 80);
 
 			font = new Font("Arial", Font.BOLD, 50);
-			
+
 			name = game.load.getNameLoad();
 			gender = game.load.getGenderLoad();
-			
+
 			if(gender == 0) {
 				gen = "Boy";
 			}
@@ -57,6 +59,14 @@ public class CharacterInfo {
 
 			bg = game.loadImage("/charmenu.png");
 
+			//weapon
+			//			BufferedImage weapon = Game.loadImage("/sword-tiles.png");
+			//			SpriteSheet weaponSheet = new SpriteSheet(weapon);
+			//			weaponSheet.loadSprites(48, 48);
+			//
+			//			bronzeSW = weaponSheet.getSprite(0, 0);
+			//			silverSW = weaponSheet.getSprite(1, 0);
+			//			goldSW = weaponSheet.getSprite(2, 0);
 		}
 		catch (Exception e)
 		{
@@ -64,43 +74,69 @@ public class CharacterInfo {
 		}
 
 	}
-	
+
 	public void update(Game game) {
 		try {
 			KeyBoardListener keyListener = game.getKeyListener();
 			boolean didMove = false;
 			
-			if(keyListener.esc()) {
-				Game.State = Game.STATE.GAME;
-				didMove = true;
-			}
+			STATE gameState = game.State;
 			
+			
+
+			if(keyListener.esc()) {
+				if(gameState.equals(Game.STATE.DUMMY)) {
+					Game.State = Game.STATE.DUMMY;
+					didMove = true;
+				}
+				
+				else if(gameState.equals(Game.STATE.LAILARATNA)) {
+					Game.State = Game.STATE.LAILARATNA;
+					didMove = true;
+				}
+				
+				if(francisco == false) {
+					francisco = true;
+					if(gameState.equals(STATE.FRANCISCO)) {
+						Game.State = Game.STATE.FRANCISCO;
+						didMove = true;
+					}
+				}
+				
+				
+				
+				else {
+					Game.State = Game.STATE.MENU;
+					System.out.println("error in loading battle");
+				}
+		
+			}
+
+
 			Thread.sleep(150);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	public void render(RenderHandler renderer, int xZoom, int yZoom) {
 		renderer.renderImage(bg, 0, 0, 2, 2, true);
+		renderer.renderSprite(game.player.weapon, 210, 120, xZoom, yZoom, true);
 	}
 
 
 
 
 	public void render(Graphics graphics) {
-		Graphics2D g2d = (Graphics2D) graphics;
-
 		graphics.setColor(Color.WHITE);
 
 		graphics.setFont(font);
 		graphics.drawString("weapon", 160, 390);
 		graphics.drawString(name, 450, 150);
 		graphics.drawString(gen, 450, 260);
-		graphics.drawString("" + hp, 570, 390);
+		graphics.drawString("" + game.player.HP, 570, 390);
 		graphics.drawString("" + level, 570, 510);
-		graphics.drawString("" + exp, 600, 620);
+		graphics.drawString("" + game.player.getExp(), 600, 620);
 
 	}
 

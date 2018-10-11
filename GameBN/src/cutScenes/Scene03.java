@@ -27,8 +27,6 @@ public class Scene03 {
 	//direction
 	private int pgDir = 0;
 	private int boyDir = 0;
-	private int counter = 0;
-	private int i = 0;
 
 	private Rectangle pbsRect;
 	private Rectangle boyRect;
@@ -36,10 +34,8 @@ public class Scene03 {
 	private Rectangle timerRect;
 	
 	private static final int down = 0;
-	private static final int left = 1;
 	private static final int right = 2;
-	private static final int up = 3;
-
+	
 	private Font f = new Font("arial", Font.PLAIN, 30);
 	private Font fontKey = new Font("arial", Font.PLAIN, 20);
 
@@ -49,8 +45,13 @@ public class Scene03 {
 				"Little boy, wake up!",
 				"*slap* *slap*"
 		};
-
-	private Audio sceneAud;
+	
+	private int pg = 0;
+	private String addedPGChar = "";
+	private int addedPGCharCounter = 0;
+	private boolean beginPG = false;
+	
+	private Audio sfx;
 
 	public Scene03(Game game) {
 		// land
@@ -87,6 +88,7 @@ public class Scene03 {
 		timerRect.generateGraphics(1, 0xffffff);
 
 		//custscenes audio
+		sfx = new Audio("/sfx/dialog.mp3");
 
 	}
 
@@ -143,14 +145,24 @@ public class Scene03 {
 
 			}
 
-			// BOY MOVEMENT
-			if(boyAni != null) {
-				boolean didMove = false;
-				int newDirection = boyDir;
+			//DIALOGS
+			if(timerRect.x > 10 && timerRect.x <= 60) {
 
+				// ANIMATING DIALOGS - BOY
+				char pgChar[] = pgDialog[pg].toCharArray();
+				if(beginPG == false) {
+					addedPGChar = "";
+					addedPGCharCounter = 0;
+					beginPG = true;
+				}
+				if(addedPGCharCounter <= pgChar.length-1) {
+					addedPGChar = addedPGChar + pgChar[addedPGCharCounter];
+					addedPGCharCounter++;
+					sfx.play();
+				} 
 			}
 
-			if(pbsRect.x >= 640) {
+			if(timerRect.x >= 0) {
 				KeyBoardListener keyListener = game.getKeyListener();
 				boolean didMove = false;
 
@@ -177,27 +189,22 @@ public class Scene03 {
 		renderer.renderSprite(boyAni, boyRect.x, boyRect.y, xZoom, yZoom, false);
 		renderer.renderSprite(pbsAni, pbsRect.x, pbsRect.y, xZoom, yZoom, false);
 
+		if(timerRect.x > 10 && timerRect.x <= 60) {
 		renderer.renderRectangle(rect, xZoom, yZoom, true);
+		}
 	}
 
 	public void render(Graphics graphics) {
 		graphics.setFont(f);
 		graphics.setColor(Color.GREEN);
 
-		if(pbsRect.x < 640) {
-			//		for(int i = 0; i < pgDialog.length; i++) {
-			graphics.drawString(pgDialog[i], 60, 650);
-			//		}
-		}
-
-		if(pbsRect.x >= 640) {
-			graphics.drawString(pgDialog[i+1], 60, 650);
-
+		if(timerRect.x > 10 && timerRect.x <= 60) {
+			graphics.drawString(addedPGChar, 60, 650);
+			
 			graphics.setFont(fontKey);
 			graphics.setColor(Color.BLACK);
 			graphics.drawString("press [A]", 800, 740);
 		}
-
 
 	}
 

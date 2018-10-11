@@ -188,13 +188,13 @@ public class Menu implements MenuObject {
 		if(currentChoice == 1)
 		{
 			// load
-			Game.State = Game.STATE.LOAD;
+			Game.State = Game.STATE.GAME;
 
 		}
 		if(currentChoice == 2)
 		{
 			// help
-			Game.State = Game.STATE.LAILARATNA;
+			Game.State = Game.STATE.SCENE04;
 		}
 		if(currentChoice == 3)
 		{

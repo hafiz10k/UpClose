@@ -2,7 +2,7 @@
 //if not collisionType, tile have no collision
 grass-0-0
 sand-0-2-3
-ocean-0-3-4
+ocean-0-3-0
 verticalPath1-0-4
 verticalPath2-1-4
 verticalPath3-2-4

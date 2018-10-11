@@ -4,8 +4,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import entity.AnimatedSprite;
+import entity.Player;
 import entity.Rectangle;
 import entity.Sprite;
 import entity.SpriteSheet;
@@ -47,7 +50,7 @@ public class lailaRatna {
 
 	//player
 	private String playerName;
-	private int playerHP;
+//	private int playerHP;
 	private int playerAttack;
 	private int playerEXP;
 
@@ -58,6 +61,8 @@ public class lailaRatna {
 
 	private Rectangle timerRect;
 	private Rectangle keyRect;
+	
+	private Player player;
 
 	public lailaRatna(Game game) {
 		
@@ -88,12 +93,14 @@ public class lailaRatna {
 		charInfo = charInfoSheet.getSprite(0, 0);
 
 		//enemy stats
+		player = game.player;
 		playerName = game.name.getName();
-		playerHP = game.player.getHP();
-		game.player.level(15);
+//		playerHP = game.player.getHP();
+		
+		game.player.exp(15);
 		playerAttack = game.player.getAttack();
 
-		enemyAttack = 10;
+		enemyAttack = 15;
 		enemyHP = enemyMaxHP = 60;
 
 		font = new Font("Calibri", Font.BOLD, 40);
@@ -128,13 +135,13 @@ public class lailaRatna {
 		if(dead) {
 			return;
 		}
-		playerHP -= enemyAttack;
+		player.HP -= enemyAttack;
 
-		if(playerHP < 0) {
-			playerHP = 0;
+		if(player.HP < 0) {
+			player.HP = 0;
 		}
 
-		if(playerHP == 0) {
+		if(player.HP == 0) {
 			dead = true;
 		}
 	}
@@ -149,7 +156,6 @@ public class lailaRatna {
 			if(keyListener.enter()) {
 				didMove = true;
 				select();
-
 			}
 
 			if(keyListener.left()) {
@@ -232,20 +238,26 @@ public class lailaRatna {
 			// attack	
 			this.hit(playerAttack);
 			System.out.println(playerAttack + ", " + "enemy: " + enemyHP);
-			this.hitEnemy(enemyAttack);
-			System.out.println(enemyAttack + ", " + "player: " + playerHP);
 
+			TimerTask task = new TimerTask() {
+				public void run() {
+					hitEnemy(enemyAttack);
+					System.out.println(enemyAttack + ", " + "player: " + player.HP);
+				}
+			};
+			Timer timer = new Timer();
+			timer.schedule(task, 1500);
 		}
 		if(currentChoice == 1)
 		{
-			// taunt
-			Game.State = Game.STATE.LOAD;
+			// check
+			Game.State = Game.STATE.GAME;
 
 		}
 		if(currentChoice == 2)
 		{
 			// stats
-			Game.State = Game.STATE.MENU;
+			Game.State = Game.STATE.CINFO;
 
 		}
 	}
@@ -278,10 +290,10 @@ public class lailaRatna {
 		graphics.setColor(Color.WHITE);
 		graphics.drawString(lailaName, 680, 50);
 		graphics.drawString("HP: " + enemyHP + "/" + enemyMaxHP, 680, 80);
-		graphics.drawString("ATK: " + "0", 680, 110);
+		graphics.drawString("ATK: " + enemyAttack, 680, 110);
 
 		graphics.drawString(playerName, 30, 400);
-		graphics.drawString("" + playerHP, 30, 430);
+		graphics.drawString("HP: " + player.HP, 30, 430);
 		graphics.drawString("ATK: " + playerAttack, 30, 460);
 
 		if(dead == true) {

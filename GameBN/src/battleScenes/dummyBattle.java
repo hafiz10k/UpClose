@@ -36,6 +36,7 @@ public class dummyBattle {
 	private String playerHP;
 	private int playerAttack;
 	private int playerEXP;
+	private int achievedEXP;
 	
 	private boolean playerTurn = false;
 
@@ -89,9 +90,9 @@ public class dummyBattle {
 		// load player stats
 		playerName = game.name.getName();
 		playerHP = "HP: " + game.player.getHP() + "/" + game.player.getMaxHP();
-		playerEXP = game.player.getExp();
+		playerEXP = game.player.exp;
 		
-		game.player.level(0);
+		game.player.exp(game.player.exp);
 		playerAttack = game.player.getAttack();
 
 		keyRect = new Rectangle(0, 650, 400, 400);
@@ -155,9 +156,10 @@ public class dummyBattle {
 			}
 			
 			if(dead == true) {
-				int achievedEXP = playerEXP + 15;
+				playerEXP = game.player.exp + 15;
 				System.out.println(achievedEXP);
-				if(keyListener.enter()) {
+				
+				if(keyListener.a()) {
 					game.State = STATE.GAME;
 				}
 			}
@@ -183,7 +185,7 @@ public class dummyBattle {
 		if(currentChoice == 2)
 		{
 			// stats
-			Game.State = Game.STATE.DUMMY;
+			Game.State = Game.STATE.CINFO;
 
 		}
 	}
@@ -228,17 +230,17 @@ public class dummyBattle {
 			
 			graphics.setFont(fontN);
 			graphics.setColor(Color.BLACK);
-			graphics.drawString("Player gained " + playerEXP, 100, 100);
+			graphics.drawString("Player gained " + achievedEXP + "exp", 100, 200);
 		}
 
 	}
 
-	public boolean isDead() {
-		return dead;
-	}
-
 	public Audio getBgm() {
 		return bgm;
+	}
+	
+	public int getAchievedExp() {
+		return achievedEXP;
 	}
 
 }

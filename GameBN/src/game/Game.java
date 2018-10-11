@@ -113,7 +113,7 @@ public class Game extends JFrame implements Runnable {
 	private hospitalScene hosp;
 
 	//battle scenes
-	private dummyBattle dummy;
+	public dummyBattle dummy;
 	private lailaRatna lailaRatna;
 	private FranciscoBattle francisco;
 	public CharacterInfo Cinfo;
@@ -688,9 +688,9 @@ public class Game extends JFrame implements Runnable {
 		}
 		
 		if(State == STATE.LOOT) {
-			loot.render(renderer, xZoom, yZoom);
+			loot.render(renderer, player, xZoom, yZoom);
 			renderer.render(graphics);
-			loot.render(graphics);
+			loot.render(graphics, this);
 		}
 
 		if(State == STATE.HOSP) {

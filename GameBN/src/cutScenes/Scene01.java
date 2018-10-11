@@ -198,9 +198,7 @@ public class Scene01 {
 			}
 			System.out.println(timerRect.x);
 
-
 			//DIALOGS
-
 			if(timerRect.x > 10 && timerRect.x <= 40) {
 				
 				// ANIMATING DIALOGS - GIRL
@@ -238,7 +236,7 @@ public class Scene01 {
 			}
 
 
-			if(timerRect.x > 100 && timerRect.x < 160) {
+			if(timerRect.x > 100 && timerRect.x <= 145) {
 
 				// ANIMATING DIALOGS - GIRL
 				char girlChar[] = girl[g].toCharArray();
@@ -258,7 +256,7 @@ public class Scene01 {
 				}
 			}
 			
-			if(timerRect.x > 160 && timerRect.x <= 240) {
+			if(timerRect.x > 145 && timerRect.x <= 200) {
 				// ANIMATING DIALOGS - BOY
 				char boyChar[] = boy[b].toCharArray();
 				if(beginBoy == false) {
@@ -276,7 +274,7 @@ public class Scene01 {
 				}
 			}
 			
-			if(timerRect.x > 240 && timerRect.x < 260) {
+			if(timerRect.x > 200 && timerRect.x <= 210) {
 				// ANIMATING DIALOGS - GIRL
 				char girlChar[] = girl[g].toCharArray();
 				if(beginGirl == false) {
@@ -295,7 +293,7 @@ public class Scene01 {
 				}
 			}
 			
-			if(timerRect.x > 260 && timerRect.x < 330) {
+			if(timerRect.x > 210 && timerRect.x <= 245) {
 				// ANIMATING DIALOGS - BOY
 				char boyChar[] = boy[b].toCharArray();
 				if(beginBoy == false) {
@@ -314,7 +312,7 @@ public class Scene01 {
 			}
 
 
-			if(timerRect.x >= 300) {
+			if(timerRect.x >= 0) {
 				KeyBoardListener keyListener = game.getKeyListener();
 
 				if(keyListener.a()) {
@@ -323,6 +321,12 @@ public class Scene01 {
 					scene02.getAudio().play();
 				}
 
+			}
+			
+			if(timerRect.x >= 255) {
+				Game.State = Game.STATE.SCENE02;
+				Scene02 scene02 = new Scene02(game);
+				scene02.getAudio().play();
 			}
 
 			Thread.sleep(100);
@@ -340,13 +344,11 @@ public class Scene01 {
 		renderer.renderSprite(boyAni, boyRect.x, boyRect.y, xZoom, yZoom, false);
 		renderer.renderSprite(girlAni, girlRect.x, girlRect.y, xZoom, yZoom, false);
 
-		if(timerRect.x > 10 && timerRect.x <= 380) {
+		if(timerRect.x > 10 && timerRect.x <= 245) {
 			renderer.renderRectangle(rect, xZoom, yZoom, true);
 		}
 		
-//		renderer.renderRectangle(timerRect, xZoom, yZoom, false);
-
-		if(timerRect.x >= 100) {
+		if(timerRect.x >= 200) {
 			renderer.renderSprite(bhAni, 600, 200, xZoom, yZoom, false);
 		}
 
@@ -368,13 +370,13 @@ public class Scene01 {
 
 		}
 
-		if(timerRect.x > 100 && timerRect.x < 160) {
+		if(timerRect.x > 100 && timerRect.x <= 145) {
 			graphics.setColor(Color.MAGENTA);
 			graphics.drawString(addedGirlChar, 70, 650);
 			
 		}
 		
-		if(timerRect.x > 160 && timerRect.x <= 240) {
+		if(timerRect.x > 145 && timerRect.x <= 200) {
 
 			graphics.setColor(Color.BLUE);
 			graphics.drawString(addedBoyChar, 70, 650);
@@ -385,15 +387,23 @@ public class Scene01 {
 
 		}
 		
-		if(timerRect.x > 240 && timerRect.x < 260) {
+		if(timerRect.x > 200 && timerRect.x <= 210) {
 			graphics.setColor(Color.MAGENTA);
 			graphics.drawString(addedGirlChar, 70, 650);
+			
+			graphics.setFont(fontKey);
+			graphics.setColor(Color.BLACK);
+			graphics.drawString(key, 800, 740);
 		}
 		
-		if(timerRect.x > 260 && timerRect.x < 330) {
+		if(timerRect.x > 210 && timerRect.x <= 245) {
 
 			graphics.setColor(Color.BLUE);
 			graphics.drawString(addedBoyChar, 70, 650);
+			
+			graphics.setFont(fontKey);
+			graphics.setColor(Color.BLACK);
+			graphics.drawString(key, 800, 740);
 		}
 
 	}

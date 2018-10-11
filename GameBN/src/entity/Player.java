@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 import game.Game;
@@ -19,11 +20,10 @@ public class Player implements GameObject {
 	private int direction = 0;
 	private int layer = 0;
 
-	private int HP;
+	public int HP;
 	private int maxHP;
 
-	private int exp;
-	private int maxExp;
+	public int exp;
 
 	private int attack;
 	private int maxAttack;
@@ -36,12 +36,21 @@ public class Player implements GameObject {
 
 	private Sprite sprite;
 	private AnimatedSprite animatedSprite = null;
+	
+//	private Sprite bronzeSW;
+//	private Sprite silverSW;
+//	private Sprite goldSW;
+	
+	BufferedImage weaponImg;
+	public Sprite weapon;
 
 	private final int xCollisionOffset = 15;
 	private final int yCollisionOffset = 35;
 	
 	private Audio sfx;
-	private HashMap<String, Sprite> weapon;
+//	private HashMap<String, Sprite> weapon;
+	
+	SpriteSheet weaponSheet;
 
 
 	public Player(Sprite sprite, int xZoom, int yZoom) {
@@ -57,10 +66,20 @@ public class Player implements GameObject {
 		collisionRectangle = new Rectangle(0, 0, 15*xZoom, 25*yZoom);
 
 		HP = maxHP = 100;
-//		exp = maxExp = 100;
+		exp = 0;
 		level = maxLevel = 4;
 		attack = maxAttack = 40;
+				
+		//weapon
+		weaponImg = Game.loadImage("/sword-tiles.png");
+		weaponSheet = new SpriteSheet(weaponImg);
+		weaponSheet.loadSprites(48, 48);
+
+		weapon = weaponSheet.getSprite(0, 0);
+//		silverSW = weaponSheet.getSprite(1, 0);
+//		goldSW = weaponSheet.getSprite(2, 0);
 		
+		//sfx
 		sfx = new Audio("/sfx/steps.mp3");
 	}
 
@@ -85,11 +104,12 @@ public class Player implements GameObject {
 		}
 	}
 	
-	public void level(int exp) {
+	public void exp(int exp) {
 		if(exp == 0) {
 			level = 1;
 			if(level == 1) {
 				attack = 10;
+				weapon = weaponSheet.getSprite(0, 0);
 			}
 		}
 		
@@ -97,6 +117,7 @@ public class Player implements GameObject {
 			level = 2;
 			if(level == 2) {
 				attack = 20;
+				weapon = weaponSheet.getSprite(1, 0);
 			}
 		}
 		
@@ -104,6 +125,7 @@ public class Player implements GameObject {
 			level = 3;
 			if(level == 3) {
 				attack = 50;
+				weapon = weaponSheet.getSprite(2, 0);
 			}
 		}
 		
@@ -114,7 +136,6 @@ public class Player implements GameObject {
 
 	@Override
 	public void render(RenderHandler renderer, int xZoom, int yZoom) {
- 
 		if(animatedSprite != null) {
 			renderer.renderSprite(animatedSprite, playerRectangle.x, playerRectangle.y, xZoom, yZoom, false);
 		}
@@ -147,8 +168,6 @@ public class Player implements GameObject {
 		if(keyListener.right()) {
 			newDirection = 2;
 			didMove = true;
-			
-			sfx.play();
 			collisionRectangle.x += speed;	
 		}
 
@@ -249,10 +268,6 @@ public class Player implements GameObject {
 
 	public int getExp() {
 		return exp;
-	}
-
-	public int getMaxExp() {
-		return maxExp;
 	}
 
 	public int getAttack() {
