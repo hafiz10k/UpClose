@@ -23,12 +23,13 @@ public class Player implements GameObject {
 	public int HP;
 	private int maxHP;
 
-	public int exp;
+	public int EXP;
+	private int maxExp;
 
 	private int attack;
 	private int maxAttack;
 
-	private int level;
+	public int level;
 	private int maxLevel;
 
 	private boolean dead = false;
@@ -66,8 +67,8 @@ public class Player implements GameObject {
 		collisionRectangle = new Rectangle(0, 0, 15*xZoom, 25*yZoom);
 
 		HP = maxHP = 100;
-		exp = 0;
-		level = maxLevel = 4;
+		EXP = 0;
+		level = 1;
 		attack = maxAttack = 40;
 				
 		//weapon
@@ -76,8 +77,6 @@ public class Player implements GameObject {
 		weaponSheet.loadSprites(48, 48);
 
 		weapon = weaponSheet.getSprite(0, 0);
-//		silverSW = weaponSheet.getSprite(1, 0);
-//		goldSW = weaponSheet.getSprite(2, 0);
 		
 		//sfx
 		sfx = new Audio("/sfx/steps.mp3");
@@ -88,24 +87,9 @@ public class Player implements GameObject {
 			animatedSprite.setAnimationRange(direction * 4, (direction * 4) + 4);
 		}
 	}
-
-	public void hit(int damage) {
-		if(dead) {
-			return;
-		}
-		HP -= damage;
-
-		if(HP < 0) {
-			HP = 0;
-		}
-
-		if(HP == 0) {
-			dead = true;
-		}
-	}
 	
 	public void exp(int exp) {
-		if(exp == 0) {
+		if(EXP == 0) {
 			level = 1;
 			if(level == 1) {
 				attack = 10;
@@ -113,7 +97,7 @@ public class Player implements GameObject {
 			}
 		}
 		
-		if(exp == 15) {
+		if(EXP == 15) {
 			level = 2;
 			if(level == 2) {
 				attack = 20;
@@ -121,7 +105,7 @@ public class Player implements GameObject {
 			}
 		}
 		
-		if(exp == 50) {
+		if(EXP == 50) {
 			level = 3;
 			if(level == 3) {
 				attack = 50;
@@ -129,7 +113,7 @@ public class Player implements GameObject {
 			}
 		}
 		
-		if(exp == 100) {
+		if(EXP == 100) {
 			level = 4;
 		}
 	}
@@ -264,10 +248,6 @@ public class Player implements GameObject {
 
 	public int getMaxHP() {
 		return maxHP;
-	}
-
-	public int getExp() {
-		return exp;
 	}
 
 	public int getAttack() {

@@ -188,7 +188,6 @@ public class FranciscoBattle {
 
 			TimerTask task = new TimerTask() {
 				public void run() {
-					player.hit(enemyAttack);
 					System.out.println(enemyAttack + ", " + "player: " + player.HP);
 				}
 			};

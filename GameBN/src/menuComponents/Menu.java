@@ -115,7 +115,6 @@ public class Menu implements MenuObject {
 
 
 	public void render(RenderHandler renderer, int xZoom, int yZoom) {
-
 		renderer.renderImage(bg, 0, 0, 2, 2, true);
 		renderer.renderSprite(logoSp, 200, 15, xZoom*2, yZoom*2, true);
 
@@ -188,13 +187,13 @@ public class Menu implements MenuObject {
 		if(currentChoice == 1)
 		{
 			// load
-			Game.State = Game.STATE.GAME;
+			Game.State = Game.STATE.LOAD;
 
 		}
 		if(currentChoice == 2)
 		{
 			// help
-			Game.State = Game.STATE.SCENE04;
+			Game.State = Game.STATE.DUMMY;
 		}
 		if(currentChoice == 3)
 		{

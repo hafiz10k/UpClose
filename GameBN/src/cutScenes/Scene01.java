@@ -45,7 +45,6 @@ public class Scene01 {
 				"Abang! Abang! Abaaaang!",
 				"please help me with my history project",
 				"Ugh!",
-				"........"
 		};
 
 
@@ -53,7 +52,7 @@ public class Scene01 {
 		{
 				"adik! what?! stop coming into my room as you please..",
 				"I can't. i'm busy rehearsing for my History play.",
-				"hmm? what is that?"
+				"whoa! what is that?"
 		};
 
 	private String key = "press [A]";
@@ -329,7 +328,7 @@ public class Scene01 {
 				scene02.getAudio().play();
 			}
 
-			Thread.sleep(100);
+			Thread.sleep(80);
 
 		} 	
 

@@ -92,14 +92,14 @@ public class lailaRatna {
 
 		charInfo = charInfoSheet.getSprite(0, 0);
 
-		//enemy stats
+		//player stats
 		player = game.player;
 		playerName = game.name.getName();
-//		playerHP = game.player.getHP();
 		
 		game.player.exp(15);
 		playerAttack = game.player.getAttack();
-
+		
+		//enemy stats
 		enemyAttack = 15;
 		enemyHP = enemyMaxHP = 60;
 
@@ -116,11 +116,11 @@ public class lailaRatna {
 		keyRect.generateGraphics(0x000000);
 	}
 
-	public void hit(int damage) {
+	public void playerHitEnemy(int playerATK) {
 		if(dead) {
 			return;
 		}
-		enemyHP -= damage;
+		enemyHP -= playerATK;
 
 		if(enemyHP < 0) {
 			enemyHP = 0;
@@ -131,11 +131,11 @@ public class lailaRatna {
 		}
 	}
 
-	public void hitEnemy(int enemyAttack) {
+	public void enemyHitPlayer(int enemyATK) {
 		if(dead) {
 			return;
 		}
-		player.HP -= enemyAttack;
+		player.HP -= enemyATK;
 
 		if(player.HP < 0) {
 			player.HP = 0;
@@ -147,7 +147,6 @@ public class lailaRatna {
 	}
 
 	public void update(Game game) {
-		timerRect.x++;
 		try {
 
 			KeyBoardListener keyListener = game.getKeyListener();
@@ -233,15 +232,14 @@ public class lailaRatna {
 	}
 
 	public void select() {
-		if(currentChoice == 0)
-		{
+		if(currentChoice == 0){
 			// attack	
-			this.hit(playerAttack);
+			playerHitEnemy(playerAttack);
 			System.out.println(playerAttack + ", " + "enemy: " + enemyHP);
 
 			TimerTask task = new TimerTask() {
 				public void run() {
-					hitEnemy(enemyAttack);
+					enemyHitPlayer(enemyAttack);
 					System.out.println(enemyAttack + ", " + "player: " + player.HP);
 				}
 			};

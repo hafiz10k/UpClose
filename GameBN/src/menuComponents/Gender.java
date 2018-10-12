@@ -38,7 +38,7 @@ public class Gender implements MenuObject{
 	private Font titleFont;
 	private Font font;
 
-	public int loadChoice = 0;
+	public int loadChoice;
 
 	private String[] gen = 
 		{

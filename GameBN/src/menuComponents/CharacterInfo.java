@@ -21,17 +21,12 @@ import handler.KeyBoardListener;
 import handler.RenderHandler;
 
 public class CharacterInfo {
-	public Rectangle backButton =  new Rectangle (10, 10, 200, 50);
-	private Color titleColor;
-	private Font titleFont;
 	private Font font;
-	private String name;
-	private int gender;
+	private String playerName;
+	private int playerGender;
 	private String gen;
-	private int level = 1;
-	private int exp;
+	private int currentEXP;
 
-	private int saveChoice = 0;
 	private Game game;
 
 	private BufferedImage bg;
@@ -41,32 +36,30 @@ public class CharacterInfo {
 	public CharacterInfo(Game game) {
 
 		try {
+			bg = game.loadImage("/charmenu.png");
+			
 			this.game = game;
-			titleColor = new Color(100, 128, 128);
-			titleFont = new Font("Broadway", Font.BOLD, 80);
-
 			font = new Font("Arial", Font.BOLD, 50);
 
-			name = game.load.getNameLoad();
-			gender = game.load.getGenderLoad();
+			if(game.name.fullName != null && !game.name.fullName.isEmpty()) {
+				playerName = game.name.getName();
+			}
+			
+			if(game.name.fullName == null && game.name.fullName.isEmpty()) {
+				playerName = game.load.nameLoad;
+			}
+			
+			playerGender = game.load.getGenderLoad();
 
-			if(gender == 0) {
+			if(playerGender == 0) {
 				gen = "Boy";
 			}
 			else {
 				gen = "Girl";
 			}
 
-			bg = game.loadImage("/charmenu.png");
+			
 
-			//weapon
-			//			BufferedImage weapon = Game.loadImage("/sword-tiles.png");
-			//			SpriteSheet weaponSheet = new SpriteSheet(weapon);
-			//			weaponSheet.loadSprites(48, 48);
-			//
-			//			bronzeSW = weaponSheet.getSprite(0, 0);
-			//			silverSW = weaponSheet.getSprite(1, 0);
-			//			goldSW = weaponSheet.getSprite(2, 0);
 		}
 		catch (Exception e)
 		{
@@ -76,34 +69,27 @@ public class CharacterInfo {
 	}
 
 	public void update(Game game) {
+		game.player.exp(currentEXP);
+		
 		try {
 			KeyBoardListener keyListener = game.getKeyListener();
-			boolean didMove = false;
-			
 			STATE gameState = game.State;
 			
-			
-
 			if(keyListener.esc()) {
 				if(gameState.equals(Game.STATE.DUMMY)) {
 					Game.State = Game.STATE.DUMMY;
-					didMove = true;
 				}
 				
-				else if(gameState.equals(Game.STATE.LAILARATNA)) {
+				if(gameState.equals(Game.STATE.LAILARATNA)) {
 					Game.State = Game.STATE.LAILARATNA;
-					didMove = true;
 				}
 				
 				if(francisco == false) {
 					francisco = true;
 					if(gameState.equals(STATE.FRANCISCO)) {
 						Game.State = Game.STATE.FRANCISCO;
-						didMove = true;
 					}
 				}
-				
-				
 				
 				else {
 					Game.State = Game.STATE.MENU;
@@ -124,45 +110,16 @@ public class CharacterInfo {
 		renderer.renderSprite(game.player.weapon, 210, 120, xZoom, yZoom, true);
 	}
 
-
-
-
 	public void render(Graphics graphics) {
 		graphics.setColor(Color.WHITE);
 
 		graphics.setFont(font);
 		graphics.drawString("weapon", 160, 390);
-		graphics.drawString(name, 450, 150);
+		graphics.drawString(playerName, 450, 150);
 		graphics.drawString(gen, 450, 260);
 		graphics.drawString("" + game.player.HP, 570, 390);
-		graphics.drawString("" + level, 570, 510);
-		graphics.drawString("" + game.player.getExp(), 600, 620);
-
+		graphics.drawString("" + game.player.level, 570, 510);
+		graphics.drawString("" + game.player.EXP, 600, 620);
+		
 	}
-
-	//	public void loadData() throws NumberFormatException, IOException {
-	//		try {
-	//			BufferedReader br = new BufferedReader(new FileReader("Details.txt"));
-	//			name = br.readLine();
-	//			gender = Integer.parseInt(br.readLine());
-	//			
-	//		} catch (FileNotFoundException e) {
-	//			// TODO Auto-generated catch block
-	//			e.printStackTrace();
-	//		}
-	//		
-	//	}
-
-	private void select() {
-		if(saveChoice == 0) {
-			game.save.save(game);
-			Game.State = Game.STATE.GAME;
-		}
-
-		if(saveChoice == 1) {
-			Game.State = Game.STATE.GAME;
-		}
-
-	}
-
 }

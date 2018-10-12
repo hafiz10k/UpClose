@@ -34,19 +34,12 @@ public class gamePlay {
 		buttonDialogSheet.loadSprites(64, 40);
 
 		dialogBtn = buttonDialogSheet.getSprite(0, 0);
-
-		//load dialog
-		BufferedImage charInfo = game.loadImage("/character_info_rect.png");
-		SpriteSheet charInfoSheet = new SpriteSheet(charInfo);
-		charInfoSheet.loadSprites(64, 40);
-
-		charInfoRect = charInfoSheet.getSprite(0, 0);
 		
 		// load player stats
 //		game.player.level(game.dummy.getAchievedExp());
 		playerName = game.name.getName();
 		playerHP = game.player.getHP() + "/" + game.player.getMaxHP();
-		playerLVL = "" + game.player.getExp();
+		playerLVL = "" + game.player.EXP;
 
 	}
 
@@ -83,7 +76,7 @@ public class gamePlay {
 
 			}
 
-			if(game.player.getRectangle().x >= 2169 && game.player.getRectangle().x <= 2194 && game.player.getRectangle().y >= -225 && game.player.getRectangle().y <= -145) {
+			if(game.player.getRectangle().x >= 2139 && game.player.getRectangle().x <= 2184 && game.player.getRectangle().y >= -225 && game.player.getRectangle().y <= -145) {
 				if(keyListener.a()) {
 					Game.State = STATE.SAVE;
 				}
@@ -107,8 +100,6 @@ public class gamePlay {
 
 
 	public void render(RenderHandler renderer, Player player, int xZoom, int yZoom) {
-		renderer.renderSprite(charInfoRect, 10, 10, 4, 3, true);
-
 		if(player.getRectangle().x <= -10 && player.getRectangle().x >= -40 && player.getRectangle().y <= -990) {
 			renderer.renderSprite(dialogBtn, 40, 600, xZoom, yZoom, true);
 		}
@@ -117,7 +108,7 @@ public class gamePlay {
 			renderer.renderSprite(dialogBtn, 40, 600, xZoom, yZoom, true);
 		}
 
-		if(player.getRectangle().x >= 2169 && player.getRectangle().x <= 2194 && player.getRectangle().y >= -225 && player.getRectangle().y <= -145) {
+		if(player.getRectangle().x >= 2139 && player.getRectangle().x <= 2184 && player.getRectangle().y >= -225 && player.getRectangle().y <= -145) {
 			renderer.renderSprite(dialogBtn, 40, 600, xZoom, yZoom, true);
 		}
 		
@@ -127,10 +118,10 @@ public class gamePlay {
 	}
 
 	public void render(Graphics graphics, Game game) {
-				graphics.setFont(f);
-				graphics.setColor(Color.WHITE);
-				graphics.drawString(game.load.nameLoad, 10, 60);
-				graphics.drawString(playerHP, 10, 100);
+//				graphics.setFont(f);
+//				graphics.setColor(Color.WHITE);
+//				graphics.drawString(game.load.nameLoad, 10, 60);
+//				graphics.drawString(playerHP, 10, 100);
 //				graphics.drawString(playerLVL, 10, 160);
 	}
 

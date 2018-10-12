@@ -118,7 +118,7 @@ public class Game extends JFrame implements Runnable {
 	private FranciscoBattle francisco;
 	public CharacterInfo Cinfo;
 	private Loot loot;
-	
+
 	private Font font;
 
 	private Rectangle dialogRect;
@@ -234,10 +234,10 @@ public class Game extends JFrame implements Runnable {
 
 
 		// load objects
-		objects = new GameObject[1];
+		objects = new GameObject[2];
 		player = new Player(boyAni, xZoom, yZoom);
 		objects[0] = player;
-		//		objects[1] = gui;
+		objects[1] = gui;
 
 		//new java class load
 		menu = new Menu(this);
@@ -368,7 +368,7 @@ public class Game extends JFrame implements Runnable {
 		if(State == STATE.NAME) {
 			name.update(this);
 		}
-		
+
 		if(State == STATE.CINFO) {
 			Cinfo.update(this);
 		}
@@ -432,7 +432,7 @@ public class Game extends JFrame implements Runnable {
 		if(State == STATE.FRANCISCO) {
 			francisco.update(this);
 		}
-		
+
 		if(State == STATE.LOOT) {
 			loot.update(this);
 		}
@@ -500,9 +500,6 @@ public class Game extends JFrame implements Runnable {
 			map.render(renderer, objects, xZoom, yZoom);
 			int chosen1 = gender.getLoadChoice();	
 
-			//			for(int i = 0; i < objects.length; i++) {
-			//				objects[i].render(renderer, xZoom, yZoom);
-			//			}
 			gamePlay.render(renderer, player, xZoom, yZoom);
 			renderer.render(graphics);
 			gamePlay.render(graphics, this);
@@ -672,7 +669,7 @@ public class Game extends JFrame implements Runnable {
 		if(State == STATE.DUMMY) {
 			dummy.render(renderer, xZoom, yZoom);
 			renderer.render(graphics);
-			dummy.render(graphics);
+			dummy.render(graphics, this);
 		}
 
 		if(State == STATE.LAILARATNA) {
@@ -686,7 +683,7 @@ public class Game extends JFrame implements Runnable {
 			renderer.render(graphics);
 			francisco.render(graphics);
 		}
-		
+
 		if(State == STATE.LOOT) {
 			loot.render(renderer, player, xZoom, yZoom);
 			renderer.render(graphics);

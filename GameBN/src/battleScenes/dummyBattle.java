@@ -4,8 +4,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import entity.AnimatedSprite;
+import entity.Player;
 import entity.Rectangle;
 import entity.Sprite;
 import entity.SpriteSheet;
@@ -16,9 +19,9 @@ import handler.KeyBoardListener;
 import handler.RenderHandler;
 
 public class dummyBattle {
-	
+	private Player player;
 	private BufferedImage bg;
-	
+
 	private Sprite enemyInfo;
 	private Sprite charInfo;
 
@@ -29,16 +32,18 @@ public class dummyBattle {
 	private String enemyName = "Training Dummy";
 	private int enemyHP;
 	private int enemyMaxHP;
-	private boolean dead = false;
-	
+	private int enemyAttack;
+
+
 	//player
 	private String playerName;
-	private String playerHP;
 	private int playerAttack;
 	private int playerEXP;
-	private int achievedEXP;
-	
-	private boolean playerTurn = false;
+	public int achievedEXP;
+
+	private boolean dead = false;
+	private boolean playerAttacking = false;
+	private boolean enemyAttacking = false;
 
 	private int currentChoice = 0;
 
@@ -48,36 +53,30 @@ public class dummyBattle {
 			"Stats"
 	};
 
-	private String pgb[] = {
-			""	
-	};
-
-	private String key = "[Enter] to select";
 	private Rectangle keyRect;
 
 	private Font font;
 	private Font fontN;
 	private Font deadFont;
 	private Font fontKey;
-	
-	private Audio bgm;
-	private Audio sfx;
 
+	private Audio bgm;
+	
 	public dummyBattle(Game game) {
 		BufferedImage dummyImage = game.loadImage("/dummyBattle.png");
 		SpriteSheet dummySheet = new SpriteSheet(dummyImage);
 		dummySheet.loadSprites(64, 64);
 
 		dummy = new AnimatedSprite(dummySheet, speed);
-		
+
 		bg = game.loadImage("/dummy_bg.png");
-		
+
 		BufferedImage enemyInfoImg = game.loadImage("/enemy_info.png");
 		SpriteSheet enemyInfoSheet = new SpriteSheet(enemyInfoImg);
 		enemyInfoSheet.loadSprites(64, 40);
 
 		enemyInfo = enemyInfoSheet.getSprite(0, 0);
-		
+
 		BufferedImage charInfoimg = game.loadImage("/char_info.png");
 		SpriteSheet charInfoSheet = new SpriteSheet(charInfoimg);
 		charInfoSheet.loadSprites(64, 40);
@@ -86,14 +85,19 @@ public class dummyBattle {
 
 		// dummy stats
 		enemyHP = enemyMaxHP = 20;
+		enemyAttack = 1;
 
 		// load player stats
-		playerName = game.name.getName();
-		playerHP = "HP: " + game.player.getHP() + "/" + game.player.getMaxHP();
-		playerEXP = game.player.exp;
+		player = game.player;
 		
-		game.player.exp(game.player.exp);
-		playerAttack = game.player.getAttack();
+		if(game.name.fullName != null && !game.name.fullName.isEmpty()) {
+			playerName = game.name.getName();
+		}
+		else {
+			playerName = game.load.nameLoad;
+		}
+
+		achievedEXP = 15;
 
 		keyRect = new Rectangle(0, 650, 400, 400);
 		keyRect.generateGraphics(0x000000);
@@ -102,17 +106,17 @@ public class dummyBattle {
 		fontN = new Font("Calibri", Font.BOLD, 30);
 		deadFont = new Font("Arial", Font.BOLD, 60);
 		fontKey = new Font("Arial", Font.PLAIN, 20);
-		
+
 		bgm = new Audio ("/bgm/battle_bgm.mp3");
 		bgm.play();
 	}
-	
-	public void hit(int damage) {
+
+	public void playerHitEnemy(int playerATK) {
 		if(dead) {
-			return;
+			return;			
 		}
-		
-		enemyHP -= damage;
+
+		enemyHP -= playerATK;
 
 		if(enemyHP < 0) {
 			enemyHP = 0;
@@ -120,10 +124,29 @@ public class dummyBattle {
 
 		if(enemyHP == 0) {
 			dead = true;
+			
+		}
+	}
+	
+	public void enemyHitPlayer(int enemyATK) {
+		if(dead) {
+			return;
+		}
+		player.HP -= enemyATK;
+
+		if(player.HP < 0) {
+			player.HP = 0;
+		}
+
+		if(player.HP == 0) {
+			dead = true;
+			
 		}
 	}
 
 	public void update(Game game) {
+		player.exp(game.player.EXP);
+		playerAttack = game.player.getAttack();
 		
 		try {
 			KeyBoardListener keyListener = game.getKeyListener();
@@ -154,16 +177,19 @@ public class dummyBattle {
 			if(didMove) {
 				Thread.sleep(200);
 			}
-			
+
 			if(dead == true) {
-				playerEXP = game.player.exp + 15;
-				System.out.println(achievedEXP);
+				playerAttacking = false;
+				enemyAttacking = false;
 				
+				player.EXP = 0 + achievedEXP;
+				System.out.println(player.EXP);
+
 				if(keyListener.a()) {
 					game.State = STATE.GAME;
 				}
 			}
-			
+
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -172,8 +198,24 @@ public class dummyBattle {
 	public void select(Game game) {
 		if(currentChoice == 0)
 		{
-			this.hit(playerAttack);
+			// attack	
+			playerHitEnemy(playerAttack);
 			System.out.println(playerAttack + ", " + "enemy: " + enemyHP);
+			
+			playerAttacking = true;
+			enemyAttacking = false;
+
+			TimerTask task = new TimerTask() {
+				public void run() {
+					enemyHitPlayer(enemyAttack);
+
+					enemyAttacking = true;
+					playerAttacking = false;
+				}
+				
+			};
+			Timer timer = new Timer();
+			timer.schedule(task, 1500);
 
 		}
 		if(currentChoice == 1)
@@ -198,7 +240,7 @@ public class dummyBattle {
 		renderer.renderRectangle(keyRect, xZoom, yZoom, true);
 	}
 
-	public void render(Graphics graphics) {
+	public void render(Graphics graphics, Game game) {
 		graphics.setFont(font);
 		for(int i = 0; i < options.length; i++) 
 		{
@@ -212,22 +254,29 @@ public class dummyBattle {
 			}
 			graphics.drawString(options[i], 150 + i * 300 , 700);
 		}
-		
+
 		graphics.setFont(fontN);
 		graphics.setColor(Color.WHITE);
 		graphics.drawString(enemyName, 680, 50);
 		graphics.drawString("HP: " + enemyHP + "/" + enemyMaxHP, 680, 80);
 		graphics.drawString("ATK: " + "0", 680, 110);
-		
+
 		graphics.drawString(playerName, 30, 400);
-		graphics.drawString(playerHP, 30, 430);
+		graphics.drawString("HP: " + game.player.HP + "/" + game.player.getMaxHP(), 30, 430);
 		graphics.drawString("ATK: " + playerAttack, 30, 460);
+		
+		if(playerAttacking == true) {
+			graphics.drawString("Player attacked!", 100, 300);
+		}
+		if(enemyAttacking == true) {
+			graphics.drawString("enemy attacked!", 100, 350);
+		}
 		
 		if(dead == true) {
 			graphics.setFont(deadFont);
 			graphics.setColor(Color.RED);
 			graphics.drawString("ENEMY DEAD!", 100, 100);
-			
+
 			graphics.setFont(fontN);
 			graphics.setColor(Color.BLACK);
 			graphics.drawString("Player gained " + achievedEXP + "exp", 100, 200);
@@ -238,7 +287,7 @@ public class dummyBattle {
 	public Audio getBgm() {
 		return bgm;
 	}
-	
+
 	public int getAchievedExp() {
 		return achievedEXP;
 	}

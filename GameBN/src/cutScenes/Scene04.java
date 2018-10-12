@@ -43,8 +43,6 @@ public class Scene04 {
 	private String[] pgDialog =
 		{
 				"Hmm? what is this little girl doing sleeping here?",
-				"Little girl, wake up!",
-				"*tap* *tap*"
 		};
 
 	private int pg = 0;
@@ -169,7 +167,7 @@ public class Scene04 {
 
 				if(keyListener.a()) {
 					didMove = true;
-					Game.State = Game.STATE.SCENE05;
+					Game.State = Game.STATE.SCENE06;
 				}
 
 				if(didMove) {
