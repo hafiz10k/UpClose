@@ -92,13 +92,6 @@ public class dummyBattle {
 		// load player stats
 		player = game.player;
 		
-		if(game.name.fullName != null && !game.name.fullName.isEmpty()) {
-			playerName = game.name.getName();
-		}
-		else {
-			playerName = game.load.nameLoad;
-		}
-
 		achievedEXP = 15;
 
 		keyRect = new Rectangle(0, 650, 400, 400);
@@ -270,6 +263,13 @@ public class dummyBattle {
 		graphics.drawString(enemyName, 680, 50);
 		graphics.drawString("HP: " + enemyHP + "/" + enemyMaxHP, 680, 80);
 		graphics.drawString("ATK: " + "0", 680, 110);
+		
+		if(game.name.fullName != null && !game.name.fullName.isEmpty()) {
+			playerName = game.name.getName();
+		}
+		else {
+			playerName = game.load.nameLoad;
+		}
 
 		graphics.drawString(playerName, 30, 400);
 		graphics.drawString("HP: " + game.player.HP + "/" + game.player.getMaxHP(), 30, 430);

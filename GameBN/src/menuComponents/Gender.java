@@ -128,7 +128,6 @@ public class Gender implements MenuObject{
 
 			boolean loading = false;
 
-
 			if(keyListener.left()) {
 				loading = true;
 				loadChoice --;
