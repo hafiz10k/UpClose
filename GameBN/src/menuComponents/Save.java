@@ -75,7 +75,7 @@ public class Save implements MenuObject{
 
 	public void save(Game game) {
 		String name = game.name.fullName; 
-		int gender = game.gender.getLoadChoice();
+		int gender = game.gender.genderchosen;
 		int playerX = game.player.getRectangle().x;
 		int playerY = game.player.getRectangle().y;
 		

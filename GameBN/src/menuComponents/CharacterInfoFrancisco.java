@@ -87,10 +87,35 @@ public class CharacterInfoFrancisco {
 		graphics.setFont(font);
 		graphics.drawString("weapon", 160, 390);
 		graphics.drawString(playerName, 450, 150);
-		graphics.drawString(gen, 450, 260);
+//		graphics.drawString(gen, 450, 260);
 		graphics.drawString("" + game.player.HP, 570, 390);
 		graphics.drawString("" + game.player.level, 570, 510);
 		graphics.drawString("" + game.player.EXP, 600, 620);
+		if(game.gender.genderchosen == 0) {
+			if(game.load.genderLoad == 1) {
+				graphics.setColor(Color.WHITE);
+				graphics.setFont(font);
+				graphics.drawString("Girl", 450, 260);
+			}
+			else if(game.load.genderLoad == 2){
+				graphics.setColor(Color.WHITE);
+				graphics.setFont(font);
+				graphics.drawString("Boy", 450, 260);
+			}
+			
+		}
+		else {
+			if(game.gender.getLoadChoice() == 1) {
+				graphics.setColor(Color.WHITE);
+				graphics.setFont(font);
+				graphics.drawString("Girl", 450, 260);
+			}
+			else if(game.gender.getLoadChoice() == 0){
+				graphics.setColor(Color.WHITE);
+				graphics.setFont(font);
+				graphics.drawString("Boy", 450, 260);
+			}
+		}
 		
 	}
 }

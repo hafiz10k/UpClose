@@ -540,17 +540,30 @@ public class Game extends JFrame implements Runnable {
 		//			}
 		//			graphics.setColor(Color.WHITE);
 		//			graphics.setFont(font);
-		//			graphics.drawString("Gender =", 20, 70);
-		//			if(gender.getLoadChoice() == 1) {
-		//				graphics.setColor(Color.WHITE);
-		//				graphics.setFont(font);
-		//				graphics.drawString("Girl", 80, 70);
-		//			}
-		//			else if(gender.getLoadChoice() == 0){
-		//				graphics.setColor(Color.WHITE);
-		//				graphics.setFont(font);
-		//				graphics.drawString("Boy", 80, 70);
-		//			}
+//					graphics.drawString("Gender =", 20, 70);
+//					if(gender.genderchosen == 0) {
+//						if(load.genderLoad == 1) {
+//							graphics.setColor(Color.WHITE);
+//							graphics.setFont(font);
+//							graphics.drawString("Girl", 80, 70);
+//						}
+//						else {
+//							graphics.setColor(Color.WHITE);
+//							graphics.setFont(font);
+//							graphics.drawString("Boy", 80, 70);
+//						}
+//						
+//					}
+//					if(gender.getLoadChoice() == 1) {
+//						graphics.setColor(Color.WHITE);
+//						graphics.setFont(font);
+//						graphics.drawString("Girl", 80, 70);
+//					}
+//					else if(gender.getLoadChoice() == 0){
+//						graphics.setColor(Color.WHITE);
+//						graphics.setFont(font);
+//						graphics.drawString("Boy", 80, 70);
+//					}
 		//			graphics.setColor(Color.WHITE);
 		//			graphics.setFont(font);
 		//			graphics.drawString("Level =", 20, 90);
