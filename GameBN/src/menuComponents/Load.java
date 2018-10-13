@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -12,15 +13,17 @@ import java.io.IOException;
 
 import game.Game;
 import handler.KeyBoardListener;
+import handler.RenderHandler;
 
 public class Load implements MenuObject{
-	public Rectangle backButton =  new Rectangle (10, 10, 200, 50);
-
 	private Color titleColor;
 	private Font titleFont;
 	public String nameLoad;
-	public String genderLoad;
+	public int genderLoad;
 	public String hpLoad;
+	
+	private int playerPosX;
+	private int playerPosY;
 
 	private Font font;
 
@@ -31,23 +34,30 @@ public class Load implements MenuObject{
 				"Yes",
 				"No"
 		};
+	
+	private BufferedImage bg;
 
-	public Load() {
+	public Load(Game game) {
 		try 
 		{
+			bg = game.loadImage("/name_bg.png");
+			titleColor = new Color(100, 128, 128);
+			titleFont = new Font("Broadway", Font.BOLD, 50);
+
+			font = new Font("Arial", Font.PLAIN, 40);
+			
 			try {
 				BufferedReader br = new BufferedReader(new FileReader("Details.txt"));
 				nameLoad = br.readLine();
-				genderLoad = br.readLine();
+				genderLoad = Integer.parseInt(br.readLine());
+				playerPosX = Integer.parseInt(br.readLine());
+				playerPosY = Integer.parseInt(br.readLine());
 				
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			titleColor = new Color(100, 128, 128);
-			titleFont = new Font("Broadway", Font.BOLD, 80);
-
-			font = new Font("Arial", Font.PLAIN, 30);
+			
 
 		}
 		catch (Exception e)
@@ -64,11 +74,11 @@ public class Load implements MenuObject{
 		this.nameLoad = nameLoad;
 	}
 
-	public String getGenderLoad() {
+	public int getGenderLoad() {
 		return genderLoad;
 	}
 
-	public void setGenderLoad(String genderLoad) {
+	public void setGenderLoad(int genderLoad) {
 		this.genderLoad = genderLoad;
 	}
 
@@ -79,35 +89,45 @@ public class Load implements MenuObject{
 	public void setHpLoad(String hpLoad) {
 		this.hpLoad = hpLoad;
 	}
+	public void render(RenderHandler renderer, int xZoom, int yZoom) {
+		renderer.renderImage(bg, 0, 0, 2, 2, true);
+	}
 
 	@Override
 	public void render(Graphics graphics) {
 		Graphics2D g2d = (Graphics2D) graphics;
 
-		graphics.setColor(Color.WHITE);
 		graphics.setFont(titleFont);
-		graphics.drawString("Load", 380, 120);
+		graphics.setColor(Color.BLACK);
+		graphics.drawString("Load Game?", 320, 150);
 
 		graphics.setFont(font);
-		graphics.drawString("load game?", 420, 250);
 
 		for(int i = 0; i < load.length; i++) 
 		{
 			if (i == loadChoice)
 			{
-				graphics.setColor(Color.YELLOW);
+				graphics.setColor(Color.RED);
 			}
 			else 
 			{
-				graphics.setColor(Color.WHITE);
+				graphics.setColor(Color.BLACK);
 			}
-			graphics.drawString(load[i], 350 + i * 250, 350);
+			graphics.drawString(load[i], 320 + i * 250, 350);
 		}
 	}
 
 	@Override
 	public void update(Game game) {
 		try {
+			try {
+				loadData();
+				
+			} catch (NumberFormatException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			KeyBoardListener keyListener = game.getKeyListener();
 
 			boolean loading = false;
@@ -146,18 +166,19 @@ public class Load implements MenuObject{
 
 	}
 	
-//	public void loadData() throws NumberFormatException, IOException {
-//		try {
-//			BufferedReader br = new BufferedReader(new FileReader("Details.txt"));
-//			nameLoad = br.readLine();
-//			genderLoad = Integer.parseInt(br.readLine());
-//			
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//	}
+	public void loadData() throws NumberFormatException, IOException {
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("Details.txt"));
+			nameLoad = br.readLine();
+			genderLoad = Integer.parseInt(br.readLine());
+			playerPosX = Integer.parseInt(br.readLine());
+			playerPosY = Integer.parseInt(br.readLine());
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 
 	private void select() {
 

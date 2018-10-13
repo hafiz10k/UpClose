@@ -13,6 +13,7 @@ import entity.Rectangle;
 import entity.SpriteSheet;
 import game.Game;
 import game.Game.STATE;
+import handler.Audio;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
 import menuComponents.CreateName;
@@ -47,39 +48,37 @@ public class Scene06 {
 	private String[] pgDialog =
 		{
 				"Little girl, are you awake now?",
-				"you are currently in Jerudong, our hideout.",
-				"brother? I found you alone passed out in the woods",
+				"You are currently in Jerudong, our hideout.",
+				"Brother? I found you alone passed out in the woods",
 				"I'm Pengiran Bendahara Sakam, Brunei's mighty warrior!",
-				"did you hit your head so hard? it's year 1578.",
-				"what is your name, little girl?",
+				"Did you hit your head so hard? it's year 1578.",
+				"Come, follow me outside, little girl?",
 		};
 
 	private String[] girl = 
 		{
 				"ugh.. where am i?",
 				"where's my brother?!",
-				"in the woods? i was just in my bedroom...",
-				"wait why do you look so familiar.. who are you?",
-				"huh? warrior? wait.. you mean THAT pengiran bendahara sakam?!",
-				"what year is this?!",
+				"But I was in my brother's room! wait... who are you?",
+				"Huh? warrior? stop joking. what year is this?!",
 				"oh..... my.... god...."
 		};
-
-	private String key = "[press enter]";
 
 	private int pg = 0;	
 	private int g = 0;
 
-	private String addedPBSChar = "";
-	private String addedgirlChar = "";
+	private String addedPGChar = "";
+	private String addedGirlChar = "";
 
-	private int addedPBSCharCounter = 0;
-	private int addedgirlCharCounter = 0;
+	private int addedPGCharCounter = 0;
+	private int addedGirlCharCounter = 0;
+
+	private boolean beginPG = false;
+	private boolean beginGirl = false;
+
+	private Audio sfx;
 
 	public Scene06(Game game) {
-		
-		
-
 		//bedroom bg
 		room = game.loadImage("/pbs-bedroom.png");
 
@@ -92,7 +91,7 @@ public class Scene06 {
 
 
 		//pengiran bendahara sakam
-		BufferedImage pbsImage = game.loadImage("/PgBS.png");
+		BufferedImage pbsImage = game.loadImage("/pg-animation.png");
 		SpriteSheet pbsSheet = new SpriteSheet(pbsImage);
 		pbsSheet.loadSprites(16, 40);
 
@@ -113,47 +112,48 @@ public class Scene06 {
 		// TIMER RECT
 		timerRect = new Rectangle(0, 0, 10, 32);
 		timerRect.generateGraphics(1, 0xffffff);
+
+		//custscenes audio
+		sfx = new Audio("/sfx/dialog.mp3");
 	}
 
-	public void update(Game game) {
+	public void update(Game game ) {
 		timerRect.x++;
+		System.out.println(timerRect.x);
 
 		try {
-
 			// PBS MOVEMENT
 			if(pbsAni != null) {
+				boolean didMove = false;
+				int newDirection = pgDir;
 
-				pbsRect.x -= speed;
-				System.out.println(timerRect.x);
+				newDirection = 1;
+				didMove = true;
 
-				//				boolean didMove = false;
-				//				int newDirection = pgDir;
-				//
-				//				newDirection = 1;
-				boolean didMove = true;
-				//
-				//				if(!didMove) {
-				//					pbsAni.reset();
-				//				}
-				//
-				//				if(didMove) {
-				//					pbsAni.incSprite();
-				//					pbsRect.x += speed;
-				//
-				//				}
-				//
-				//				if(newDirection != pgDir) {
-				//					pgDir = newDirection;
-				//					pbsAni.setAnimationRange(pgDir * 4, (pgDir * 4) + 4);
-				//				}
-				//
+				if(!didMove) {
+					pbsAni.reset();
+				}
+
+				if(didMove) {
+					pbsAni.incSprite();
+					pbsRect.x -= 10;
+				}
+
+				if(newDirection != pgDir) {
+					pgDir = newDirection;
+					pbsAni.setAnimationRange(pgDir * 4, (pgDir * 4) + 4);
+
+				}
 
 				if(timerRect.x >= 22) {
+					didMove = true;
+					pbsAni.reset();
+
 					pbsRect.x = 190;
 				}
 			}
 
-			// girl MOVEMENT
+			// GIRL MOVEMENT
 			if(girlAni != null) {
 				boolean didMove = false;
 				int newDirection = girlDir;
@@ -179,9 +179,224 @@ public class Scene06 {
 
 				}
 			}
+			
+			
+			if(timerRect.x >= 25 && timerRect.x <= 60) {
+				// ANIMATING DIALOGS - PG Bendahara
+				char pgChar[] = pgDialog[pg].toCharArray();
+				if(beginPG == false) {
+					addedPGChar = "";
+					addedPGCharCounter = 0;
+					beginPG = true;
+				}
+				if(addedPGCharCounter <= pgChar.length-1) {
+					addedPGChar = addedPGChar + pgChar[addedPGCharCounter];
+					addedPGCharCounter++;
+					sfx.play();
+				} 
+			}
+
+			if(timerRect.x > 60 && timerRect.x <= 90) {
+				// ANIMATING DIALOGS - BOY
+				char boyChar[] = girl[g].toCharArray();
+				if(beginGirl == false) {
+					addedGirlChar = "";
+					addedGirlCharCounter = 0;
+					beginGirl = true;
+					pg++;
+				}
+				if(addedGirlCharCounter <= boyChar.length-1) {
+					addedGirlChar = addedGirlChar + boyChar[addedGirlCharCounter];
+					addedGirlCharCounter++;
+					sfx.play();
+				} else {
+					beginPG = false;
+				}
+			}
+
+			if(timerRect.x > 90 && timerRect.x <= 150) {
+				// ANIMATING DIALOGS - PG Bendahara
+				char pgChar[] = pgDialog[pg].toCharArray();
+				if(beginPG == false) {
+					addedPGChar = "";
+					addedPGCharCounter = 0;
+					beginPG = true;
+					g++;
+				}
+				if(addedPGCharCounter <= pgChar.length-1) {
+					addedPGChar = addedPGChar + pgChar[addedPGCharCounter];
+					addedPGCharCounter++;
+					sfx.play();
+				}
+				else {
+					beginGirl = false;
+				}
+			}
+
+			if(timerRect.x > 150 && timerRect.x <= 180) {
+				// ANIMATING DIALOGS - BOY
+				char boyChar[] = girl[g].toCharArray();
+				if(beginGirl == false) {
+					addedGirlChar = "";
+					addedGirlCharCounter = 0;
+					beginGirl = true;
+					pg++;
+				}
+				if(addedGirlCharCounter <= boyChar.length-1) {
+					addedGirlChar = addedGirlChar + boyChar[addedGirlCharCounter];
+					addedGirlCharCounter++;
+					sfx.play();
+				} else {
+					beginPG = false;
+				}
+			}
+
+			if(timerRect.x > 180 && timerRect.x <= 250) {
+				// ANIMATING DIALOGS - PG Bendahara
+				char pgChar[] = pgDialog[pg].toCharArray();
+				if(beginPG == false) {
+					addedPGChar = "";
+					addedPGCharCounter = 0;
+					beginPG = true;
+					g++;
+				}
+				if(addedPGCharCounter <= pgChar.length-1) {
+					addedPGChar = addedPGChar + pgChar[addedPGCharCounter];
+					addedPGCharCounter++;
+					sfx.play();
+				}
+				else {
+					beginGirl = false;
+				}
+			}
+
+			if(timerRect.x > 250 && timerRect.x <= 320) {
+				// ANIMATING DIALOGS - BOY
+				char boyChar[] = girl[g].toCharArray();
+				if(beginGirl == false) {
+					addedGirlChar = "";
+					addedGirlCharCounter = 0;
+					beginGirl = true;
+					pg++;
+				}
+				if(addedGirlCharCounter <= boyChar.length-1) {
+					addedGirlChar = addedGirlChar + boyChar[addedGirlCharCounter];
+					addedGirlCharCounter++;
+					sfx.play();
+				}
+				else {
+					beginPG = false;
+				}
+			}
+
+			if(timerRect.x > 320 && timerRect.x <= 390) {
+				// ANIMATING DIALOGS - PG Bendahara
+				char pgChar[] = pgDialog[pg].toCharArray();
+				if(beginPG == false) {
+					addedPGChar = "";
+					addedPGCharCounter = 0;
+					beginPG = true;
+					g++;
+				}
+				if(addedPGCharCounter <= pgChar.length-1) {
+					addedPGChar = addedPGChar + pgChar[addedPGCharCounter];
+					addedPGCharCounter++;
+					sfx.play();
+				}
+				else {
+					beginGirl = false;
+				}
+			}
+
+			if(timerRect.x > 390 && timerRect.x <= 450) {
+				// ANIMATING DIALOGS - BOY
+				char boyChar[] = girl[g].toCharArray();
+				if(beginGirl == false) {
+					addedGirlChar = "";
+					addedGirlCharCounter = 0;
+					beginGirl = true;
+					pg++;
+				}
+				if(addedGirlCharCounter <= boyChar.length-1) {
+					addedGirlChar = addedGirlChar + boyChar[addedGirlCharCounter];
+					addedGirlCharCounter++;
+					sfx.play();
+				}
+				else {
+					beginPG = false;
+				}
+			}
+
+			if(timerRect.x > 450 && timerRect.x <= 510) {
+				// ANIMATING DIALOGS - PG Bendahara
+				char pgChar[] = pgDialog[pg].toCharArray();
+				if(beginPG == false) {
+					addedPGChar = "";
+					addedPGCharCounter = 0;
+					beginPG = true;
+					g++;
+				}
+				if(addedPGCharCounter <= pgChar.length-1) {
+					addedPGChar = addedPGChar + pgChar[addedPGCharCounter];
+					addedPGCharCounter++;
+					sfx.play();
+				}
+				else {
+					beginGirl = false;
+				}
+			}
+
+			if(timerRect.x > 510 && timerRect.x <= 540) {
+				// ANIMATING DIALOGS - BOY
+				char boyChar[] = girl[g].toCharArray();
+				if(beginGirl == false) {
+					addedGirlChar = "";
+					addedGirlCharCounter = 0;
+					beginGirl = true;
+					pg++;
+				}
+				if(addedGirlCharCounter <= boyChar.length-1) {
+					addedGirlChar = addedGirlChar + boyChar[addedGirlCharCounter];
+					addedGirlCharCounter++;
+					sfx.play();
+				}
+				else {
+					beginPG = false;
+				}
+			}
+
+			if(timerRect.x > 540 && timerRect.x <= 610) {
+				// ANIMATING DIALOGS - PG Bendahara
+				char pgChar[] = pgDialog[pg].toCharArray();
+				if(beginPG == false) {
+					addedPGChar = "";
+					addedPGCharCounter = 0;
+					beginPG = true;
+				}
+				if(addedPGCharCounter <= pgChar.length-1) {
+					addedPGChar = addedPGChar + pgChar[addedPGCharCounter];
+					addedPGCharCounter++;
+					sfx.play();
+				}
+
+			}
 
 
-			Thread.sleep(150);
+			if(timerRect.x >= 0 ) {
+				KeyBoardListener keyListener = game.getKeyListener();
+				boolean didMove = false;
+
+				if(keyListener.a()) {
+					didMove = true;
+					Game.State = Game.STATE.SCENE07;
+				}
+
+				if(didMove) {
+					Thread.sleep(100);
+				}
+			}
+
+			Thread.sleep(70);
 
 		} 	
 
@@ -198,8 +413,6 @@ public class Scene06 {
 		renderer.renderSprite(girlAni, girlRect.x, girlRect.y, xZoom, yZoom, false);
 		renderer.renderSprite(pbsAni, pbsRect.x, pbsRect.y, xZoom, yZoom, false);
 
-		renderer.renderRectangle(timerRect, xZoom, yZoom, false);
-		
 		if(timerRect.x >= 22) {
 			renderer.renderRectangle(rect, xZoom, yZoom, true);
 		}
@@ -208,79 +421,62 @@ public class Scene06 {
 
 	public void render(Graphics graphics, Game game) {
 		graphics.setFont(f);
-		if(timerRect.x >= 22 && timerRect.x < 32) {
+		if(timerRect.x >= 25 && timerRect.x <= 60) {
 			graphics.setColor(Color.GREEN);
-			graphics.drawString(pgDialog[pg], 60, 650);
+			graphics.drawString(addedPGChar, 60, 650);
 		}
-		
-		if(timerRect.x >= 32 && timerRect.x < 42) {
-			graphics.setColor(Color.MAGENTA);
-			graphics.drawString(girl[g], 60, 650);
-		}
-		
-		if(timerRect.x >= 42 && timerRect.x < 52) {
-			graphics.setColor(Color.GREEN);
-			graphics.drawString(pgDialog[pg+1], 60, 650);
-		}
-		
-		if(timerRect.x >= 52 && timerRect.x < 62) {
-			graphics.setColor(Color.MAGENTA);
-			graphics.drawString(girl[g+1], 60, 650);
-		}
-		
-		if(timerRect.x >= 62 && timerRect.x < 72) {
-			graphics.setColor(Color.GREEN);
-			graphics.drawString(pgDialog[pg+2], 60, 650);
-		}
-		
-		if(timerRect.x >= 72 && timerRect.x < 82) {
-			graphics.setColor(Color.MAGENTA);
-			graphics.drawString(girl[g+2], 60, 650);
-		}
-		
-		if(timerRect.x >= 82 && timerRect.x < 92) {
-			graphics.setColor(Color.MAGENTA);
-			graphics.drawString(girl[g+3], 60, 650);
-		}
-		
-		if(timerRect.x >= 92 && timerRect.x < 102) {
-			graphics.setColor(Color.GREEN);
-			graphics.drawString(pgDialog[pg+3], 60, 650);
-		}
-		
-		if(timerRect.x >= 102 && timerRect.x < 112) {
-			graphics.setColor(Color.MAGENTA);
-			graphics.drawString(girl[g+4], 60, 650);
-		}
-		
-		if(timerRect.x >= 112 && timerRect.x < 122) {
-			graphics.setColor(Color.MAGENTA);
-			graphics.drawString(girl[g+5], 60, 650);
-		}
-		
-		if(timerRect.x >= 122 && timerRect.x < 132) {
-			graphics.setColor(Color.GREEN);
-			graphics.drawString(pgDialog[pg+4], 60, 650);
-		}
-		
-		if(timerRect.x >= 132 && timerRect.x < 142) {
-			graphics.setColor(Color.MAGENTA);
-			graphics.drawString(girl[g+6], 60, 650);
-		}
-		
-		if(timerRect.x >= 142 && timerRect.x < 152) {
-			graphics.setColor(Color.GREEN);
-			graphics.drawString(pgDialog[pg+5], 60, 650);
-		}
-		
-		if(timerRect.x >= 155 && timerRect.x < 175) {
-			String pg6 = "alright, " + game.name.getName() + " follow me";
-			graphics.setColor(Color.GREEN);
-			graphics.drawString(pg6, 60, 650);
 
+		if(timerRect.x > 60 && timerRect.x <= 90) {
+			graphics.setColor(Color.MAGENTA);
+			graphics.drawString(addedGirlChar, 60, 650);
 		}
-		
-		if(timerRect.x >= 180) {
+
+		if(timerRect.x > 90 && timerRect.x <= 150) {
+			graphics.setColor(Color.GREEN);
+			graphics.drawString(addedPGChar, 60, 650);
+		}
+
+		if(timerRect.x > 150 && timerRect.x <= 180) {
+			graphics.setColor(Color.MAGENTA);
+			graphics.drawString(addedGirlChar, 60, 650);
+		}
+
+		if(timerRect.x > 180 && timerRect.x <= 250) {
+			graphics.setColor(Color.GREEN);
+			graphics.drawString(addedPGChar, 60, 650);
+		}
+
+		if(timerRect.x > 250 && timerRect.x <= 320) {
+			graphics.setColor(Color.MAGENTA);
+			graphics.drawString(addedGirlChar, 60, 650);
+		}
+
+		if(timerRect.x > 320 && timerRect.x <= 390) {
+			graphics.setColor(Color.GREEN);
+			graphics.drawString(addedPGChar, 60, 650);
+		}
+
+		if(timerRect.x > 390 && timerRect.x <= 450) {
+			graphics.setColor(Color.MAGENTA);
+			graphics.drawString(addedGirlChar, 60, 650);
+		}
+
+		if(timerRect.x > 450 && timerRect.x <= 510) {
+			graphics.setColor(Color.GREEN);
+			graphics.drawString(addedPGChar, 60, 650);
+		}
+
+		if(timerRect.x > 510 && timerRect.x <= 540) {
+			graphics.setColor(Color.MAGENTA);
+			graphics.drawString(addedGirlChar, 60, 650);
+		}
+
+		if(timerRect.x > 540 && timerRect.x <= 610) {
+			graphics.setColor(Color.GREEN);
+			graphics.drawString(addedPGChar, 60, 650);
+		}
+
+		if(timerRect.x >= 620) {
 			Game.State = STATE.SCENE08;
 		}
 

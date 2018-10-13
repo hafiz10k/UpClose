@@ -23,7 +23,7 @@ public class Scene04 {
 	private AnimatedSprite pbsAni;
 	private AnimatedSprite girlAni;
 
-	private int speed = 10;
+	private int speed = 2;
 
 	//direction
 	private int pgDir = 0;
@@ -32,6 +32,10 @@ public class Scene04 {
 	private Rectangle pbsRect;
 	private Rectangle girlRect;
 	private Rectangle rect;
+	private Rectangle timerRect;
+
+	private static final int down = 0;
+	private static final int right = 2;
 
 	private Font f = new Font("arial", Font.PLAIN, 30);
 	private Font fontKey = new Font("arial", Font.PLAIN, 20);
@@ -39,18 +43,21 @@ public class Scene04 {
 	private String[] pgDialog =
 		{
 				"Hmm? what is this little girl doing sleeping here?",
-				"Little girl, wake up!",
-				"*tap* *tap*"
 		};
 
-	private int i = 0;
+	private int pg = 0;
+	private String addedPGChar = "";
+	private int addedPGCharCounter = 0;
+	private boolean beginPG = false;
+
+	private Audio sfx;
 
 	public Scene04(Game game) {
 		// land
 		land = game.loadImage("/scene03.png");
 
 		//pengiran bendahara sakam
-		BufferedImage pbsImage = game.loadImage("/PgBS.png");
+		BufferedImage pbsImage = game.loadImage("/pg-animation.png");
 		SpriteSheet pbsSheet = new SpriteSheet(pbsImage);
 		pbsSheet.loadSprites(16, 40);
 
@@ -75,72 +82,100 @@ public class Scene04 {
 		rect = new Rectangle(40, 600, 300, 50);
 		rect.generateGraphics(0xeff0f1);
 
+		// TIMER RECT
+		timerRect = new Rectangle(0, 0, 10, 32);
+		timerRect.generateGraphics(1, 0xffffff);
+
+		//custscenes audio
+		sfx = new Audio("/sfx/dialog.mp3");
+
 	}
 
-	public void update(Game game, Player player) {
+	public void update(Game game) {
+		timerRect.x++;
+
 		try {
 
 			// PBS MOVEMENT
 			if(pbsAni != null) {
-
-				pbsRect.y += speed;
-
-				//				boolean didMove = false;
-				//				int newDirection = pgDir;
-				//
-				//				newDirection = 1;
-				boolean didMove = true;
-				//
-				//				if(!didMove) {
-				//					pbsAni.reset();
-				//				}
-				//
-				//				if(didMove) {
-				//					pbsAni.incSprite();
-				//					pbsRect.x += speed;
-				//
-				//				}
-				//
-				//				if(newDirection != pgDir) {
-				//					pgDir = newDirection;
-				//					pbsAni.setAnimationRange(pgDir * 4, (pgDir * 4) + 4);
-				//				}
-				//
-				if(pbsRect.y >= 300) {
-					pbsRect.y = 300;
-
-					pbsRect.x += speed;
-					System.out.println(pbsRect.x);
-
-					if(pbsRect.x >= 640) {
-						pbsRect.x = 640;
+				boolean didMove = false;
+				int newDirection = pgDir;
+				System.out.println(pgDir);
+				if(timerRect.x >= 0) {
+					newDirection = down;
+					didMove = true;
+					pbsRect.y += speed;
+					 
+					if(!didMove) {
+						pbsAni.reset();
 					}
 
+					if(didMove) {
+							pbsAni.incSprite();
+					}
+
+					if(newDirection != pgDir) {
+						pgDir = newDirection;
+						if(pbsAni != null) {
+							pbsAni.setAnimationRange(pgDir * 4, (pgDir * 4) + 4);
+						}
+						
+					}
+					
+					if(pbsRect.y >= 300) {
+						didMove = true;
+						pbsAni.reset();
+						pbsRect.y = 300;
+						
+						newDirection = right;
+						pbsRect.x += speed;
+						
+						if(didMove) {
+							pbsAni.incSprite();
+							pbsAni.setAnimationRange(newDirection * 4, (newDirection * 4) + 4);
+						}
+						
+						if(pbsRect.x >= 640) {
+							pbsRect.x = 640;
+						}
+
+					}
 				}
 
 			}
 
-			// GIRL MOVEMENT
-			if(girlAni != null) {
-				boolean didMove = false;
-				int newDirection = girlDir;
+			//DIALOGS
+			if(timerRect.x > 10 && timerRect.x <= 60) {
+
+				// ANIMATING DIALOGS - BOY
+				char pgChar[] = pgDialog[pg].toCharArray();
+				if(beginPG == false) {
+					addedPGChar = "";
+					addedPGCharCounter = 0;
+					beginPG = true;
+				}
+				if(addedPGCharCounter <= pgChar.length-1) {
+					addedPGChar = addedPGChar + pgChar[addedPGCharCounter];
+					addedPGCharCounter++;
+					sfx.play();
+				} 
 			}
 
-			if(pbsRect.x >= 640) {
+			if(timerRect.x >= 0) {
 				KeyBoardListener keyListener = game.getKeyListener();
 				boolean didMove = false;
 
-				if(keyListener.enter()) {
+				if(keyListener.a()) {
 					didMove = true;
-					Game.State = STATE.SCENE06;
+					Game.State = Game.STATE.SCENE06;
 				}
 
 				if(didMove) {
 					Thread.sleep(150);
 				}
 			}
-			
-			Thread.sleep(150);
+
+			Thread.sleep(100);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -152,25 +187,21 @@ public class Scene04 {
 		renderer.renderSprite(girlAni, girlRect.x, girlRect.y, xZoom, yZoom, false);
 		renderer.renderSprite(pbsAni, pbsRect.x, pbsRect.y, xZoom, yZoom, false);
 
-		renderer.renderRectangle(rect, xZoom, yZoom, true);
+		if(timerRect.x > 10 && timerRect.x <= 60) {
+			renderer.renderRectangle(rect, xZoom, yZoom, true);
+			}
 	}
 
 	public void render(Graphics graphics) {
 		graphics.setFont(f);
 		graphics.setColor(Color.GREEN);
-		
-		if(pbsRect.x < 640) {
-			//		for(int i = 0; i < pgDialog.length; i++) {
-			graphics.drawString(pgDialog[i], 60, 650);
-			//		}
-		}
 
-		if(pbsRect.x >= 640) {
-			graphics.drawString(pgDialog[i+1], 60, 650);
-
+		if(timerRect.x > 10 && timerRect.x <= 60) {
+			graphics.drawString(addedPGChar, 60, 650);
+			
 			graphics.setFont(fontKey);
 			graphics.setColor(Color.BLACK);
-			graphics.drawString("[press enter]", 800, 740);
+			graphics.drawString("press [A]", 800, 740);
 		}
 
 

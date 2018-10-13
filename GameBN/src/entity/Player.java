@@ -1,9 +1,11 @@
 package entity;
 
-import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.HashMap;
 
 import game.Game;
 import game.GameObject;
+import handler.Audio;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
 
@@ -16,14 +18,40 @@ public class Player implements GameObject {
 
 	// 0 - Down, 1 - Left, 2 - Right, 3 - Up
 	private int direction = 0;
-
 	private int layer = 0;
+
+	public int HP;
+	private int maxHP;
+
+	public int EXP;
+	private int maxExp;
+
+	private int attack;
+	private int maxAttack;
+
+	public int level;
+	private int maxLevel;
+
+	private boolean dead = false;
+	private boolean playerWon = false;
 
 	private Sprite sprite;
 	private AnimatedSprite animatedSprite = null;
+	
+//	private Sprite bronzeSW;
+//	private Sprite silverSW;
+//	private Sprite goldSW;
+	
+	BufferedImage weaponImg;
+	public Sprite weapon;
 
 	private final int xCollisionOffset = 15;
 	private final int yCollisionOffset = 35;
+	
+	private Audio sfx;
+//	private HashMap<String, Sprite> weapon;
+	
+	SpriteSheet weaponSheet;
 
 
 	public Player(Sprite sprite, int xZoom, int yZoom) {
@@ -33,11 +61,25 @@ public class Player implements GameObject {
 		}
 
 		updateDirection();
-		playerRectangle = new Rectangle(-90, 0, 24, 32);
+		playerRectangle = new Rectangle(-606, -70, 24, 32);
 		playerRectangle.generateGraphics(3, 0xFF00FF90);
 
 		collisionRectangle = new Rectangle(0, 0, 15*xZoom, 25*yZoom);
 
+		HP = maxHP = 100;
+		EXP = 0;
+		level = 1;
+		attack = maxAttack = 40;
+				
+		//weapon
+		weaponImg = Game.loadImage("/sword-tiles.png");
+		weaponSheet = new SpriteSheet(weaponImg);
+		weaponSheet.loadSprites(48, 48);
+
+		weapon = weaponSheet.getSprite(0, 0);
+		
+		//sfx
+		sfx = new Audio("/sfx/steps.mp3");
 	}
 
 	public void updateDirection() {
@@ -45,13 +87,41 @@ public class Player implements GameObject {
 			animatedSprite.setAnimationRange(direction * 4, (direction * 4) + 4);
 		}
 	}
+	
+	public void exp(int exp) {
+		if(EXP == 0) {
+			level = 1;
+			if(level == 1) {
+				attack = 10;
+				weapon = weaponSheet.getSprite(0, 0);
+			}
+		}
+		
+		if(EXP == 15) {
+			level = 2;
+			if(level == 2) {
+				attack = 20;
+				weapon = weaponSheet.getSprite(1, 0);
+			}
+		}
+		
+		if(EXP == 50) {
+			level = 3;
+			if(level == 3) {
+				attack = 50;
+				weapon = weaponSheet.getSprite(2, 0);
+			}
+		}
+		
+		if(EXP == 100) {
+			level = 4;
+		}
+	}
 
 	@Override
 	public void render(RenderHandler renderer, int xZoom, int yZoom) {
-
 		if(animatedSprite != null) {
 			renderer.renderSprite(animatedSprite, playerRectangle.x, playerRectangle.y, xZoom, yZoom, false);
-
 		}
 		else if(sprite != null) {
 			renderer.renderSprite(sprite, playerRectangle.x, playerRectangle.y, xZoom, yZoom, false);
@@ -76,13 +146,13 @@ public class Player implements GameObject {
 		if(keyListener.left()) {
 			newDirection = 1;
 			didMove = true;
-			collisionRectangle.x -= speed;			
+			collisionRectangle.x -= speed;	
 		}
 
 		if(keyListener.right()) {
 			newDirection = 2;
 			didMove = true;
-			collisionRectangle.x += speed;			
+			collisionRectangle.x += speed;	
 		}
 
 		if(keyListener.up()) {
@@ -109,7 +179,6 @@ public class Player implements GameObject {
 
 
 		if(didMove) {
-
 
 			collisionRectangle.x += xCollisionOffset;
 			collisionRectangle.y += yCollisionOffset;
@@ -164,25 +233,49 @@ public class Player implements GameObject {
 		}
 	}
 
-		@Override
-		public int getLayer() {
-			return layer;
+	public boolean handleMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) { return false; }
+
+	public void changeSprite(Sprite sprite) {
+		this.sprite = sprite;
+		if(sprite != null && sprite instanceof AnimatedSprite) {
+			animatedSprite = (AnimatedSprite) sprite; 
 		}
-
-
-		public boolean handleMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) { return false; }
-
-		public void changeSprite(Sprite sprite) {
-			this.sprite = sprite;
-			if(sprite != null && sprite instanceof AnimatedSprite) {
-				animatedSprite = (AnimatedSprite) sprite; 
-			}
-		}
-
-		@Override
-		public Rectangle getRectangle() {
-			return playerRectangle;
-		}
-
-
 	}
+
+	public int getHP() {
+		return HP;
+	}
+
+	public int getMaxHP() {
+		return maxHP;
+	}
+
+	public int getAttack() {
+		return attack;
+	}
+
+
+	public int getMaxAttack() {
+		return maxAttack;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public int getMaxLevel() {
+		return maxLevel;
+	}
+
+	@Override
+	public int getLayer() {
+		return layer;
+	}
+
+	@Override
+	public Rectangle getRectangle() {
+		return playerRectangle;
+	}
+
+
+}

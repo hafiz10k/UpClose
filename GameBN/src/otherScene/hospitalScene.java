@@ -1,4 +1,4 @@
-package placeScene;
+package otherScene;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -25,7 +25,7 @@ public class hospitalScene {
 	private int r = 0;
 	private String addedReceptionChar = "";
 	private int addedReceptionCharCounter = 0;
-	
+
 	private int currentChoice = 0;
 
 	// dialog
@@ -33,7 +33,7 @@ public class hospitalScene {
 		{
 				"Hello, you seem tired, can I help you?"
 		};
-	
+
 	private String[] options = 
 		{
 				"Heal",
@@ -62,7 +62,7 @@ public class hospitalScene {
 	public void update(Game game) {
 		timerRect.x++;
 		System.out.println(timerRect.x);
-		
+
 		KeyBoardListener keyListener = game.getKeyListener();
 		boolean didMove = false;
 		try {
@@ -79,6 +79,10 @@ public class hospitalScene {
 				}
 			}
 			if(timerRect.x >= 75) {
+				if(keyListener.enter()) {
+					didMove = true;
+					select();
+				}
 				if(keyListener.up()) {
 					didMove = true;
 					currentChoice --;
@@ -97,9 +101,9 @@ public class hospitalScene {
 					}
 				}
 			}
-			
-				Thread.sleep(100);
-			
+
+			Thread.sleep(100);
+
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -114,6 +118,19 @@ public class hospitalScene {
 		}
 
 	}
+	
+	public void select() {
+		if(currentChoice == 0){
+			System.out.println("NOOOO");
+
+		}
+		if(currentChoice == 1)
+		{
+			// load
+			Game.State = Game.STATE.GAME;
+
+		}
+	}
 
 	public void render(Graphics graphics) {
 		graphics.setFont(f);
@@ -125,7 +142,7 @@ public class hospitalScene {
 			graphics.setColor(Color.BLACK);
 			graphics.drawString(key, 800, 740);
 		}
-		
+
 		if(timerRect.x >= 75) {
 			for(int i = 0; i < options.length; i++) {
 				if (i == currentChoice) {

@@ -74,6 +74,10 @@ public class KeyBoardListener implements KeyListener, FocusListener{
 	public boolean a() {
 		return keys[KeyEvent.VK_A];
 	}
+	
+	public boolean esc() {
+		return keys[KeyEvent.VK_ESCAPE];
+	}
 
 
 

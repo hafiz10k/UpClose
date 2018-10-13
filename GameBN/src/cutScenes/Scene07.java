@@ -13,13 +13,14 @@ import entity.Rectangle;
 import entity.SpriteSheet;
 import game.Game;
 import game.Game.STATE;
+import handler.Audio;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
 
 // BOY - outside hideout
 public class Scene07 {
 
-	private BufferedImage room;
+	private BufferedImage hideout;
 	private BufferedImage bh;
 
 	private AnimatedSprite pbsAni;
@@ -50,32 +51,20 @@ public class Scene07 {
 	private String[] pgDialog =
 		{
 				"Follow me, let me show you the training ground.",
-				"I will show you where I and my soldiers trains.",
-				"No, the pleasure is mine."
 		};
-
-	private String[] boy = 
-		{
-				"Okay, let's go",
-				"Sure it will be my pleasure",
-				"*Smile*"
-		};
-
-	private String key = "[press enter]";
 
 	private int pg = 0;	
-	private int b = 0;
+	private String addedPGChar = "";
+	private int addedPGCharCounter = 0;
 
-	private String addedPBSChar = "";
-	private String addedBoyChar = "";
+	private boolean beginPG = false;
 
-	private int addedPBSCharCounter = 0;
-	private int addedBoyCharCounter = 0;
+	private Audio sfx;
+
 
 	public Scene07(Game game) {
-
-		//bedroom bg
-		room = game.loadImage("/pgbs-hideout.png");
+		//hideout bg
+		hideout = game.loadImage("/pgbs-hideout.png");
 
 		//male
 		BufferedImage playerSheetImage = game.loadImage("/mainAnimated.png");
@@ -85,11 +74,11 @@ public class Scene07 {
 		boyAni = new AnimatedSprite(boySheet, speed);
 
 		//pengiran bendahara sakam
-		BufferedImage pbsImage = game.loadImage("/PgBS.png");
+		BufferedImage pbsImage = game.loadImage("/pg-animation.png");
 		SpriteSheet pbsSheet = new SpriteSheet(pbsImage);
 		pbsSheet.loadSprites(16, 40);
 
-		pbsAni = new AnimatedSprite(pbsSheet, speed);
+		pbsAni = new AnimatedSprite(pbsSheet, 7);
 
 		//soldiers
 		BufferedImage guyImage = game.loadImage("/soldiers.png");
@@ -113,49 +102,58 @@ public class Scene07 {
 		// TIMER RECT
 		timerRect = new Rectangle(0, 0, 10, 32);
 		timerRect.generateGraphics(1, 0xffffff);
+
+		//custscenes audio
+		sfx = new Audio("/sfx/dialog.mp3");
 	}
 
-	public void update(Game game, Player player ) {
+	public void update(Game game ) {
 		KeyBoardListener keyListener = game.getKeyListener();
 		timerRect.x++;
+
 		try {
 
 			// PBS MOVEMENT
 			if(pbsAni != null) {
 
-				//				boolean didMove = false;
-				//				int newDirection = pgDir;
-				//
-				//				newDirection = 1;
-				boolean didMove = true;
-				//
-				//				if(!didMove) {
-				//					pbsAni.reset();
-				//				}
-				//
-				//				if(didMove) {
-				//					pbsAni.incSprite();
-				//					pbsRect.x += speed;
-				//
-				//				}
-				//
-				//				if(newDirection != pgDir) {
-				//					pgDir = newDirection;
-				//					pbsAni.setAnimationRange(pgDir * 4, (pgDir * 4) + 4);
-				//				}
-				//
+				boolean didMove = false;
+				int newDirection = pgDir;
 
 				if(timerRect.x >= 10) {
-					pbsRect.x += speed;
+					newDirection = 2;
+					didMove = true;
+
+					if(!didMove) {
+						pbsAni.reset();
+					}
+
+					if(didMove) {
+						pbsAni.incSprite();
+						pbsRect.x += 7;
+					}
+
+					if(newDirection != pgDir) {
+						pgDir = newDirection;
+						pbsAni.setAnimationRange(pgDir * 4, (pgDir * 4) + 4);
+
+					}
+
+					if(timerRect.x >= 10) {
+						pbsRect.x += 7;
+					}
+
+					if(pbsRect.x >= 850) {
+						didMove = true;
+						pbsAni.reset();
+
+						newDirection = 1;
+						pbsAni.setAnimationRange(newDirection * 4, (newDirection * 4) + 4);
+						pbsRect.x = 850;
+					}
 				}
 
-				if(pbsRect.x >= 850) {
-					pbsRect.x = 850;
-				}
 
 			}
-
-			System.out.println(boyRect.y);
 
 			//BOY MOVEMENT
 			// 0 - Down, 1 - Left, 2 - Right, 3 - Up
@@ -204,6 +202,23 @@ public class Scene07 {
 				}
 
 			}
+
+			if(timerRect.x >= 40 && timerRect.x <= 90) {
+				// ANIMATING DIALOGS - PG Bendahara
+				char pgChar[] = pgDialog[pg].toCharArray();
+				if(beginPG == false) {
+					addedPGChar = "";
+					addedPGCharCounter = 0;
+					beginPG = true;
+				}
+				if(addedPGCharCounter <= pgChar.length-1) {
+					addedPGChar = addedPGChar + pgChar[addedPGCharCounter];
+					addedPGCharCounter++;
+					sfx.play();
+				} 
+			}
+
+
 			// boundary at pgBs
 			if(boyRect.x <= 380) {
 				boyRect.x = 380;
@@ -220,7 +235,7 @@ public class Scene07 {
 			if(boyRect.y >= 450) {
 				boyRect.y = 450;
 			}
-			
+
 			if(boyRect.x == 810 && boyRect.y == 360) {
 				if(keyListener.a()) {
 					Game.State = STATE.SCENE09;
@@ -240,7 +255,7 @@ public class Scene07 {
 	}
 
 	public void render(RenderHandler renderer, Game game, Player player, int xZoom, int yZoom) {
-		renderer.renderImage(room, 10, 150, xZoom, yZoom, true);
+		renderer.renderImage(hideout, 10, 150, xZoom, yZoom, true);
 		renderer.renderSprite(boyAni, boyRect.x, boyRect.y, 2, 2, false);
 		renderer.renderSprite(pbsAni, pbsRect.x, pbsRect.y, 2, 2, false);
 		renderer.renderSprite(soldierAni, 200, 200, 2, 2, false);
@@ -248,7 +263,7 @@ public class Scene07 {
 		renderer.renderSprite(soldierAni, 600, 450, 2, 2, false);
 		renderer.renderSprite(soldierAni, 850, 450, 2, 2, false);
 
-		if(timerRect.x >= 50 && timerRect.x < 70) {
+		if(timerRect.x >= 40 && timerRect.x <= 90) {
 			renderer.renderRectangle(rect, xZoom, yZoom, true);
 		}
 
@@ -256,16 +271,14 @@ public class Scene07 {
 			renderer.renderRectangle(rect, xZoom, yZoom, true);
 		}
 
-		renderer.renderRectangle(timerRect, xZoom, yZoom, false);
-
 	}
 
 	public void render(Graphics graphics) {
 
 		graphics.setFont(f);
-		if(timerRect.x >= 50 && timerRect.x < 70) {
+		if(timerRect.x >= 40 && timerRect.x <= 90) {
 			graphics.setColor(Color.GREEN);
-			graphics.drawString(pgDialog[pg], 60, 650);
+			graphics.drawString(addedPGChar, 60, 650);
 		}
 
 		if(boyRect.x == 810 && boyRect.y == 360) {

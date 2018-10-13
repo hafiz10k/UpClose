@@ -20,14 +20,25 @@ public class Gender implements MenuObject{
 	
 	private int speed = 10;
 	
+	private BufferedImage bg;
+	
 	private BufferedImage boyRect;
 	private BufferedImage girlRect;
+	
+	private String[] key = 
+		{
+				"↑ - Up",
+				"↓ - Down",
+				"← - Left",
+				"→ - Right",
+				"[ENTER] - Select"
+		};
 	
 	private Color titleColor;
 	private Font titleFont;
 	private Font font;
 
-	public int loadChoice = 0;
+	public int loadChoice;
 
 	private String[] gen = 
 		{
@@ -52,18 +63,13 @@ public class Gender implements MenuObject{
 			girlSheet.loadSprites(24, 32);
 
 			girl = new AnimatedSprite(girlSheet, speed);
-			
-//			//boy rect
-//			boyRect = new Rectangle(0, 300, 100, 100);
-//			boyRect.generateGraphics(0x0000ff);
+
 			boyRect = game.loadImage("/gender-boy-rect.png");
 			
 			girlRect = game.loadImage("/gender-girl-rect.png");
-
-//			//girl rect
-//			girlRect = new Rectangle(100, 300, 24, 32);
-//			girlRect.generateGraphics(0xf303d2);
-
+			
+			bg = game.loadImage("/gender_bg.png");
+			
 			titleColor = new Color(100, 128, 128);
 			titleFont = new Font("Broadway", Font.BOLD, 50);
 
@@ -80,9 +86,9 @@ public class Gender implements MenuObject{
 	public void render(Graphics graphics) {
 		Graphics2D g2d = (Graphics2D) graphics;
 
-		graphics.setColor(Color.WHITE);
+		graphics.setColor(Color.BLACK);
 		graphics.setFont(titleFont);
-		graphics.drawString("Are you a Boy or Girl?", 200, 120);
+		graphics.drawString("Are you a Boy or Girl?", 200, 150);
 
 		graphics.setFont(font);
 
@@ -103,9 +109,10 @@ public class Gender implements MenuObject{
 	}
 	
 	public void render(RenderHandler renderer, int xZoom, int yZoom) {
+		renderer.renderImage(bg, 0, 0, 2, 2, true);
+		
 		renderer.renderImage(boyRect, -20, 230, xZoom*3, yZoom*3, true);
 		renderer.renderImage(girlRect, 590, 230, xZoom*3, yZoom*3, true);
-//		renderer.renderRectangle(girlRect, xZoom, yZoom, true);
 		
 		renderer.renderSprite(boy, 100, 300, xZoom*2, yZoom*2, true);
 		renderer.renderSprite(girl, 700, 300, xZoom*2, yZoom*2, true);
@@ -152,7 +159,7 @@ public class Gender implements MenuObject{
 
 					game.player.changeSprite(boyAni);
 					
-					Game.State = STATE.GAME;
+					Game.State = STATE.SCENE03;
 				} 
 				
 				else {
@@ -164,7 +171,7 @@ public class Gender implements MenuObject{
 					AnimatedSprite girlAni = new AnimatedSprite(girlSheet, 10);
 					game.player.changeSprite(girlAni);
 					
-					Game.State = STATE.GAME;
+					Game.State = STATE.SCENE04;
 				}
 
 			}

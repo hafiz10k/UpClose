@@ -2,6 +2,7 @@ package game;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -15,6 +16,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import battleScenes.FranciscoBattle;
+import battleScenes.Loot;
 import battleScenes.dummyBattle;
 import battleScenes.lailaRatna;
 import cutScenes.Scene01;
@@ -49,12 +51,9 @@ import menuComponents.Gender;
 import menuComponents.Help;
 import menuComponents.Load;
 import menuComponents.Menu;
-import menuComponents.MenuObject;
 import menuComponents.Save;
-import placeScene.hospitalScene;
-
-import java.awt.Color;
-import java.awt.Font;
+import menuComponents.retryGame;
+import otherScene.hospitalScene;
 
 @SuppressWarnings({ "serial", "unused" })
 public class Game extends JFrame implements Runnable {
@@ -68,9 +67,9 @@ public class Game extends JFrame implements Runnable {
 	private SpriteSheet sheet;
 	private SpriteSheet boySheet;
 	private SpriteSheet girlSheet;
-	
+
 	private int selectedTileID = 2;
-	private int selectedLayer = 0;
+	private int selectedLayer = 1;
 
 	private Tiles tiles;
 	private Map map;
@@ -92,9 +91,10 @@ public class Game extends JFrame implements Runnable {
 	public CreateName name;
 	public Gender gender;
 	private Help help;
-	private Load load;
+	public Load load;
 	public Save save;
 	private gamePlay gamePlay;
+	private retryGame retry;
 
 	// cutscenes
 	private Scene01 scene01;
@@ -108,17 +108,19 @@ public class Game extends JFrame implements Runnable {
 	private Scene09 scene09;
 	private Scene10 scene10;
 	private lailaRatnaScene LR;
-	
+
 	//places Scenes
 	private hospitalScene hosp;
 
 	//battle scenes
-	private dummyBattle dummy;
+	public dummyBattle dummy;
 	private lailaRatna lailaRatna;
 	private FranciscoBattle francisco;
 	public CharacterInfo Cinfo;
+	private Loot loot;
+
 	private Font font;
-	
+
 	private Rectangle dialogRect;
 
 	private boolean boy = true;
@@ -147,14 +149,16 @@ public class Game extends JFrame implements Runnable {
 		LOAD,
 		HELP,
 		SAVE,
+		RETRY,
 		HOSP,
-		CINFO
+		CINFO,
+		LOOT
 	};
 
 	public static STATE State = STATE.MENU;
 
 	public Game() {
-//		Rectangle backButton =  new Rectangle (80, 80, 200, 50);
+		//		Rectangle backButton =  new Rectangle (80, 80, 200, 50);
 		setTitle("UpClose");
 
 		// make our prog shutdown when we exit
@@ -180,7 +184,7 @@ public class Game extends JFrame implements Runnable {
 		// create obj for buffer strat
 		canvas.createBufferStrategy(3);	
 
-//		font = new Font("Arial", Font.PLAIN, 12);
+		//		font = new Font("Arial", Font.PLAIN, 12);
 
 		//set focus on canvas - so player dont have to click on screen everytime
 		canvas.setFocusable(true);
@@ -206,7 +210,7 @@ public class Game extends JFrame implements Runnable {
 		//load player animated sprite
 		AnimatedSprite boyAni = new AnimatedSprite(boySheet, 10);
 		AnimatedSprite girlAni = new AnimatedSprite(girlSheet, 10);
-		
+
 		// load tiles
 		tiles = new Tiles(new File("tile.txt"), sheet);
 
@@ -214,7 +218,7 @@ public class Game extends JFrame implements Runnable {
 		map = new Map(new File("Map.txt"), tiles);
 
 		//load audio
-		vilAud = new Audio("/Village-Scene234.mp3");
+		vilAud = new Audio("/bgm/inGame.mp3");
 
 		//load SDK GUI
 		GUIButton[] buttons = new GUIButton[tiles.size()];
@@ -237,11 +241,12 @@ public class Game extends JFrame implements Runnable {
 
 		//new java class load
 		menu = new Menu(this);
-		name = new CreateName();
+		name = new CreateName(this);
 		gender = new Gender(this);
-		help = new Help();
-		load = new Load();
+		help = new Help(this);
+		load = new Load(this);
 		save = new Save(this);
+		retry = new retryGame(this);
 		gamePlay = new gamePlay(this);
 		Cinfo = new CharacterInfo(this);
 
@@ -262,12 +267,13 @@ public class Game extends JFrame implements Runnable {
 		dummy = new dummyBattle(this);
 		lailaRatna = new lailaRatna(this);
 		francisco = new FranciscoBattle(this);
+		loot = new Loot(this);
 
 		//PLACES SCENES
 		hosp = new hospitalScene(this);
 
-		
-		
+
+
 		// add listeners
 		canvas.addKeyListener(keyListener);
 		canvas.addFocusListener(keyListener);
@@ -323,7 +329,7 @@ public class Game extends JFrame implements Runnable {
 			gamePlay.update(this);
 
 			if(!playedGameMusic) {
-				menu.getAud().close();
+				menu.getAud().stop();
 				vilAud.play();
 				playedGameMusic = true;
 			}
@@ -334,6 +340,7 @@ public class Game extends JFrame implements Runnable {
 			menu.update(this);
 
 			vilAud.stop();
+			dummy.getBgm().stop();
 			playedGameMusic = false;
 		}
 
@@ -349,6 +356,11 @@ public class Game extends JFrame implements Runnable {
 			load.update(this);
 		}
 
+		if(State == STATE.RETRY) {
+			retry.update(this);
+		}
+
+
 		if(State == STATE.HELP) {
 			help.update(this);
 		}
@@ -357,7 +369,13 @@ public class Game extends JFrame implements Runnable {
 			name.update(this);
 		}
 
+		if(State == STATE.CINFO) {
+			Cinfo.update(this);
+		}
+
+
 		if(State == STATE.SCENE01) {
+			menu.getAud().stop();
 			scene01.update(this);
 		}
 
@@ -367,15 +385,15 @@ public class Game extends JFrame implements Runnable {
 		}
 
 		if(State == STATE.SCENE03) {
-			scene03.update(this, player);
+			scene03.update(this);
 		}
 
 		if(State == STATE.SCENE04) {
-			scene04.update(this, player);
+			scene04.update(this);
 		}
 
 		if(State == STATE.SCENE05) {
-			scene05.update(this, player);
+			scene05.update(this);
 		}
 
 		if(State == STATE.SCENE06) {
@@ -383,26 +401,27 @@ public class Game extends JFrame implements Runnable {
 		}
 
 		if(State == STATE.SCENE07) {
-			scene07.update(this, player);
+			scene07.update(this);
 		}
 
 		if(State == STATE.SCENE08) {
-			scene08.update(this, player);
+			scene08.update(this);
 		}
 
 		if(State == STATE.SCENE09) {
-			scene09.update(this, player);
+			scene09.update(this);
 		}
 
 		if(State == STATE.SCENE10) {
 			scene10.update(this);
 		}
-		
+
 		if(State == STATE.LRS) {
 			LR.update(this);
 		}
 
 		if(State == STATE.DUMMY) {
+			menu.getAud().close();
 			dummy.update(this);
 		}
 
@@ -413,7 +432,11 @@ public class Game extends JFrame implements Runnable {
 		if(State == STATE.FRANCISCO) {
 			francisco.update(this);
 		}
-		
+
+		if(State == STATE.LOOT) {
+			loot.update(this);
+		}
+
 		if(State == STATE.HOSP) {
 			hosp.update(this);
 		}
@@ -466,78 +489,75 @@ public class Game extends JFrame implements Runnable {
 	}
 
 	public void render() {
-		
+
 		BufferStrategy bufferStrategy = canvas.getBufferStrategy();
 		Graphics graphics = bufferStrategy.getDrawGraphics();
 		super.paint(graphics);
 
 		renderer.render(graphics);
-		
+
 		if(State == STATE.GAME) {
 			map.render(renderer, objects, xZoom, yZoom);
 			int chosen1 = gender.getLoadChoice();	
-			
-			//			for(int i = 0; i < objects.length; i++) {
-			//				objects[i].render(renderer, xZoom, yZoom);
-			//			}
+
 			gamePlay.render(renderer, player, xZoom, yZoom);
 			renderer.render(graphics);
 			gamePlay.render(graphics, this);
 		}
-		
 
-//		if(State == STATE.GAME) {
-//			map.render(renderer, objects, xZoom, yZoom);
-//			renderer.render(graphics);
-//			graphics.fillRect(0, 0, 140, 180);
-//			graphics.setColor(Color.WHITE);
-//			graphics.setFont(font);
-//			graphics.drawString("Name =", 20, 50);
-//			
-//			if(name.fullName != null && !name.fullName.isEmpty()) {
-//				graphics.setColor(Color.WHITE);
-//				graphics.setFont(font);
-//				graphics.drawString(name.fullName, 80, 50);
-//				
-//			}else {
-//				graphics.setColor(Color.WHITE);
-//				graphics.setFont(font);
-//				graphics.drawString(load.nameLoad, 80, 50);
-//			}
-//			graphics.setColor(Color.WHITE);
-//			graphics.setFont(font);
-//			graphics.drawString("Gender =", 20, 70);
-//			if(gender.getLoadChoice() == 1) {
-//				graphics.setColor(Color.WHITE);
-//				graphics.setFont(font);
-//				graphics.drawString("Girl", 80, 70);
-//			}
-//			else if(gender.getLoadChoice() == 0){
-//				graphics.setColor(Color.WHITE);
-//				graphics.setFont(font);
-//				graphics.drawString("Boy", 80, 70);
-//			}
-//			graphics.setColor(Color.WHITE);
-//			graphics.setFont(font);
-//			graphics.drawString("Level =", 20, 90);
-//			graphics.setColor(Color.WHITE);
-//			graphics.setFont(font);
-//			graphics.drawString("1", 80, 90);
-//			graphics.setColor(Color.WHITE);
-//			graphics.setFont(font);
-//			graphics.drawString("Experience =", 20, 110);
-//			graphics.setColor(Color.WHITE);
-//			graphics.setFont(font);
-//			graphics.drawString("0", 90, 110);
-//			graphics.setColor(Color.WHITE);
-//			graphics.setFont(font);
-//			graphics.drawString("Weapon =", 20, 130);
-//			
-//			
-//			
-//			System.out.println(name.fullName);
-//
-//		}
+
+		//		if(State == STATE.GAME) {
+		//			map.render(renderer, objects, xZoom, yZoom);
+		//			renderer.render(graphics);
+		//			graphics.fillRect(0, 0, 140, 180);
+		//			graphics.setColor(Color.WHITE);
+		//			graphics.setFont(font);
+		//			graphics.drawString("Name =", 20, 50);
+		//			
+		//			if(name.fullName != null && !name.fullName.isEmpty()) {
+		//				graphics.setColor(Color.WHITE);
+		//				graphics.setFont(font);
+		//				graphics.drawString(name.fullName, 80, 50);
+		//				
+		//			}else {
+		//				graphics.setColor(Color.WHITE);
+		//				graphics.setFont(font);
+		//				graphics.drawString(load.nameLoad, 80, 50);
+		//			}
+		//			graphics.setColor(Color.WHITE);
+		//			graphics.setFont(font);
+		//			graphics.drawString("Gender =", 20, 70);
+		//			if(gender.getLoadChoice() == 1) {
+		//				graphics.setColor(Color.WHITE);
+		//				graphics.setFont(font);
+		//				graphics.drawString("Girl", 80, 70);
+		//			}
+		//			else if(gender.getLoadChoice() == 0){
+		//				graphics.setColor(Color.WHITE);
+		//				graphics.setFont(font);
+		//				graphics.drawString("Boy", 80, 70);
+		//			}
+		//			graphics.setColor(Color.WHITE);
+		//			graphics.setFont(font);
+		//			graphics.drawString("Level =", 20, 90);
+		//			graphics.setColor(Color.WHITE);
+		//			graphics.setFont(font);
+		//			graphics.drawString("1", 80, 90);
+		//			graphics.setColor(Color.WHITE);
+		//			graphics.setFont(font);
+		//			graphics.drawString("Experience =", 20, 110);
+		//			graphics.setColor(Color.WHITE);
+		//			graphics.setFont(font);
+		//			graphics.drawString("0", 90, 110);
+		//			graphics.setColor(Color.WHITE);
+		//			graphics.setFont(font);
+		//			graphics.drawString("Weapon =", 20, 130);
+		//			
+		//			
+		//			
+		//			System.out.println(name.fullName);
+		//
+		//		}
 
 		if(State == STATE.MENU) {
 			menu.render(renderer, xZoom, yZoom); // sword
@@ -547,6 +567,8 @@ public class Game extends JFrame implements Runnable {
 		}
 
 		if(State == STATE.NAME) {
+			name.render(renderer, xZoom, yZoom);
+			renderer.render(graphics);
 			name.render(graphics);
 		}
 
@@ -557,15 +579,23 @@ public class Game extends JFrame implements Runnable {
 		}
 
 		if(State == STATE.HELP) {
+			help.render(renderer, xZoom, yZoom);
+			renderer.render(graphics);
 			help.render(graphics);
 		}
 
 		if(State == STATE.LOAD) {
+			load.render(renderer, xZoom, yZoom);
+			renderer.render(graphics);
 			load.render(graphics);
 		}
 
 		if(State == STATE.SAVE) {
 			save.render(graphics);
+		}
+
+		if(State == STATE.RETRY) {
+			retry.render(graphics);
 		}
 
 		if(State == STATE.SCENE01) {
@@ -628,7 +658,7 @@ public class Game extends JFrame implements Runnable {
 			renderer.render(graphics);
 			scene10.render(graphics, this);
 		}
-		
+
 		if(State == STATE.LRS) {
 
 			LR.render(renderer, xZoom, yZoom); 
@@ -639,7 +669,7 @@ public class Game extends JFrame implements Runnable {
 		if(State == STATE.DUMMY) {
 			dummy.render(renderer, xZoom, yZoom);
 			renderer.render(graphics);
-			dummy.render(graphics);
+			dummy.render(graphics, this);
 		}
 
 		if(State == STATE.LAILARATNA) {
@@ -653,16 +683,24 @@ public class Game extends JFrame implements Runnable {
 			renderer.render(graphics);
 			francisco.render(graphics);
 		}
-		
+
+		if(State == STATE.LOOT) {
+			loot.render(renderer, player, xZoom, yZoom);
+			renderer.render(graphics);
+			loot.render(graphics, this);
+		}
+
 		if(State == STATE.HOSP) {
 			hosp.render(renderer, xZoom, yZoom, this);
 			renderer.render(graphics);
 			hosp.render(graphics);
 		}
 		if(State == STATE.CINFO) {
+			Cinfo.render(renderer, xZoom, yZoom);
+			renderer.render(graphics);
 			Cinfo.render(graphics);
 		}
-	
+
 
 		graphics.dispose();
 		bufferStrategy.show();

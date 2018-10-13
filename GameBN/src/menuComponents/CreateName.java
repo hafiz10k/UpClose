@@ -3,36 +3,53 @@ package menuComponents;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
-import javax.swing.BorderFactory;
-import javax.swing.JTextField;
-
+import entity.Rectangle;
 import game.Game;
 import handler.KeyBoardListener;
+import handler.RenderHandler;
 
 
-public class CreateName implements MenuObject, ActionListener{
+public class CreateName implements MenuObject{
 
 	private Color titleColor;
 	private Font titleFont;
 
 	private Font font;
+	private Font fontKey;
+	
+	private BufferedImage bg;
 
 	private char[] name = {'A', 'A', 'A', 'A', 'A'};
+	private String[] key = 
+		{
+				"↑ - Up",
+				"↓ - Down",
+				"← - Left",
+				"→ - Right",
+				"[ENTER] - Select"
+		};
+	
 	private int currentChoice = 0;
 	public String fullName = "";
+	
+	private Rectangle keyRect;
 
-	public CreateName() {
+	public CreateName(Game game) {
 		try 
 		{
 
 			titleColor = new Color(100, 128, 128);
 			titleFont = new Font("Broadway", Font.BOLD, 50);
+			
+			bg = game.loadImage("/name_bg.png");
 
-			font = new Font("Arial", Font.PLAIN, 30);		
+			font = new Font("Arial", Font.BOLD, 40);		
+			fontKey = new Font("Arial", Font.PLAIN, 20);
+			
+			keyRect = new Rectangle(0, 720, 400, 20);
+			keyRect.generateGraphics(0xebebeb);
 
 
 		}
@@ -44,9 +61,9 @@ public class CreateName implements MenuObject, ActionListener{
 
 	@Override
 	public void render(Graphics graphics) {
-		graphics.setColor(Color.WHITE);
+		graphics.setColor(Color.BLACK);
 		graphics.setFont(titleFont);
-		graphics.drawString("What is your name?", 200, 120);
+		graphics.drawString("What is your name?", 200, 150);
 
 		graphics.setFont(font);	
 
@@ -56,12 +73,24 @@ public class CreateName implements MenuObject, ActionListener{
 				graphics.setColor(Color.RED);
 			}
 			else {
-				graphics.setColor(Color.YELLOW);
+				graphics.setColor(Color.BLACK);
 			}
 
-			graphics.drawString("" + name[i], 260 + i * 100, 300);
+			graphics.drawString("" + name[i], 260 + i * 100, 350);
 
 		}
+		
+		for(int k = 0; k < key.length; k++) {
+			graphics.setFont(fontKey);
+			graphics.setColor(Color.BLACK);
+			graphics.drawString("" + key[k], 150 + k * 150, 740);
+		}
+	}
+	
+	public void render(RenderHandler renderer, int xZoom, int yZoom) {
+		renderer.renderImage(bg, 0, 0, 2, 2, true);
+		
+		renderer.renderRectangle(keyRect, xZoom, yZoom, true);
 	}
 
 	@Override
@@ -108,12 +137,6 @@ public class CreateName implements MenuObject, ActionListener{
 	
 	public String getName() {
 		return fullName.toLowerCase();
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		//		input = txtInput.getText(); 
-		//       System.out.println(input);
 	}
 
 }

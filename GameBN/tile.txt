@@ -2,7 +2,7 @@
 //if not collisionType, tile have no collision
 grass-0-0
 sand-0-2
-ocean-0-3-4
+ocean-0-3-0
 verticalPath1-0-4
 verticalPath2-1-4
 verticalPath3-2-4
@@ -82,3 +82,5 @@ chest1-4-1
 chest1-4-2-3
 chest1-5-1
 chest1-5-2-3
+//73
+checkpoint-4-5-3
