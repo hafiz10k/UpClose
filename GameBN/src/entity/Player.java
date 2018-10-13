@@ -26,7 +26,7 @@ public class Player implements GameObject {
 	public int EXP;
 	private int maxExp;
 
-	private int attack;
+	public int attack;
 	private int maxAttack;
 
 	public int level;
@@ -37,10 +37,6 @@ public class Player implements GameObject {
 
 	private Sprite sprite;
 	private AnimatedSprite animatedSprite = null;
-	
-//	private Sprite bronzeSW;
-//	private Sprite silverSW;
-//	private Sprite goldSW;
 	
 	BufferedImage weaponImg;
 	public Sprite weapon;
@@ -77,9 +73,6 @@ public class Player implements GameObject {
 		weaponSheet.loadSprites(48, 48);
 
 		weapon = weaponSheet.getSprite(0, 0);
-		
-		//sfx
-		sfx = new Audio("/sfx/steps.mp3");
 	}
 
 	public void updateDirection() {

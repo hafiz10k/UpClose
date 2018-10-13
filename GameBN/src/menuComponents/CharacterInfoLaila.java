@@ -10,7 +10,7 @@ import game.Game.STATE;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
 
-public class CharacterInfoDummy {
+public class CharacterInfoLaila {
 	private Font font;
 	private String playerName;
 	private int playerGender;
@@ -23,7 +23,7 @@ public class CharacterInfoDummy {
 	
 	boolean francisco = false;
 
-	public CharacterInfoDummy(Game game) {
+	public CharacterInfoLaila(Game game) {
 
 		try {
 			bg = game.loadImage("/charmenu.png");
@@ -66,26 +66,8 @@ public class CharacterInfoDummy {
 			STATE gameState = game.State;
 			
 			if(keyListener.esc()) {
-				if(gameState.equals(Game.STATE.DUMMY)) {
-					Game.State = Game.STATE.DUMMY;
-				}
-				
-				if(gameState.equals(Game.STATE.LAILARATNA)) {
 					Game.State = Game.STATE.LAILARATNA;
-				}
-				
-				if(francisco == false) {
-					francisco = true;
-					if(gameState.equals(STATE.FRANCISCO)) {
-						Game.State = Game.STATE.FRANCISCO;
-					}
-				}
-				
-				else {
-					Game.State = Game.STATE.MENU;
-					System.out.println("error in loading battle");
-				}
-		
+
 			}
 
 

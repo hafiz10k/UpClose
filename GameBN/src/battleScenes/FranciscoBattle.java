@@ -203,7 +203,7 @@ public class FranciscoBattle {
 		if(currentChoice == 2)
 		{
 			// stats
-			Game.State = Game.STATE.CINFO;
+			Game.State = Game.STATE.CINFOFRANCISCO;
 
 		}
 	}

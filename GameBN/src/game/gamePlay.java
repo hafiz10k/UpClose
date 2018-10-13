@@ -56,13 +56,13 @@ public class gamePlay {
 				game.player.getRectangle().y = -75;
 			}
 
-			if(game.player.getRectangle().x <= -10 && game.player.getRectangle().x >= -40 && game.player.getRectangle().y <= -990) {
-				if(keyListener.a()) {
-
-					Game.State = Game.STATE.HOSP;
-					Thread.sleep(150);
-				} 
-			}
+//			if(game.player.getRectangle().x <= -10 && game.player.getRectangle().x >= -40 && game.player.getRectangle().y <= -990) {
+//				if(keyListener.a()) {
+//
+//					Game.State = Game.STATE.HOSP;
+//					Thread.sleep(150);
+//				} 
+//			}
 
 			if(game.player.getRectangle().x >= 2220 && game.player.getRectangle().x <= 2290 && game.player.getRectangle().y <= 0 && game.player.getRectangle().y >= -155) {
 				if(keyListener.a()) {
@@ -106,7 +106,7 @@ public class gamePlay {
 
 
 	public void render(RenderHandler renderer, Player player, int xZoom, int yZoom) {
-		if(player.getRectangle().x <= -10 && player.getRectangle().x >= -40 && player.getRectangle().y <= -990) {
+		if(player.getRectangle().x >= 1529 && player.getRectangle().x <= 1594 && player.getRectangle().y == -1040) {
 			renderer.renderSprite(dialogBtn, 40, 600, xZoom, yZoom, true);
 		}
 

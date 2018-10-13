@@ -46,7 +46,8 @@ import handler.MouseEventListener;
 import handler.MouseInput;
 import handler.RenderHandler;
 import menuComponents.CharacterInfo;
-import menuComponents.CharacterInfoDummy;
+import menuComponents.CharacterInfoFrancisco;
+import menuComponents.CharacterInfoLaila;
 import menuComponents.CreateName;
 import menuComponents.Gender;
 import menuComponents.Help;
@@ -119,7 +120,8 @@ public class Game extends JFrame implements Runnable {
 	private FranciscoBattle francisco;
 	public CharacterInfo Cinfo;
 	private Loot loot;
-	public CharacterInfoDummy Cinfodummy;
+	public CharacterInfoLaila Cinfolaila;
+	public CharacterInfoFrancisco Cinfofrancisco;
 
 	private Font font;
 
@@ -155,7 +157,8 @@ public class Game extends JFrame implements Runnable {
 		HOSP,
 		CINFO,
 		LOOT,
-		CINFODUMMY
+		CINFOLAILA,
+		CINFOFRANCISCO
 	};
 
 	public static STATE State = STATE.MENU;
@@ -252,7 +255,7 @@ public class Game extends JFrame implements Runnable {
 		retry = new retryGame(this);
 		gamePlay = new gamePlay(this);
 		Cinfo = new CharacterInfo(this);
-		Cinfodummy = new CharacterInfoDummy(this);
+		Cinfolaila = new CharacterInfoLaila(this);
 		
 		// CUTSCENES
 		scene01 = new Scene01(this);
@@ -376,7 +379,14 @@ public class Game extends JFrame implements Runnable {
 		if(State == STATE.CINFO) {
 			Cinfo.update(this);
 		}
-
+		
+		if(State == STATE.CINFOLAILA) {
+			Cinfolaila.update(this);
+		}
+		
+		if(State == STATE.CINFOFRANCISCO) {
+			Cinfofrancisco.update(this);
+		}
 
 		if(State == STATE.SCENE01) {
 			menu.getAud().stop();
@@ -705,10 +715,16 @@ public class Game extends JFrame implements Runnable {
 			Cinfo.render(graphics);
 		}
 		
-		if(State == STATE.CINFODUMMY) {
-			Cinfodummy.render(renderer, xZoom, yZoom);
+		if(State == STATE.CINFOLAILA) {
+			Cinfolaila.render(renderer, xZoom, yZoom);
 			renderer.render(graphics);
-			Cinfodummy.render(graphics);
+			Cinfolaila.render(graphics);
+		}
+		
+		if(State == STATE.CINFOFRANCISCO) {
+			Cinfofrancisco.render(renderer, xZoom, yZoom);
+			renderer.render(graphics);
+			Cinfofrancisco.render(graphics);
 		}
 
 
