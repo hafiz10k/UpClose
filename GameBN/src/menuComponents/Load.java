@@ -11,6 +11,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import entity.AnimatedSprite;
+import entity.SpriteSheet;
 import game.Game;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
@@ -134,7 +136,7 @@ public class Load implements MenuObject{
 
 			if(keyListener.enter()) {
 				loading = true;
-				select();
+				select(game);
 
 			}
 
@@ -180,12 +182,37 @@ public class Load implements MenuObject{
 		
 	}
 
-	private void select() {
+	private void select(Game game) {
 
 		if(loadChoice == 0) {
 			System.out.println(nameLoad);
 			System.out.println(genderLoad);
-			Game.State = Game.STATE.GAME;
+			if(genderLoad == 0) {
+				//male
+				BufferedImage playerSheetImage = game.loadImage("/mainAnimated.png");
+				SpriteSheet boySheet = new SpriteSheet(playerSheetImage);
+				boySheet.loadSprites(24, 32);
+
+				AnimatedSprite boyAni = new AnimatedSprite(boySheet, 10);
+
+				game.player.changeSprite(boyAni);
+				game.player.playerRectangle.x = playerPosX;
+				game.player.playerRectangle.y = playerPosY;
+				Game.State = Game.STATE.GAME;
+			} 
+			else {
+				// female
+				BufferedImage girlSheetImage = game.loadImage("/girl-main-anim.png");
+				SpriteSheet girlSheet = new SpriteSheet(girlSheetImage);
+				girlSheet.loadSprites(24, 32);
+
+				AnimatedSprite girlAni = new AnimatedSprite(girlSheet, 10);
+				game.player.changeSprite(girlAni);
+				game.player.playerRectangle.x = playerPosX;
+				game.player.playerRectangle.y = playerPosY;
+				Game.State = Game.STATE.GAME;
+			}
+
 		}
 
 		if(loadChoice == 1) {

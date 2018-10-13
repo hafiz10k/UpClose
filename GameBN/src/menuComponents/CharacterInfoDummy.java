@@ -3,24 +3,14 @@ package menuComponents;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
 
-import entity.Map;
-import entity.Sprite;
-import entity.SpriteSheet;
 import game.Game;
 import game.Game.STATE;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
 
-public class CharacterInfo {
+public class CharacterInfoDummy {
 	private Font font;
 	private String playerName;
 	private int playerGender;
@@ -33,7 +23,7 @@ public class CharacterInfo {
 	
 	boolean francisco = false;
 
-	public CharacterInfo(Game game) {
+	public CharacterInfoDummy(Game game) {
 
 		try {
 			bg = game.loadImage("/charmenu.png");
@@ -76,26 +66,27 @@ public class CharacterInfo {
 			STATE gameState = game.State;
 			
 			if(keyListener.esc()) {
+				if(gameState.equals(Game.STATE.DUMMY)) {
 					Game.State = Game.STATE.DUMMY;
 				}
-//				
-//				if(gameState.equals(Game.STATE.LAILARATNA)) {
-//					Game.State = Game.STATE.LAILARATNA;
-//				}
-//				
-//				if(francisco == false) {
-//					francisco = true;
-//					if(gameState.equals(STATE.FRANCISCO)) {
-//						Game.State = Game.STATE.FRANCISCO;
-//					}
-//				}
-//				
-//				else {
-//					Game.State = Game.STATE.MENU;
-//					System.out.println("error in loading battle");
-//				}
+				
+				if(gameState.equals(Game.STATE.LAILARATNA)) {
+					Game.State = Game.STATE.LAILARATNA;
+				}
+				
+				if(francisco == false) {
+					francisco = true;
+					if(gameState.equals(STATE.FRANCISCO)) {
+						Game.State = Game.STATE.FRANCISCO;
+					}
+				}
+				
+				else {
+					Game.State = Game.STATE.MENU;
+					System.out.println("error in loading battle");
+				}
 		
-			
+			}
 
 
 			Thread.sleep(150);

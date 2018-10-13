@@ -82,6 +82,12 @@ public class gamePlay {
 				}
 			}
 			
+			if(game.player.getRectangle().x >= 7235 && game.player.getRectangle().x <= 7335 && game.player.getRectangle().y >= -140 && game.player.getRectangle().y <= -35) {
+				if(keyListener.a()) {
+					Game.State = STATE.SAVE;
+				}
+			}
+			
 			if(game.player.getRectangle().x >= 3950 && game.player.getRectangle().x <= 4035 && game.player.getRectangle().y >= -1090 && game.player.getRectangle().y <= -1005) {
 				if(keyListener.a()) {
 					Game.State = STATE.LOOT;
@@ -113,6 +119,10 @@ public class gamePlay {
 		}
 		
 		if(player.getRectangle().x >= 3950 && player.getRectangle().x <= 4035 && player.getRectangle().y >= -1090 && player.getRectangle().y <= -1005) {
+			renderer.renderSprite(dialogBtn, 40, 600, xZoom, yZoom, true);
+		}
+		
+		if(player.getRectangle().x >= 7235 && player.getRectangle().x <= 7335 && player.getRectangle().y >= -140 && player.getRectangle().y <= -35) {
 			renderer.renderSprite(dialogBtn, 40, 600, xZoom, yZoom, true);
 		}
 	}

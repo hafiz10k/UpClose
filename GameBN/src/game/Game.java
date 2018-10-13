@@ -46,6 +46,7 @@ import handler.MouseEventListener;
 import handler.MouseInput;
 import handler.RenderHandler;
 import menuComponents.CharacterInfo;
+import menuComponents.CharacterInfoDummy;
 import menuComponents.CreateName;
 import menuComponents.Gender;
 import menuComponents.Help;
@@ -118,6 +119,7 @@ public class Game extends JFrame implements Runnable {
 	private FranciscoBattle francisco;
 	public CharacterInfo Cinfo;
 	private Loot loot;
+	public CharacterInfoDummy Cinfodummy;
 
 	private Font font;
 
@@ -152,7 +154,8 @@ public class Game extends JFrame implements Runnable {
 		RETRY,
 		HOSP,
 		CINFO,
-		LOOT
+		LOOT,
+		CINFODUMMY
 	};
 
 	public static STATE State = STATE.MENU;
@@ -249,7 +252,8 @@ public class Game extends JFrame implements Runnable {
 		retry = new retryGame(this);
 		gamePlay = new gamePlay(this);
 		Cinfo = new CharacterInfo(this);
-
+		Cinfodummy = new CharacterInfoDummy(this);
+		
 		// CUTSCENES
 		scene01 = new Scene01(this);
 		scene02 = new Scene02(this);
@@ -699,6 +703,12 @@ public class Game extends JFrame implements Runnable {
 			Cinfo.render(renderer, xZoom, yZoom);
 			renderer.render(graphics);
 			Cinfo.render(graphics);
+		}
+		
+		if(State == STATE.CINFODUMMY) {
+			Cinfodummy.render(renderer, xZoom, yZoom);
+			renderer.render(graphics);
+			Cinfodummy.render(graphics);
 		}
 
 

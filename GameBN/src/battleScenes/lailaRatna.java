@@ -94,7 +94,12 @@ public class lailaRatna {
 
 		//player stats
 		player = game.player;
-		playerName = game.name.getName();
+		if(game.name.fullName != null && !game.name.fullName.isEmpty()) {
+			playerName = game.name.getName();
+		}
+		else {
+			playerName = game.load.nameLoad;
+		}
 		
 		game.player.exp(15);
 		playerAttack = game.player.getAttack();
