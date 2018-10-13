@@ -45,7 +45,7 @@ public class CharacterInfo {
 				playerName = game.name.getName();
 			}
 			
-			if(game.name.fullName == null && game.name.fullName.isEmpty()) {
+			else{
 				playerName = game.load.nameLoad;
 			}
 			

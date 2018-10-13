@@ -7,13 +7,12 @@ import java.awt.image.BufferedImage;
 
 import entity.Rectangle;
 import game.Game;
+import handler.Audio;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
 
 
 public class CreateName implements MenuObject{
-
-	private Color titleColor;
 	private Font titleFont;
 
 	private Font font;
@@ -35,12 +34,10 @@ public class CreateName implements MenuObject{
 	public String fullName = "";
 	
 	private Rectangle keyRect;
+	private Audio sfx;
 
 	public CreateName(Game game) {
-		try 
-		{
-
-			titleColor = new Color(100, 128, 128);
+		try {
 			titleFont = new Font("Broadway", Font.BOLD, 50);
 			
 			bg = game.loadImage("/name_bg.png");
@@ -50,7 +47,8 @@ public class CreateName implements MenuObject{
 			
 			keyRect = new Rectangle(0, 720, 400, 20);
 			keyRect.generateGraphics(0xebebeb);
-
+			
+			sfx = new Audio("/sfx/menu_click.mp3");
 
 		}
 		catch (Exception e)
@@ -101,19 +99,23 @@ public class CreateName implements MenuObject{
 			
 			if(keyListener.enter()) {
 				fullName = new String(name);
-
+				sfx.play();
+				
 				Game.State = Game.STATE.GENDER;
 			}
 
 			if(keyListener.up()) {
+				sfx.play();
 				name[currentChoice]++;
 			}
 
 			if(keyListener.down()) {
+				sfx.play();
 				name[currentChoice]--;
 			}
 
 			if(keyListener.left()) {
+				sfx.play();
 				currentChoice --;
 				if(currentChoice == -1)
 				{
@@ -122,6 +124,7 @@ public class CreateName implements MenuObject{
 			}
 
 			if(keyListener.right()) {
+				sfx.play();
 				currentChoice ++;
 				if(currentChoice == name.length)
 				{

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -61,6 +62,7 @@ public class dummyBattle {
 	private Font fontKey;
 
 	private Audio bgm;
+	private Audio sfx;
 	
 	public dummyBattle(Game game) {
 		BufferedImage dummyImage = game.loadImage("/dummyBattle.png");
@@ -85,7 +87,7 @@ public class dummyBattle {
 
 		// dummy stats
 		enemyHP = enemyMaxHP = 20;
-		enemyAttack = 1;
+//		enemyAttack = 1;
 
 		// load player stats
 		player = game.player;
@@ -109,6 +111,8 @@ public class dummyBattle {
 
 		bgm = new Audio ("/bgm/battle_bgm.mp3");
 		bgm.play();
+		
+		sfx = new Audio("/sfx/menu_click.mp3");
 	}
 
 	public void playerHitEnemy(int playerATK) {
@@ -143,6 +147,11 @@ public class dummyBattle {
 			
 		}
 	}
+	
+	public static int enemyAttack(int min, int max) {
+        Random random = new Random();
+        return random.nextInt((max - min) + 1) + min;
+    }
 
 	public void update(Game game) {
 		player.exp(game.player.EXP);
@@ -207,7 +216,8 @@ public class dummyBattle {
 
 			TimerTask task = new TimerTask() {
 				public void run() {
-					enemyHitPlayer(enemyAttack);
+					enemyHitPlayer(enemyAttack(3, 10));
+					System.out.println(enemyAttack(3, 10));
 
 					enemyAttacking = true;
 					playerAttacking = false;
