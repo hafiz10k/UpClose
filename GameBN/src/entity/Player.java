@@ -11,7 +11,7 @@ import handler.RenderHandler;
 
 public class Player implements GameObject {
 
-	private Rectangle playerRectangle;
+	public Rectangle playerRectangle;
 	private Rectangle collisionRectangle;
 
 	private int speed = 5;

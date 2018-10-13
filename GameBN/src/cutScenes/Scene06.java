@@ -388,7 +388,7 @@ public class Scene06 {
 
 				if(keyListener.a()) {
 					didMove = true;
-					Game.State = Game.STATE.SCENE07;
+					Game.State = Game.STATE.SCENE08;
 				}
 
 				if(didMove) {

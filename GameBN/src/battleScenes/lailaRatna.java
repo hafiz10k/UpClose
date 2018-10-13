@@ -105,7 +105,6 @@ public class lailaRatna {
 
 		// load player stats
 		player = game.player;
-
 		if(game.name.fullName != null && !game.name.fullName.isEmpty()) {
 			playerName = game.name.getName();
 		}
@@ -114,6 +113,9 @@ public class lailaRatna {
 		}
 
 		achievedEXP = 35;
+		
+		//enemy stats
+		enemyHP = enemyMaxHP = 60;
 
 		font = new Font("Calibri", Font.BOLD, 40);
 		fontN = new Font("Calibri", Font.BOLD, 30);

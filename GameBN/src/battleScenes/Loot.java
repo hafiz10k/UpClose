@@ -9,6 +9,8 @@ import entity.Player;
 import entity.Sprite;
 import entity.SpriteSheet;
 import game.Game;
+import game.Game.STATE;
+import handler.KeyBoardListener;
 import handler.RenderHandler;
 
 public class Loot {
@@ -39,6 +41,11 @@ public class Loot {
 	}
 	
 	public void update(Game game) {
+		KeyBoardListener keyListener = game.getKeyListener();
+		
+		if(keyListener.esc()) {
+			Game.State = STATE.GAME;
+		}
 		
 		if(game.player.getRectangle().x >= 3950 && game.player.getRectangle().x <= 4035 && game.player.getRectangle().y >= -1090 && game.player.getRectangle().y <= -1005) {
 			item = itemImgSheet.getSprite(1, 0);
