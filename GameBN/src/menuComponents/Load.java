@@ -198,6 +198,11 @@ public class Load implements MenuObject{
 				game.player.changeSprite(boyAni);
 				game.player.playerRectangle.x = playerPosX;
 				game.player.playerRectangle.y = playerPosY;
+				if(game.player.HP == 100) {
+					game.player.HP = game.save.playerHP;
+					game.player.EXP = game.save.playerExp;
+				}
+
 				Game.State = Game.STATE.GAME;
 			} 
 			else {
@@ -212,6 +217,7 @@ public class Load implements MenuObject{
 				game.player.playerRectangle.y = playerPosY;
 				Game.State = Game.STATE.GAME;
 			}
+			
 
 		}
 
