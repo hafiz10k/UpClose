@@ -61,7 +61,6 @@ public class dummyBattle {
 	private Font deadFont;
 	private Font fontKey;
 
-	private Audio bgm;
 	private Audio sfx;
 	
 	public dummyBattle(Game game) {
@@ -102,9 +101,6 @@ public class dummyBattle {
 		deadFont = new Font("Arial", Font.BOLD, 60);
 		fontKey = new Font("Arial", Font.PLAIN, 20);
 
-		bgm = new Audio ("/bgm/battle_bgm.mp3");
-		bgm.play();
-		
 		sfx = new Audio("/sfx/menu_click.mp3");
 	}
 
@@ -292,14 +288,6 @@ public class dummyBattle {
 			graphics.drawString("Player gained " + achievedEXP + "exp", 100, 200);
 		}
 
-	}
-
-	public Audio getBgm() {
-		return bgm;
-	}
-
-	public int getAchievedExp() {
-		return achievedEXP;
 	}
 
 }

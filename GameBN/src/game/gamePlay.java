@@ -27,6 +27,7 @@ public class gamePlay {
 	private Font f = new Font("arial", Font.PLAIN, 50);
 
 	public gamePlay(Game game) {
+		player = game.player;
 		
 		//load dialog
 		BufferedImage buttonDialog = game.loadImage("/dialogRect.png");
@@ -44,11 +45,11 @@ public class gamePlay {
 	}
 
 	public void update(Game game) {
-
-		KeyBoardListener keyListener = game.getKeyListener();
+		player = game.player;KeyBoardListener keyListener = game.getKeyListener();
 		try {	
 			if(keyListener.esc()) {
-				Game.State = STATE.MENU;
+				game.player.getRectangle().x = 0;
+				game.player.getRectangle().y = -90;
 			}
 			
 			if(keyListener.enter()) {
@@ -105,7 +106,7 @@ public class gamePlay {
 	}
 
 
-	public void render(RenderHandler renderer, Player player, int xZoom, int yZoom) {
+	public void render(RenderHandler renderer, int xZoom, int yZoom) {
 		if(player.getRectangle().x >= 1529 && player.getRectangle().x <= 1594 && player.getRectangle().y == -1040) {
 			renderer.renderSprite(dialogBtn, 40, 600, xZoom, yZoom, true);
 		}

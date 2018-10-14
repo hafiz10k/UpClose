@@ -208,6 +208,7 @@ public class Player implements GameObject {
 	public void updateCamera(Rectangle camera) {
 
 		System.out.println("x: " + playerRectangle.x + "\n" + "y: " + playerRectangle.y);
+		System.out.println("camera x: " + camera.x);
 		camera.x = playerRectangle.x - (camera.w / 2);
 		camera.y = playerRectangle.y - (camera.h / 2);
 
@@ -223,6 +224,10 @@ public class Player implements GameObject {
 			if(playerRectangle.y <= -1360) {
 				playerRectangle.y = -1360;
 			}
+		}
+		
+		if(playerRectangle.x <= 6340 && playerRectangle.y <= 750) {
+			System.out.println("olo");
 		}
 	}
 

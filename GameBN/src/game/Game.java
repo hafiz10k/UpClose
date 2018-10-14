@@ -344,7 +344,6 @@ public class Game extends JFrame implements Runnable {
 			menu.update(this);
 
 			vilAud.stop();
-			dummy.getBgm().stop();
 			playedGameMusic = false;
 		}
 
@@ -425,7 +424,6 @@ public class Game extends JFrame implements Runnable {
 		}
 
 		if(State == STATE.DUMMY) {
-			menu.getAud().close();
 			dummy.update(this);
 		}
 
@@ -504,7 +502,7 @@ public class Game extends JFrame implements Runnable {
 			map.render(renderer, objects, xZoom, yZoom);
 			int chosen1 = gender.getLoadChoice();	
 
-			gamePlay.render(renderer, player, xZoom, yZoom);
+			gamePlay.render(renderer, xZoom, yZoom);
 			renderer.render(graphics);
 			gamePlay.render(graphics, this);
 		}
