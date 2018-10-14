@@ -24,6 +24,8 @@ public class Save implements MenuObject{
 	private Font font;
 	private String name;
 	private int gender;
+	public int playerHP;
+	public int playerExp;
 
 	private int saveChoice = 0;
 
@@ -60,6 +62,8 @@ public class Save implements MenuObject{
 		int gender = game.gender.genderchosen;
 		int playerX = game.player.getRectangle().x;
 		int playerY = game.player.getRectangle().y;
+		playerHP = game.player.HP;
+		playerExp = game.player.EXP;
 		
 
 		String fileName = "details.txt";
@@ -76,6 +80,8 @@ public class Save implements MenuObject{
 		writer.println(gender);
 		writer.println(playerX);
 		writer.println(playerY);
+		writer.println(playerHP);
+		writer.println(playerExp);
 
 		writer.close();
 	}
