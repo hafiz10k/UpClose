@@ -51,31 +51,13 @@ public class Save implements MenuObject{
 		{
 			e.printStackTrace();
 		}
-		//		String name = game.name.fullName;
-		//		Gender gender = new Gender();
-		//		
-		//		String fileName = "details.txt";
-		//		PrintWriter writer = null;
-		//		
-		//		try {
-		//			writer = new PrintWriter(fileName);
-		//		} catch (FileNotFoundException e) {
-		//			// TODO Auto-generated catch block
-		//			e.printStackTrace();
-		//		}
-		//		for(int i = 0; i < 5; i++) {
-		//			writer.println(gender.getLoadChoice() );
-		//			
-		//
-		//		}
-		//		writer.close();
 
 	}
 
 
 	public void save(Game game) {
 		String name = game.name.fullName; 
-		int gender = game.gender.getLoadChoice();
+		int gender = game.gender.genderchosen;
 		int playerX = game.player.getRectangle().x;
 		int playerY = game.player.getRectangle().y;
 		
@@ -131,7 +113,6 @@ public class Save implements MenuObject{
 			gender = Integer.parseInt(br.readLine());
 
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

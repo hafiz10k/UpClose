@@ -1,19 +1,16 @@
-package battleScenes;
+package entity;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import entity.Player;
-import entity.Sprite;
-import entity.SpriteSheet;
 import game.Game;
 import game.Game.STATE;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
 
-public class Loot {
+public class Item {
 	private Sprite box;
 	private Sprite item;
 	private Sprite potion;
@@ -24,7 +21,7 @@ public class Loot {
 	private Font f;
 	private Font fs;
 	
-	public Loot(Game game) {
+	public Item(Game game) {
 		BufferedImage boxImg = game.loadImage("/lootbox.png");
 		SpriteSheet boxImgSheet = new SpriteSheet(boxImg);
 		boxImgSheet.loadSprites(64, 40);

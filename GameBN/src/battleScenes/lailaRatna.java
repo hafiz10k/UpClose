@@ -20,6 +20,7 @@ import handler.KeyBoardListener;
 import handler.RenderHandler;
 
 public class lailaRatna {
+	private Game game;
 	private Player player;
 	private BufferedImage bg;
 	private Sprite enemyInfo;
@@ -74,6 +75,8 @@ public class lailaRatna {
 
 	public lailaRatna(Game game) {
 		player = game.player;
+		this.game = game;
+
 		bg = game.loadImage("/LRBattle.png");
 
 		BufferedImage lailaImage = game.loadImage("/laila-ani.png");
@@ -105,15 +108,9 @@ public class lailaRatna {
 
 		// load player stats
 		player = game.player;
-		if(game.name.fullName != null && !game.name.fullName.isEmpty()) {
-			playerName = game.name.getName();
-		}
-		else {
-			playerName = game.load.nameLoad;
-		}
 
 		achievedEXP = 35;
-		
+
 		//enemy stats
 		enemyHP = enemyMaxHP = 60;
 
@@ -146,11 +143,11 @@ public class lailaRatna {
 			enemyDead = true;
 		}
 	}
-	
+
 	public static int enemyATKRange(int min, int max) {
-        Random random = new Random();
-        return random.nextInt((max - min) + 1) + min;
-    }
+		Random random = new Random();
+		return random.nextInt((max - min) + 1) + min;
+	}
 
 	public void enemyHitPlayer(int enemyATK) {
 		if(playerDead) {
@@ -249,14 +246,14 @@ public class lailaRatna {
 
 				}
 			}
-			
+
 			if(enemyDead == true) {
 				playerAttacking = false;
 				enemyAttacking = false;
-				
+
 				player.EXP += achievedEXP;
 				System.out.println(player.EXP);
-				
+
 				if(player.EXP >= 50) {
 					player.EXP = 50;
 				}
@@ -276,25 +273,25 @@ public class lailaRatna {
 	public void select() {
 		if(currentChoice == 0){
 			// attack	
-						playerHitEnemy(playerAttack);
-						System.out.println(playerAttack + ", " + "enemy: " + enemyHP);
-						
-						playerAttacking = true;
-						enemyAttacking = false;
+			playerHitEnemy(playerAttack);
+			System.out.println(playerAttack + ", " + "enemy: " + enemyHP);
 
-						TimerTask task = new TimerTask() {
-							public void run() {
-								enemyHitPlayer(enemyATKRange(5, 15));
+			playerAttacking = true;
+			enemyAttacking = false;
 
-								enemyAttacking = true;
-								playerAttacking = false;
-							}
-							
-						};
-						Timer timer = new Timer();
-						timer.schedule(task, 1500);
+			TimerTask task = new TimerTask() {
+				public void run() {
+					enemyHitPlayer(enemyATKRange(5, 15));
 
-					}
+					enemyAttacking = true;
+					playerAttacking = false;
+				}
+
+			};
+			Timer timer = new Timer();
+			timer.schedule(task, 1500);
+
+		}
 		if(currentChoice == 1)
 		{
 			// check
@@ -304,7 +301,7 @@ public class lailaRatna {
 		if(currentChoice == 2)
 		{
 			// stats
-			Game.State = Game.STATE.CINFO;
+			Game.State = Game.STATE.CINFOLAILA;
 
 		}
 	}
@@ -339,17 +336,24 @@ public class lailaRatna {
 		graphics.drawString("HP: " + enemyHP + "/" + enemyMaxHP, 680, 80);
 		graphics.drawString("ATK: " + "0", 680, 110);
 
+		if(game.name.fullName != null && !game.name.fullName.isEmpty()) {
+			playerName = game.name.getName();
+		}
+		else {
+			playerName = game.load.nameLoad;
+		}
+
 		graphics.drawString(playerName, 30, 400);
 		graphics.drawString("HP: " + player.HP + "/" + player.getMaxHP(), 30, 430);
 		graphics.drawString("ATK: " + playerAttack, 30, 460);
-		
+
 		if(playerAttacking == true) {
 			graphics.drawString("Player attacked!", 100, 300);
 		}
 		if(enemyAttacking == true) {
 			graphics.drawString("enemy attacked!", 100, 350);
 		}
-		
+
 		if(enemyDead == true) {
 			graphics.setFont(deadFont);
 			graphics.setColor(Color.RED);
@@ -358,8 +362,8 @@ public class lailaRatna {
 			graphics.setFont(fontN);
 			graphics.setColor(Color.BLACK);
 			graphics.drawString("Player gained " + achievedEXP + "exp", 100, 200);
-	}
+		}
 
-}
+	}
 }
 

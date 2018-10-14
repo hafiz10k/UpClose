@@ -1,30 +1,17 @@
 package menuComponents;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
 
-import entity.Map;
-import entity.Sprite;
-import entity.SpriteSheet;
 import game.Game;
 import game.Game.STATE;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
 
-public class CharacterInfo {
+public class CharacterInfoFrancisco {
 	private Font font;
 	private String playerName;
-	private int playerGender;
-	private String gen;
 	private int currentEXP;
 
 	private Game game;
@@ -33,7 +20,7 @@ public class CharacterInfo {
 	
 	boolean francisco = false;
 
-	public CharacterInfo(Game game) {
+	public CharacterInfoFrancisco(Game game) {
 
 		try {
 			bg = game.loadImage("/charmenu.png");
@@ -54,11 +41,13 @@ public class CharacterInfo {
 		
 		try {
 			KeyBoardListener keyListener = game.getKeyListener();
-			STATE gameState = game.State;
 			
 			if(keyListener.esc()) {
-					Game.State = Game.STATE.DUMMY;
-				}
+					Game.State = Game.STATE.FRANCISCO;
+
+			}
+
+
 			Thread.sleep(150);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -75,7 +64,7 @@ public class CharacterInfo {
 
 		graphics.setFont(font);
 		graphics.drawString("weapon", 160, 390);
-		
+
 		if(game.name.fullName != null && !game.name.fullName.isEmpty()) {
 			playerName = game.name.fullName;
 			graphics.drawString(playerName, 450, 150);
@@ -86,12 +75,9 @@ public class CharacterInfo {
 			graphics.drawString(playerName, 450, 150);
 		}
 		
-		
-//		graphics.drawString(gen, 450, 260);
 		graphics.drawString("" + game.player.HP, 570, 390);
 		graphics.drawString("" + game.player.level, 570, 510);
 		graphics.drawString("" + game.player.EXP, 600, 620);
-		//gender
 		if(game.gender.genderchosen == 0) {
 			if(game.load.genderLoad == 1) {
 				graphics.setColor(Color.WHITE);

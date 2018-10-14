@@ -16,7 +16,6 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import battleScenes.FranciscoBattle;
-import battleScenes.Loot;
 import battleScenes.dummyBattle;
 import battleScenes.lailaRatna;
 import cutScenes.Scene01;
@@ -31,6 +30,7 @@ import cutScenes.Scene09;
 import cutScenes.Scene10;
 import cutScenes.lailaRatnaScene;
 import entity.AnimatedSprite;
+import entity.Item;
 import entity.Map;
 import entity.Player;
 import entity.Rectangle;
@@ -46,7 +46,8 @@ import handler.MouseEventListener;
 import handler.MouseInput;
 import handler.RenderHandler;
 import menuComponents.CharacterInfo;
-import menuComponents.CharacterInfoDummy;
+import menuComponents.CharacterInfoFrancisco;
+import menuComponents.CharacterInfoLaila;
 import menuComponents.CreateName;
 import menuComponents.Gender;
 import menuComponents.Help;
@@ -118,8 +119,9 @@ public class Game extends JFrame implements Runnable {
 	private lailaRatna lailaRatna;
 	private FranciscoBattle francisco;
 	public CharacterInfo Cinfo;
-	private Loot loot;
-	public CharacterInfoDummy Cinfodummy;
+	private Item item;
+	public CharacterInfoLaila Cinfolaila;
+	public CharacterInfoFrancisco Cinfofrancisco;
 
 	private Font font;
 
@@ -154,8 +156,9 @@ public class Game extends JFrame implements Runnable {
 		RETRY,
 		HOSP,
 		CINFO,
-		LOOT,
-		CINFODUMMY
+		ITEM,
+		CINFOLAILA,
+		CINFOFRANCISCO
 	};
 
 	public static STATE State = STATE.MENU;
@@ -252,7 +255,7 @@ public class Game extends JFrame implements Runnable {
 		retry = new retryGame(this);
 		gamePlay = new gamePlay(this);
 		Cinfo = new CharacterInfo(this);
-		Cinfodummy = new CharacterInfoDummy(this);
+		Cinfolaila = new CharacterInfoLaila(this);
 		
 		// CUTSCENES
 		scene01 = new Scene01(this);
@@ -271,7 +274,7 @@ public class Game extends JFrame implements Runnable {
 		dummy = new dummyBattle(this);
 		lailaRatna = new lailaRatna(this);
 		francisco = new FranciscoBattle(this);
-		loot = new Loot(this);
+		item = new Item(this);
 
 		//PLACES SCENES
 		hosp = new hospitalScene(this);
@@ -375,7 +378,14 @@ public class Game extends JFrame implements Runnable {
 		if(State == STATE.CINFO) {
 			Cinfo.update(this);
 		}
-
+		
+		if(State == STATE.CINFOLAILA) {
+			Cinfolaila.update(this);
+		}
+		
+		if(State == STATE.CINFOFRANCISCO) {
+			Cinfofrancisco.update(this);
+		}
 
 		if(State == STATE.SCENE01) {
 			menu.getAud().stop();
@@ -435,8 +445,8 @@ public class Game extends JFrame implements Runnable {
 			francisco.update(this);
 		}
 
-		if(State == STATE.LOOT) {
-			loot.update(this);
+		if(State == STATE.ITEM) {
+			item.update(this);
 		}
 
 		if(State == STATE.HOSP) {
@@ -506,60 +516,6 @@ public class Game extends JFrame implements Runnable {
 			renderer.render(graphics);
 			gamePlay.render(graphics, this);
 		}
-
-
-		//		if(State == STATE.GAME) {
-		//			map.render(renderer, objects, xZoom, yZoom);
-		//			renderer.render(graphics);
-		//			graphics.fillRect(0, 0, 140, 180);
-		//			graphics.setColor(Color.WHITE);
-		//			graphics.setFont(font);
-		//			graphics.drawString("Name =", 20, 50);
-		//			
-		//			if(name.fullName != null && !name.fullName.isEmpty()) {
-		//				graphics.setColor(Color.WHITE);
-		//				graphics.setFont(font);
-		//				graphics.drawString(name.fullName, 80, 50);
-		//				
-		//			}else {
-		//				graphics.setColor(Color.WHITE);
-		//				graphics.setFont(font);
-		//				graphics.drawString(load.nameLoad, 80, 50);
-		//			}
-		//			graphics.setColor(Color.WHITE);
-		//			graphics.setFont(font);
-		//			graphics.drawString("Gender =", 20, 70);
-		//			if(gender.getLoadChoice() == 1) {
-		//				graphics.setColor(Color.WHITE);
-		//				graphics.setFont(font);
-		//				graphics.drawString("Girl", 80, 70);
-		//			}
-		//			else if(gender.getLoadChoice() == 0){
-		//				graphics.setColor(Color.WHITE);
-		//				graphics.setFont(font);
-		//				graphics.drawString("Boy", 80, 70);
-		//			}
-		//			graphics.setColor(Color.WHITE);
-		//			graphics.setFont(font);
-		//			graphics.drawString("Level =", 20, 90);
-		//			graphics.setColor(Color.WHITE);
-		//			graphics.setFont(font);
-		//			graphics.drawString("1", 80, 90);
-		//			graphics.setColor(Color.WHITE);
-		//			graphics.setFont(font);
-		//			graphics.drawString("Experience =", 20, 110);
-		//			graphics.setColor(Color.WHITE);
-		//			graphics.setFont(font);
-		//			graphics.drawString("0", 90, 110);
-		//			graphics.setColor(Color.WHITE);
-		//			graphics.setFont(font);
-		//			graphics.drawString("Weapon =", 20, 130);
-		//			
-		//			
-		//			
-		//			System.out.println(name.fullName);
-		//
-		//		}
 
 		if(State == STATE.MENU) {
 			menu.render(renderer, xZoom, yZoom); // sword
@@ -686,10 +642,10 @@ public class Game extends JFrame implements Runnable {
 			francisco.render(graphics);
 		}
 
-		if(State == STATE.LOOT) {
-			loot.render(renderer, player, xZoom, yZoom);
+		if(State == STATE.ITEM) {
+			item.render(renderer, player, xZoom, yZoom);
 			renderer.render(graphics);
-			loot.render(graphics, this);
+			item.render(graphics, this);
 		}
 
 		if(State == STATE.HOSP) {
@@ -703,10 +659,16 @@ public class Game extends JFrame implements Runnable {
 			Cinfo.render(graphics);
 		}
 		
-		if(State == STATE.CINFODUMMY) {
-			Cinfodummy.render(renderer, xZoom, yZoom);
+		if(State == STATE.CINFOLAILA) {
+			Cinfolaila.render(renderer, xZoom, yZoom);
 			renderer.render(graphics);
-			Cinfodummy.render(graphics);
+			Cinfolaila.render(graphics);
+		}
+		
+		if(State == STATE.CINFOFRANCISCO) {
+			Cinfofrancisco.render(renderer, xZoom, yZoom);
+			renderer.render(graphics);
+			Cinfofrancisco.render(graphics);
 		}
 
 

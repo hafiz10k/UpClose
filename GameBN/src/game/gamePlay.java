@@ -91,7 +91,7 @@ public class gamePlay {
 			
 			if(game.player.getRectangle().x >= 3950 && game.player.getRectangle().x <= 4035 && game.player.getRectangle().y >= -1090 && game.player.getRectangle().y <= -1005) {
 				if(keyListener.a()) {
-					Game.State = STATE.LOOT;
+					Game.State = STATE.ITEM;
 				}
 			}
 

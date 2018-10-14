@@ -46,6 +46,7 @@ public class FranciscoBattle {
 	private int playerEXP;
 
 	private Player player;
+	private Game game;
 
 	private Font font;
 	private Font fontN;
@@ -56,6 +57,8 @@ public class FranciscoBattle {
 	private Rectangle keyRect;
 
 	public FranciscoBattle(Game game) {
+		
+		this.game = game;
 		
 		bg = game.loadImage("/franciscoBattle.png");
 
@@ -203,7 +206,7 @@ public class FranciscoBattle {
 		if(currentChoice == 2)
 		{
 			// stats
-			Game.State = Game.STATE.CINFO;
+			Game.State = Game.STATE.CINFOFRANCISCO;
 
 		}
 	}
@@ -237,6 +240,14 @@ public class FranciscoBattle {
 		graphics.drawString(enemyName, 650, 50);
 		graphics.drawString("HP: " + enemyHP + "/" + enemyMaxHP, 650, 80);
 		graphics.drawString("ATK: " + enemyAttack, 650, 110);
+		
+
+		if(game.name.fullName != null && !game.name.fullName.isEmpty()) {
+			playerName = game.name.getName();
+		}
+		else {
+			playerName = game.load.nameLoad;
+		}
 
 		graphics.drawString(playerName, 30, 400);
 		graphics.drawString("HP: " + player.HP, 30, 430);

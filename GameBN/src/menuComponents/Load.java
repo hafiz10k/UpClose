@@ -187,7 +187,7 @@ public class Load implements MenuObject{
 		if(loadChoice == 0) {
 			System.out.println(nameLoad);
 			System.out.println(genderLoad);
-			if(genderLoad == 0) {
+			if(genderLoad == 2) {
 				//male
 				BufferedImage playerSheetImage = game.loadImage("/mainAnimated.png");
 				SpriteSheet boySheet = new SpriteSheet(playerSheetImage);

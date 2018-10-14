@@ -10,7 +10,7 @@ import game.Game.STATE;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
 
-public class CharacterInfoDummy {
+public class CharacterInfoLaila {
 	private Font font;
 	private String playerName;
 	private int playerGender;
@@ -23,32 +23,13 @@ public class CharacterInfoDummy {
 	
 	boolean francisco = false;
 
-	public CharacterInfoDummy(Game game) {
+	public CharacterInfoLaila(Game game) {
 
 		try {
 			bg = game.loadImage("/charmenu.png");
 			
 			this.game = game;
 			font = new Font("Arial", Font.BOLD, 50);
-
-			if(game.name.fullName != null && !game.name.fullName.isEmpty()) {
-				playerName = game.name.getName();
-			}
-			
-			else {
-				playerName = game.load.nameLoad;
-			}
-			
-			playerGender = game.load.getGenderLoad();
-
-			if(playerGender == 0) {
-				gen = "Boy";
-			}
-			else {
-				gen = "Girl";
-			}
-
-			
 
 		}
 		catch (Exception e)
@@ -66,26 +47,8 @@ public class CharacterInfoDummy {
 			STATE gameState = game.State;
 			
 			if(keyListener.esc()) {
-				if(gameState.equals(Game.STATE.DUMMY)) {
-					Game.State = Game.STATE.DUMMY;
-				}
-				
-				if(gameState.equals(Game.STATE.LAILARATNA)) {
 					Game.State = Game.STATE.LAILARATNA;
-				}
-				
-				if(francisco == false) {
-					francisco = true;
-					if(gameState.equals(STATE.FRANCISCO)) {
-						Game.State = Game.STATE.FRANCISCO;
-					}
-				}
-				
-				else {
-					Game.State = Game.STATE.MENU;
-					System.out.println("error in loading battle");
-				}
-		
+
 			}
 
 
@@ -105,11 +68,45 @@ public class CharacterInfoDummy {
 
 		graphics.setFont(font);
 		graphics.drawString("weapon", 160, 390);
-		graphics.drawString(playerName, 450, 150);
-		graphics.drawString(gen, 450, 260);
+		
+		if(game.name.fullName != null && !game.name.fullName.isEmpty()) {
+			playerName = game.name.fullName;
+			graphics.drawString(playerName, 450, 150);
+		}
+		
+		else{
+			playerName = game.load.nameLoad;
+			graphics.drawString(playerName, 450, 150);
+		}
+		
 		graphics.drawString("" + game.player.HP, 570, 390);
 		graphics.drawString("" + game.player.level, 570, 510);
 		graphics.drawString("" + game.player.EXP, 600, 620);
+		if(game.gender.genderchosen == 0) {
+			if(game.load.genderLoad == 1) {
+				graphics.setColor(Color.WHITE);
+				graphics.setFont(font);
+				graphics.drawString("Girl", 450, 260);
+			}
+			else if(game.load.genderLoad == 2){
+				graphics.setColor(Color.WHITE);
+				graphics.setFont(font);
+				graphics.drawString("Boy", 450, 260);
+			}
+			
+		}
+		else {
+			if(game.gender.getLoadChoice() == 1) {
+				graphics.setColor(Color.WHITE);
+				graphics.setFont(font);
+				graphics.drawString("Girl", 450, 260);
+			}
+			else if(game.gender.getLoadChoice() == 0){
+				graphics.setColor(Color.WHITE);
+				graphics.setFont(font);
+				graphics.drawString("Boy", 450, 260);
+			}
+		}
 		
 	}
 }

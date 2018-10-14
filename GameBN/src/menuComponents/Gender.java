@@ -39,7 +39,8 @@ public class Gender implements MenuObject{
 	private Font font;
 
 	public int loadChoice;
-
+	public int genderchosen;
+	
 	private String[] gen = 
 		{
 				"Boy",
@@ -149,6 +150,7 @@ public class Gender implements MenuObject{
 			if(keyListener.enter()) {
 				loading = true;
 				if(loadChoice == 0) {
+					genderchosen = 2;
 					//male
 					BufferedImage playerSheetImage = game.loadImage("/mainAnimated.png");
 					SpriteSheet boySheet = new SpriteSheet(playerSheetImage);
@@ -163,6 +165,7 @@ public class Gender implements MenuObject{
 				
 				else {
 					// female
+					genderchosen = 1;
 					BufferedImage girlSheetImage = game.loadImage("/girl-main-anim.png");
 					SpriteSheet girlSheet = new SpriteSheet(girlSheetImage);
 					girlSheet.loadSprites(24, 32);
