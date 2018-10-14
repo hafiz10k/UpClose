@@ -13,7 +13,7 @@ import game.Game;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
 
-public class lailaRatnaScene {
+public class francisco {
 
 	private BufferedImage scene;
 
@@ -29,17 +29,18 @@ public class lailaRatnaScene {
 	// dialog
 	private String[] laila =
 		{
-				"I heard Pengiran's has trained somebody",
-				"Yeah, but something seems off",
-				"I dont think this person is from our world"
+				"There is only one master...",
+				"And that is me, Francisco!",
+				"We will take over your land, Pengiran!"
+				"Come on fellas, stick 'em with the pointy end."
 		};
 
 
 	private String[] ratna = 
 		{
-				"Really?!",
-				"What do you mean, Laila?",
-				"What makes you think so?"
+				"adik! what?! stop coming into my room as you please..",
+				"i'm busy rehearsing for my History play.",
+				"abang dialog 3"
 		};
 
 	private String key = "press [A]";
@@ -56,7 +57,7 @@ public class lailaRatnaScene {
 	private boolean beginratna = false;
 	private boolean beginlaila = false;
 
-	public lailaRatnaScene(Game game) {
+	public francisco(Game game) {
 		//bedroom bg
 		scene = game.loadImage("/lailaRatna_Scene.png");
 
@@ -110,6 +111,8 @@ public class lailaRatnaScene {
 
 
 			if(timerRect.x > 100) {
+
+				String adik2 = "adik dialog 2";
 				// ANIMATING DIALOGS - laila
 				char lailaChar[] = laila[g].toCharArray();
 				if(beginlaila == false) {
