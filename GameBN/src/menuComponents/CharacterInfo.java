@@ -50,7 +50,7 @@ public class CharacterInfo {
 	}
 
 	public void update(Game game) {
-		game.player.exp(currentEXP);
+		game.player.exp(game.player.EXP);
 		
 		try {
 			KeyBoardListener keyListener = game.getKeyListener();
@@ -67,14 +67,18 @@ public class CharacterInfo {
 
 	public void render(RenderHandler renderer, int xZoom, int yZoom) {
 		renderer.renderImage(bg, 0, 0, 2, 2, true);
-		renderer.renderSprite(game.player.weapon, 210, 120, xZoom, yZoom, true);
+		renderer.renderSprite(game.player.weapon, 210, 120, xZoom, yZoom, true);	
 	}
 
 	public void render(Graphics graphics) {
 		graphics.setColor(Color.WHITE);
 
 		graphics.setFont(font);
-		graphics.drawString("weapon", 160, 390);
+		graphics.drawString("LOOT:", 160, 370);
+		
+		graphics.setFont(font);
+		graphics.drawString("N/A", 230, 470);
+		graphics.drawString("N/A", 230, 660);
 		
 		if(game.name.fullName != null && !game.name.fullName.isEmpty()) {
 			playerName = game.name.fullName;
@@ -87,7 +91,6 @@ public class CharacterInfo {
 		}
 		
 		
-//		graphics.drawString(gen, 450, 260);
 		graphics.drawString("" + game.player.HP, 570, 390);
 		graphics.drawString("" + game.player.level, 570, 510);
 		graphics.drawString("" + game.player.EXP, 600, 620);

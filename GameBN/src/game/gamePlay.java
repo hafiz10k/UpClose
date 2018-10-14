@@ -35,13 +35,6 @@ public class gamePlay {
 		buttonDialogSheet.loadSprites(64, 40);
 
 		dialogBtn = buttonDialogSheet.getSprite(0, 0);
-		
-		// load player stats
-//		game.player.level(game.dummy.getAchievedExp());
-		playerName = game.name.getName();
-		playerHP = game.player.getHP() + "/" + game.player.getMaxHP();
-		playerLVL = "" + game.player.EXP;
-
 	}
 
 	public void update(Game game) {
@@ -95,11 +88,9 @@ public class gamePlay {
 				}
 			}
 
-
-
-
-		}catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+		}
+		
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 

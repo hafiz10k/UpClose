@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import battleScenes.FranciscoBattle;
+import battleScenes.battleWon;
 import battleScenes.dummyBattle;
 import battleScenes.lailaRatna;
 import cutScenes.Scene01;
@@ -28,6 +29,7 @@ import cutScenes.Scene07;
 import cutScenes.Scene08;
 import cutScenes.Scene09;
 import cutScenes.Scene10;
+import cutScenes.franciscoScene;
 import cutScenes.lailaRatnaScene;
 import entity.AnimatedSprite;
 import entity.Item;
@@ -110,6 +112,7 @@ public class Game extends JFrame implements Runnable {
 	private Scene09 scene09;
 	private Scene10 scene10;
 	private lailaRatnaScene LR;
+	private franciscoScene fransShip;
 
 	//places Scenes
 	private hospitalScene hosp;
@@ -122,6 +125,7 @@ public class Game extends JFrame implements Runnable {
 	private Item item;
 	public CharacterInfoLaila Cinfolaila;
 	public CharacterInfoFrancisco Cinfofrancisco;
+	private battleWon win;
 
 	private Font font;
 
@@ -145,6 +149,7 @@ public class Game extends JFrame implements Runnable {
 		SCENE09,
 		SCENE10,
 		LRS,
+		FRANSHIP,
 		DUMMY,
 		LAILARATNA,
 		FRANCISCO,
@@ -158,7 +163,8 @@ public class Game extends JFrame implements Runnable {
 		CINFO,
 		ITEM,
 		CINFOLAILA,
-		CINFOFRANCISCO
+		CINFOFRANCISCO,
+		WIN
 	};
 
 	public static STATE State = STATE.MENU;
@@ -183,7 +189,7 @@ public class Game extends JFrame implements Runnable {
 		setVisible(true);
 
 		//frame cannot be resize
-		setResizable(true);
+		setResizable(false);
 
 		canvas.setBackground(Color.DARK_GRAY);
 
@@ -256,6 +262,7 @@ public class Game extends JFrame implements Runnable {
 		gamePlay = new gamePlay(this);
 		Cinfo = new CharacterInfo(this);
 		Cinfolaila = new CharacterInfoLaila(this);
+		Cinfofrancisco = new CharacterInfoFrancisco(this);
 		
 		// CUTSCENES
 		scene01 = new Scene01(this);
@@ -269,12 +276,14 @@ public class Game extends JFrame implements Runnable {
 		scene09 = new Scene09(this);
 		scene10 = new Scene10(this);
 		LR = new lailaRatnaScene(this);
+		fransShip = new franciscoScene(this);
 
 		//BATTLE
 		dummy = new dummyBattle(this);
 		lailaRatna = new lailaRatna(this);
 		francisco = new FranciscoBattle(this);
 		item = new Item(this);
+		win = new battleWon(this);
 
 		//PLACES SCENES
 		hosp = new hospitalScene(this);
@@ -324,10 +333,6 @@ public class Game extends JFrame implements Runnable {
 
 
 	public void update() { 
-		//		for(int i = 0; i < objects.length; i++) {
-		//			objects[i].update(this);
-		//		}
-
 		if(State == STATE.GAME) {
 			for(int i = 0; i < objects.length; i++) {
 				objects[i].update(this);
@@ -337,6 +342,7 @@ public class Game extends JFrame implements Runnable {
 
 			if(!playedGameMusic) {
 				menu.getAud().stop();
+				fransShip.bgm.stop();
 				vilAud.play();
 				playedGameMusic = true;
 			}
@@ -347,6 +353,7 @@ public class Game extends JFrame implements Runnable {
 			menu.update(this);
 
 			vilAud.stop();
+			fransShip.bgm.stop();
 			playedGameMusic = false;
 		}
 
@@ -432,6 +439,18 @@ public class Game extends JFrame implements Runnable {
 		if(State == STATE.LRS) {
 			LR.update(this);
 		}
+		
+		if(State == STATE.FRANSHIP) {
+			if(!playedGameMusic) {
+				menu.getAud().stop();
+				vilAud.stop();
+				
+				fransShip.bgm.play();
+				playedGameMusic = true;
+			}
+			
+			fransShip.update(this);
+		}
 
 		if(State == STATE.DUMMY) {
 			dummy.update(this);
@@ -443,6 +462,10 @@ public class Game extends JFrame implements Runnable {
 
 		if(State == STATE.FRANCISCO) {
 			francisco.update(this);
+		}
+		
+		if(State == STATE.WIN) {
+			win.update(this);
 		}
 
 		if(State == STATE.ITEM) {
@@ -623,6 +646,13 @@ public class Game extends JFrame implements Runnable {
 			renderer.render(graphics); 
 			LR.render(graphics); 
 		}
+		
+		if(State == STATE.FRANSHIP) {
+
+			fransShip.render(renderer, xZoom, yZoom); 
+			renderer.render(graphics); 
+			fransShip.render(graphics); 
+		}
 
 		if(State == STATE.DUMMY) {
 			dummy.render(renderer, xZoom, yZoom);
@@ -640,6 +670,12 @@ public class Game extends JFrame implements Runnable {
 			francisco.render(renderer, xZoom, yZoom);
 			renderer.render(graphics);
 			francisco.render(graphics);
+		}
+		
+		if(State == STATE.WIN) {
+			win.render(renderer, xZoom, yZoom);
+			renderer.render(graphics);
+			win.render(graphics);
 		}
 
 		if(State == STATE.ITEM) {

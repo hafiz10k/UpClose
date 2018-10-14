@@ -24,31 +24,29 @@ public class Player implements GameObject {
 	private int maxHP;
 
 	public int EXP;
-	private int maxExp;
-
 	public int attack;
 	private int maxAttack;
 
 	public int level;
 	private int maxLevel;
 
-	private boolean dead = false;
-	private boolean playerWon = false;
-
 	private Sprite sprite;
 	private AnimatedSprite animatedSprite = null;
-	
-	BufferedImage weaponImg;
+
+	public BufferedImage weaponImg;
+	public SpriteSheet weaponSheet;
 	public Sprite weapon;
+
+	private BufferedImage lootImg ;
+	private SpriteSheet lootImgSheet;
+	
+	public Sprite loot;
+	public Sprite loot2;
 
 	private final int xCollisionOffset = 15;
 	private final int yCollisionOffset = 35;
-	
-	private Audio sfx;
-//	private HashMap<String, Sprite> weapon;
-	
-	SpriteSheet weaponSheet;
 
+	
 
 	public Player(Sprite sprite, int xZoom, int yZoom) {
 		this.sprite = sprite;
@@ -66,13 +64,21 @@ public class Player implements GameObject {
 		EXP = 0;
 		level = 1;
 		attack = maxAttack = 40;
-				
+
 		//weapon
 		weaponImg = Game.loadImage("/sword-tiles.png");
 		weaponSheet = new SpriteSheet(weaponImg);
 		weaponSheet.loadSprites(48, 48);
 
 		weapon = weaponSheet.getSprite(0, 0);
+
+		//loot
+		lootImg = Game.loadImage("/loot_item.png");
+		lootImgSheet = new SpriteSheet(lootImg);
+		lootImgSheet.loadSprites(80, 96);
+		
+		loot = lootImgSheet.getSprite(2, 0);
+		loot2 = lootImgSheet.getSprite(3, 0);
 	}
 
 	public void updateDirection() {
@@ -80,34 +86,37 @@ public class Player implements GameObject {
 			animatedSprite.setAnimationRange(direction * 4, (direction * 4) + 4);
 		}
 	}
-	
+
 	public void exp(int exp) {
 		if(EXP == 0) {
 			level = 1;
 			if(level == 1) {
-				attack = 10;
+				attack = 5;
 				weapon = weaponSheet.getSprite(0, 0);
 			}
 		}
-		
+
 		if(EXP == 15) {
 			level = 2;
 			if(level == 2) {
-				attack = 20;
+				attack = 15;
 				weapon = weaponSheet.getSprite(1, 0);
 			}
 		}
-		
+
 		if(EXP == 50) {
 			level = 3;
 			if(level == 3) {
-				attack = 50;
+				attack = 35;
 				weapon = weaponSheet.getSprite(2, 0);
+				loot = lootImgSheet.getSprite(2, 0);
 			}
 		}
-		
+
 		if(EXP == 100) {
 			level = 4;
+			loot = lootImgSheet.getSprite(2, 0);
+			loot2 = lootImgSheet.getSprite(3, 0);
 		}
 	}
 
@@ -225,10 +234,7 @@ public class Player implements GameObject {
 				playerRectangle.y = -1360;
 			}
 		}
-		
-		if(playerRectangle.x <= 6340 && playerRectangle.y <= 750) {
-			System.out.println("olo");
-		}
+
 	}
 
 	public boolean handleMouseClick(Rectangle mouseRectangle, Rectangle camera, int xZoom, int yZoom) { return false; }

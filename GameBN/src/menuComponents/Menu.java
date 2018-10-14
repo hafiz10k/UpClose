@@ -193,7 +193,7 @@ public class Menu implements MenuObject {
 		if(currentChoice == 2)
 		{
 			// help
-			Game.State = Game.STATE.LAILARATNA;
+			Game.State = Game.STATE.WIN;
 		}
 		if(currentChoice == 3)
 		{

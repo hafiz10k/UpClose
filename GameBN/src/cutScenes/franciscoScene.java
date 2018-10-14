@@ -8,8 +8,8 @@ import java.awt.image.BufferedImage;
 import entity.AnimatedSprite;
 import entity.Player;
 import entity.Rectangle;
-import entity.SpriteSheet;
 import game.Game;
+import handler.Audio;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
 
@@ -59,17 +59,13 @@ public class franciscoScene {
 
 	private boolean beginratna = false;
 	private boolean beginlaila = false;
+	
+	public Audio bgm;
 
 	public franciscoScene(Game game) {
 		//bg
-		scene = game.loadImage("/franciscoBattle.png");
+		scene = game.loadImage("/franciscoScene.png");
 		
-		BufferedImage dfdsImage = game.loadImage("/dfds-ani.png");
-		SpriteSheet dfdsSheet = new SpriteSheet(dfdsImage);
-		dfdsSheet.loadSprites(24, 40);
-
-		dfds = new AnimatedSprite(dfdsSheet, speed);
-
 		// dialog
 		rect = new Rectangle(40, 600, 300, 50);
 		rect.generateGraphics(0xeff0f1);
@@ -77,6 +73,9 @@ public class franciscoScene {
 		// TIMER RECT
 		timerRect = new Rectangle(0, 0, 10, 32);
 		timerRect.generateGraphics(1, 0xffffff);
+		
+		//Audio
+		bgm = new Audio("/bgm/francisco.mp3");
 	}
 
 	public void update(Game game) {
@@ -157,7 +156,6 @@ public class franciscoScene {
 
 	public void render(RenderHandler renderer, int xZoom, int yZoom) {
 		renderer.renderImage(scene, 10, 150, xZoom, yZoom, true);
-		renderer.renderSprite(dfds, 400, 100, xZoom, yZoom, true);
 
 		if(timerRect.x > 10) {
 			renderer.renderRectangle(rect, xZoom, yZoom, true);
@@ -193,7 +191,6 @@ public class franciscoScene {
 		if(timerRect.x > 100) {
 			graphics.setColor(Color.MAGENTA);
 			graphics.drawString(addedlailaChar, 70, 650);
-			System.out.println("Hello");
 		}
 	}
 
