@@ -60,7 +60,7 @@ public class lailaRatna {
 
 	public boolean enemyDead = false;
 	public boolean playerDead = false;
-
+	
 	private boolean playerAttacking = false;
 	private boolean enemyAttacking = false;
 
@@ -70,7 +70,6 @@ public class lailaRatna {
 	private Font deadFont;
 
 	private Rectangle timerRect;
-	private Rectangle rect;
 	private Rectangle keyRect;
 
 	private Audio sfx;
@@ -120,10 +119,6 @@ public class lailaRatna {
 		fontN = new Font("Calibri", Font.BOLD, 30);
 		deadFont = new Font("Arial", Font.BOLD, 60);
 		fontKey = new Font("Arial", Font.PLAIN, 20);
-
-		// dialog
-		rect = new Rectangle(40, 550, 300, 30);
-		rect.generateGraphics(0xeff0f1);
 
 		// TIMER RECT
 		timerRect = new Rectangle(0, 0, 10, 32);
@@ -299,6 +294,7 @@ public class lailaRatna {
 		if(currentChoice == 1)
 		{
 			// check
+			Game.State = Game.STATE.GAME;
 
 		}
 		if(currentChoice == 2)
@@ -316,10 +312,6 @@ public class lailaRatna {
 		renderer.renderSprite(charInfo, 0, 350, 5, 4, true);
 		renderer.renderSprite(enemyInfo, 650, 0, 5, 4, true);
 		renderer.renderRectangle(keyRect, xZoom, yZoom, true);
-		
-		if(currentChoice == 1) {
-			renderer.renderRectangle(rect, xZoom, yZoom, true);
-		}
 	}
 
 	public void render(Graphics graphics) {
@@ -360,12 +352,6 @@ public class lailaRatna {
 		if(enemyAttacking == true) {
 			graphics.drawString("enemy attacked!", 100, 350);
 		}
-		
-		if(currentChoice == 1) {
-			graphics.setColor(Color.BLACK);
-			graphics.drawString("Pengiran Seri Laila and Pengiran Seri Ratna:", 70, 580);
-			graphics.drawString("Planning to betray Brunei!", 70, 610);
-		}
 
 		if(enemyDead == true) {
 			graphics.setFont(deadFont);
@@ -379,4 +365,3 @@ public class lailaRatna {
 
 	}
 }
-
