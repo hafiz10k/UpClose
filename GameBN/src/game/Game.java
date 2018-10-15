@@ -19,6 +19,10 @@ import battleScenes.FranciscoBattle;
 import battleScenes.battleWon;
 import battleScenes.dummyBattle;
 import battleScenes.lailaRatna;
+import cutScenes.BruneiWon;
+import cutScenes.Credit;
+import cutScenes.Ending;
+import cutScenes.FranciscoDefeat;
 import cutScenes.FranciscoScene;
 import cutScenes.FranciscoScene02;
 import cutScenes.LailaRatnaScene;
@@ -115,6 +119,10 @@ public class Game extends JFrame implements Runnable {
 	private LailaRatnaScene LR;
 	private FranciscoScene fransShip;
 	private FranciscoScene02 fransArrive;
+	private FranciscoDefeat fransDefeat;
+	private BruneiWon bnWin;
+	private Ending end;
+	private Credit credit;
 
 	//places Scenes
 	private hospitalScene hosp;
@@ -154,6 +162,8 @@ public class Game extends JFrame implements Runnable {
 		LRS,
 		FRANSHIP,
 		FRANSARRIVE,
+		FRANSDEFEAT,
+		BNWIN,
 		DUMMY,
 		LAILARATNA,
 		FRANCISCO,
@@ -168,7 +178,9 @@ public class Game extends JFrame implements Runnable {
 		ITEM,
 		CINFOLAILA,
 		CINFOFRANCISCO,
-		WIN
+		WIN,
+		ENDING,
+		CREDIT
 	};
 
 	public static STATE State = STATE.MENU;
@@ -181,7 +193,7 @@ public class Game extends JFrame implements Runnable {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// set pos n size of frame
-		setBounds(0, 0, 1000, 1000);
+		setBounds(0, 0, 1000, 800);
 
 		//put our frame in center of screen
 		setLocationRelativeTo(null);
@@ -282,6 +294,10 @@ public class Game extends JFrame implements Runnable {
 		LR = new LailaRatnaScene(this);
 		fransShip = new FranciscoScene(this);
 		fransArrive = new FranciscoScene02(this);
+		fransDefeat = new FranciscoDefeat(this);
+		bnWin = new BruneiWon(this);
+		end = new Ending(this);
+		credit = new Credit(this);
 
 		//BATTLE
 		dummy = new dummyBattle(this);
@@ -468,7 +484,23 @@ public class Game extends JFrame implements Runnable {
 			
 			fransArrive.update(this);
 		}
-
+		
+		if(State == STATE.FRANSDEFEAT) {
+			fransDefeat.update(this);
+		}
+		
+		if(State == STATE.BNWIN) {
+			bnWin.update(this);
+		}
+		
+		if(State == STATE.ENDING) {
+			end.update(this);
+		}
+		
+		if(State == STATE.CREDIT) {
+			credit.update(this);
+		}
+		
 		if(State == STATE.DUMMY) {
 			dummy.update(this);
 		}
@@ -690,6 +722,32 @@ public class Game extends JFrame implements Runnable {
 			fransArrive.render(renderer, xZoom, yZoom); 
 			renderer.render(graphics); 
 			fransArrive.render(graphics); 
+		}
+		
+		if(State == STATE.FRANSDEFEAT) {
+
+			fransDefeat.render(renderer, xZoom, yZoom); 
+			renderer.render(graphics); 
+			fransDefeat.render(graphics); 
+		}
+		
+		if(State == STATE.BNWIN) {
+
+			bnWin.render(renderer, xZoom, yZoom); 
+			renderer.render(graphics); 
+			bnWin.render(graphics); 
+		}
+		
+		if(State == STATE.ENDING) {
+			end.render(renderer, graphics, xZoom, yZoom);
+			renderer.render(graphics);
+			end.render(graphics);
+		}
+		
+		if(State == STATE.CREDIT) {
+			credit.render(renderer, xZoom, yZoom);
+			renderer.render(graphics);
+			credit.render(graphics);
 		}
 
 		if(State == STATE.DUMMY) {

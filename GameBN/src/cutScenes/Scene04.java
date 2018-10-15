@@ -23,7 +23,7 @@ public class Scene04 {
 	private AnimatedSprite pbsAni;
 	private AnimatedSprite girlAni;
 
-	private int speed = 2;
+	private int speed = 5;
 
 	//direction
 	private int pgDir = 0;
@@ -145,7 +145,7 @@ public class Scene04 {
 			}
 
 			//DIALOGS
-			if(timerRect.x > 10 && timerRect.x <= 60) {
+			if(timerRect.x > 10 && timerRect.x <= 150) {
 
 				// ANIMATING DIALOGS - BOY
 				char pgChar[] = pgDialog[pg].toCharArray();
@@ -171,11 +171,15 @@ public class Scene04 {
 				}
 
 				if(didMove) {
-					Thread.sleep(150);
+					Thread.sleep(100);
 				}
 			}
+			
+			if(timerRect.x >= 160) {
+				Game.State = Game.STATE.SCENE06;
+			}
 
-			Thread.sleep(100);
+			Thread.sleep(80);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -187,7 +191,7 @@ public class Scene04 {
 		renderer.renderSprite(girlAni, girlRect.x, girlRect.y, xZoom, yZoom, false);
 		renderer.renderSprite(pbsAni, pbsRect.x, pbsRect.y, xZoom, yZoom, false);
 
-		if(timerRect.x > 10 && timerRect.x <= 60) {
+		if(timerRect.x > 10 && timerRect.x <= 150) {
 			renderer.renderRectangle(rect, xZoom, yZoom, true);
 			}
 	}
@@ -196,7 +200,7 @@ public class Scene04 {
 		graphics.setFont(f);
 		graphics.setColor(Color.GREEN);
 
-		if(timerRect.x > 10 && timerRect.x <= 60) {
+		if(timerRect.x > 10 && timerRect.x <= 150) {
 			graphics.drawString(addedPGChar, 60, 650);
 			
 			graphics.setFont(fontKey);

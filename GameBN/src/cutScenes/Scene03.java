@@ -22,7 +22,7 @@ public class Scene03 {
 	private AnimatedSprite pbsAni;
 	private AnimatedSprite boyAni;
 
-	private int speed = 2;
+	private int speed = 5;
 
 	//direction
 	private int pgDir = 0;
@@ -42,8 +42,6 @@ public class Scene03 {
 	private String[] pgDialog =
 		{
 				"Hmm? what is this boy doing sleeping here?",
-				"Little boy, wake up!",
-				"*slap* *slap*"
 		};
 
 	private int pg = 0;
@@ -94,13 +92,14 @@ public class Scene03 {
 
 	public void update(Game game) {
 		timerRect.x++;
+		System.out.println(timerRect.x);
 
 		try {
 			// PBS MOVEMENT
 			if(pbsAni != null) {
 				boolean didMove = false;
 				int newDirection = pgDir;
-				System.out.println(pgDir);
+
 				if(timerRect.x >= 0) {
 					newDirection = down;
 					didMove = true;
@@ -163,7 +162,7 @@ public class Scene03 {
 
 
 		//DIALOGS
-		if(timerRect.x > 10 && timerRect.x <= 60) {
+		if(timerRect.x > 10 && timerRect.x <= 150) {
 			// ANIMATING DIALOGS - PG Bendahara
 			char pgChar[] = pgDialog[pg].toCharArray();
 			if(beginPG == false) {
@@ -189,11 +188,15 @@ public class Scene03 {
 			}
 
 			if(didMove) {
-				Thread.sleep(150);
+				Thread.sleep(100);
 			}
 		}
+		
+		if(timerRect.x >= 160) {
+			Game.State = Game.STATE.SCENE05;
+		}
 
-		Thread.sleep(100);
+		Thread.sleep(80);
 
 	}
 	catch(Exception e) {
@@ -206,7 +209,7 @@ public void render(RenderHandler renderer, Game game, Player player, int xZoom, 
 	renderer.renderSprite(boyAni, boyRect.x, boyRect.y, xZoom, yZoom, false);
 	renderer.renderSprite(pbsAni, pbsRect.x, pbsRect.y, xZoom, yZoom, false);
 
-	if(timerRect.x > 10 && timerRect.x <= 60) {
+	if(timerRect.x > 10 && timerRect.x <= 150) {
 		renderer.renderRectangle(rect, xZoom, yZoom, true);
 	}
 }
@@ -215,7 +218,7 @@ public void render(Graphics graphics) {
 	graphics.setFont(f);
 	graphics.setColor(Color.GREEN);
 
-	if(timerRect.x > 10 && timerRect.x <= 60) {
+	if(timerRect.x > 10 && timerRect.x <= 150) {
 		graphics.drawString(addedPGChar, 60, 650);
 
 		graphics.setFont(fontKey);
