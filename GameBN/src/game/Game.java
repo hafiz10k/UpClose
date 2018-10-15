@@ -161,7 +161,7 @@ public class Game extends JFrame implements Runnable {
 		CINFOFRANCISCO
 	};
 
-	public static STATE State = STATE.MENU;
+	public static STATE State = STATE.RETRY;
 
 	public Game() {
 		//		Rectangle backButton =  new Rectangle (80, 80, 200, 50);
@@ -256,7 +256,7 @@ public class Game extends JFrame implements Runnable {
 		gamePlay = new gamePlay(this);
 		Cinfo = new CharacterInfo(this);
 		Cinfolaila = new CharacterInfoLaila(this);
-		
+
 		// CUTSCENES
 		scene01 = new Scene01(this);
 		scene02 = new Scene02(this);
@@ -378,11 +378,11 @@ public class Game extends JFrame implements Runnable {
 		if(State == STATE.CINFO) {
 			Cinfo.update(this);
 		}
-		
+
 		if(State == STATE.CINFOLAILA) {
 			Cinfolaila.update(this);
 		}
-		
+
 		if(State == STATE.CINFOFRANCISCO) {
 			Cinfofrancisco.update(this);
 		}
@@ -658,13 +658,13 @@ public class Game extends JFrame implements Runnable {
 			renderer.render(graphics);
 			Cinfo.render(graphics);
 		}
-		
+
 		if(State == STATE.CINFOLAILA) {
 			Cinfolaila.render(renderer, xZoom, yZoom);
 			renderer.render(graphics);
 			Cinfolaila.render(graphics);
 		}
-		
+
 		if(State == STATE.CINFOFRANCISCO) {
 			Cinfofrancisco.render(renderer, xZoom, yZoom);
 			renderer.render(graphics);

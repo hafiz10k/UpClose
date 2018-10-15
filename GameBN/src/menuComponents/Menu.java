@@ -44,7 +44,7 @@ public class Menu implements MenuObject {
 
 	private BufferedImage logo;
 	private Sprite logoSp;
-	
+
 	private BufferedImage bg;
 
 	private Audio aud;
@@ -74,7 +74,7 @@ public class Menu implements MenuObject {
 
 			aud = new Audio("/bgm/menu_bgm.mp3");
 			aud.play();
-			
+
 			sfx = new Audio("/sfx/menu_click.mp3");
 
 			keyRect = new Rectangle(0, 720, 400, 20);
@@ -105,7 +105,7 @@ public class Menu implements MenuObject {
 			}
 			graphics.drawString(options[i], 400 , 300 + i * 130);
 		}
-		
+
 		for(int k = 0; k < key.length; k++) {
 			graphics.setFont(fontKey);
 			graphics.setColor(Color.BLACK);
@@ -131,13 +131,13 @@ public class Menu implements MenuObject {
 		try {
 
 			KeyBoardListener keyListener = game.getKeyListener();
-			
+
 
 			boolean didMove = false;
 			if(keyListener.enter()) {
 				didMove = true;
 				sfx.play();
-				
+
 				select();
 
 			}
@@ -145,7 +145,7 @@ public class Menu implements MenuObject {
 			if(keyListener.up()) {
 				didMove = true;
 				sfx.play();
-				
+
 				currentChoice --;
 				if(currentChoice == -1)
 				{
@@ -156,7 +156,7 @@ public class Menu implements MenuObject {
 			if(keyListener.down()) {
 				didMove = true;
 				sfx.play();
-				
+
 				currentChoice ++;
 				if(currentChoice == options.length)
 				{

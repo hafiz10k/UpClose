@@ -30,14 +30,14 @@ public class CharacterInfo {
 	private Game game;
 
 	private BufferedImage bg;
-	
+
 	boolean francisco = false;
 
 	public CharacterInfo(Game game) {
 
 		try {
 			bg = game.loadImage("/charmenu.png");
-			
+
 			this.game = game;
 			font = new Font("Arial", Font.BOLD, 50);
 
@@ -51,14 +51,14 @@ public class CharacterInfo {
 
 	public void update(Game game) {
 		game.player.exp(currentEXP);
-		
+
 		try {
 			KeyBoardListener keyListener = game.getKeyListener();
 			STATE gameState = game.State;
-			
+
 			if(keyListener.esc()) {
-					Game.State = Game.STATE.DUMMY;
-				}
+				Game.State = Game.STATE.DUMMY;
+			}
 			Thread.sleep(150);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -75,19 +75,19 @@ public class CharacterInfo {
 
 		graphics.setFont(font);
 		graphics.drawString("weapon", 160, 390);
-		
+
 		if(game.name.fullName != null && !game.name.fullName.isEmpty()) {
 			playerName = game.name.fullName;
 			graphics.drawString(playerName, 450, 150);
 		}
-		
+
 		else{
 			playerName = game.load.nameLoad;
 			graphics.drawString(playerName, 450, 150);
 		}
+
+
 		
-		
-//		graphics.drawString(gen, 450, 260);
 		graphics.drawString("" + game.player.HP, 570, 390);
 		graphics.drawString("" + game.player.level, 570, 510);
 		graphics.drawString("" + game.player.EXP, 600, 620);
@@ -103,7 +103,7 @@ public class CharacterInfo {
 				graphics.setFont(font);
 				graphics.drawString("Boy", 450, 260);
 			}
-			
+
 		}
 		else {
 			if(game.gender.getLoadChoice() == 1) {
@@ -117,6 +117,6 @@ public class CharacterInfo {
 				graphics.drawString("Boy", 450, 260);
 			}
 		}
-		
+
 	}
 }

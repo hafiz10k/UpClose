@@ -23,7 +23,8 @@ public class Load implements MenuObject{
 	public String nameLoad;
 	public int genderLoad;
 	public String hpLoad;
-	
+	public int playerHP;
+	public int playerEXP;
 	private int playerPosX;
 	private int playerPosY;
 
@@ -36,7 +37,7 @@ public class Load implements MenuObject{
 				"Yes",
 				"No"
 		};
-	
+
 	private BufferedImage bg;
 
 	public Load(Game game) {
@@ -47,19 +48,19 @@ public class Load implements MenuObject{
 			titleFont = new Font("Broadway", Font.BOLD, 50);
 
 			font = new Font("Arial", Font.PLAIN, 40);
-			
+
 			try {
 				BufferedReader br = new BufferedReader(new FileReader("Details.txt"));
 				nameLoad = br.readLine();
 				genderLoad = Integer.parseInt(br.readLine());
 				playerPosX = Integer.parseInt(br.readLine());
 				playerPosY = Integer.parseInt(br.readLine());
-				
+
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 
 		}
 		catch (Exception e)
@@ -124,12 +125,12 @@ public class Load implements MenuObject{
 		try {
 			try {
 				loadData();
-				
+
 			} catch (NumberFormatException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 			KeyBoardListener keyListener = game.getKeyListener();
 
 			boolean loading = false;
@@ -158,7 +159,7 @@ public class Load implements MenuObject{
 				}
 			}
 
-				Thread.sleep(150);
+			Thread.sleep(150);
 
 
 		}
@@ -167,7 +168,7 @@ public class Load implements MenuObject{
 		}
 
 	}
-	
+
 	public void loadData() throws NumberFormatException, IOException {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("Details.txt"));
@@ -175,11 +176,13 @@ public class Load implements MenuObject{
 			genderLoad = Integer.parseInt(br.readLine());
 			playerPosX = Integer.parseInt(br.readLine());
 			playerPosY = Integer.parseInt(br.readLine());
+			playerHP = Integer.parseInt(br.readLine());
+			playerEXP = Integer.parseInt(br.readLine());
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private void select(Game game) {
@@ -198,10 +201,10 @@ public class Load implements MenuObject{
 				game.player.changeSprite(boyAni);
 				game.player.playerRectangle.x = playerPosX;
 				game.player.playerRectangle.y = playerPosY;
-				if(game.player.HP == 100) {
-					game.player.HP = game.save.playerHP;
-					game.player.EXP = game.save.playerExp;
-				}
+
+				game.player.HP = playerHP;
+				game.player.EXP = playerEXP;
+
 
 				Game.State = Game.STATE.GAME;
 			} 
@@ -217,7 +220,7 @@ public class Load implements MenuObject{
 				game.player.playerRectangle.y = playerPosY;
 				Game.State = Game.STATE.GAME;
 			}
-			
+
 
 		}
 
