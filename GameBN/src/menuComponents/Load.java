@@ -23,7 +23,8 @@ public class Load implements MenuObject{
 	public String nameLoad;
 	public int genderLoad;
 	public String hpLoad;
-	
+	public int playerHP;
+	public int playerEXP;
 	private int playerPosX;
 	private int playerPosY;
 
@@ -54,6 +55,8 @@ public class Load implements MenuObject{
 				genderLoad = Integer.parseInt(br.readLine());
 				playerPosX = Integer.parseInt(br.readLine());
 				playerPosY = Integer.parseInt(br.readLine());
+				playerHP = Integer.parseInt(br.readLine());
+				playerEXP = Integer.parseInt(br.readLine());
 				
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -175,6 +178,8 @@ public class Load implements MenuObject{
 			genderLoad = Integer.parseInt(br.readLine());
 			playerPosX = Integer.parseInt(br.readLine());
 			playerPosY = Integer.parseInt(br.readLine());
+			playerHP = Integer.parseInt(br.readLine());
+			playerEXP = Integer.parseInt(br.readLine());
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -198,6 +203,8 @@ public class Load implements MenuObject{
 				game.player.changeSprite(boyAni);
 				game.player.playerRectangle.x = playerPosX;
 				game.player.playerRectangle.y = playerPosY;
+				game.player.HP = playerHP;
+				game.player.EXP = playerEXP;
 
 				Game.State = Game.STATE.GAME;
 			} 

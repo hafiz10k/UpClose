@@ -52,6 +52,7 @@ import menuComponents.CharacterInfo;
 import menuComponents.CharacterInfoFrancisco;
 import menuComponents.CharacterInfoLaila;
 import menuComponents.CreateName;
+import menuComponents.Exit;
 import menuComponents.Gender;
 import menuComponents.Help;
 import menuComponents.Load;
@@ -129,7 +130,7 @@ public class Game extends JFrame implements Runnable {
 	public CharacterInfoLaila Cinfolaila;
 	public CharacterInfoFrancisco Cinfofrancisco;
 	private battleWon win;
-
+	public Exit exit;
 	private Font font;
 
 	private Rectangle dialogRect;
@@ -168,7 +169,8 @@ public class Game extends JFrame implements Runnable {
 		ITEM,
 		CINFOLAILA,
 		CINFOFRANCISCO,
-		WIN
+		WIN,
+		EXIT
 	};
 
 	public static STATE State = STATE.MENU;
@@ -267,6 +269,7 @@ public class Game extends JFrame implements Runnable {
 		Cinfo = new CharacterInfo(this);
 		Cinfolaila = new CharacterInfoLaila(this);
 		Cinfofrancisco = new CharacterInfoFrancisco(this);
+		exit = new Exit(this);
 		
 		// CUTSCENES
 		scene01 = new Scene01(this);
@@ -282,6 +285,7 @@ public class Game extends JFrame implements Runnable {
 		LR = new LailaRatnaScene(this);
 		fransShip = new FranciscoScene(this);
 		fransArrive = new FranciscoScene02(this);
+		
 
 		//BATTLE
 		dummy = new dummyBattle(this);
@@ -506,6 +510,10 @@ public class Game extends JFrame implements Runnable {
 
 		if(State == STATE.HOSP) {
 			hosp.update(this);
+		}
+		
+		if(State == STATE.EXIT) {
+			exit.update(this);
 		}
 
 	}
@@ -744,7 +752,10 @@ public class Game extends JFrame implements Runnable {
 			renderer.render(graphics);
 			Cinfofrancisco.render(graphics);
 		}
-
+		
+		if(State == STATE.EXIT) {
+			exit.render(graphics);
+		}
 
 		graphics.dispose();
 		bufferStrategy.show();

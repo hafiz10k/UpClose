@@ -41,8 +41,7 @@ public class gamePlay {
 		player = game.player;KeyBoardListener keyListener = game.getKeyListener();
 		try {	
 			if(keyListener.esc()) {
-				game.player.getRectangle().x = 0;
-				game.player.getRectangle().y = -90;
+				Game.State = Game.STATE.EXIT;
 			}
 			
 			if(keyListener.enter()) {
@@ -97,7 +96,11 @@ public class gamePlay {
 					Game.State = STATE.ITEM;
 				}
 			}
-
+			if(game.player.getRectangle().x >= 1809 && game.player.getRectangle().x <= 1954 && game.player.getRectangle().y >= -480 && game.player.getRectangle().y <= -460) {
+				if(keyListener.a()) {
+					Game.State = STATE.ITEM;
+				}
+			}
 		}
 		
 		catch (InterruptedException e) {
@@ -131,6 +134,11 @@ public class gamePlay {
 		if(player.getRectangle().x >= 7235 && player.getRectangle().x <= 7335 && player.getRectangle().y >= -140 && player.getRectangle().y <= -35) {
 			renderer.renderSprite(dialogBtn, 40, 600, xZoom, yZoom, true);
 		}
+		
+		if(player.getRectangle().x >= 1809 && player.getRectangle().x <= 1954 && player.getRectangle().y >= -480 && player.getRectangle().y <= -460) {
+			renderer.renderSprite(dialogBtn, 40, 600, xZoom, yZoom, true);
+		}
+		
 	}
 
 

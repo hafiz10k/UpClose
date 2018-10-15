@@ -13,7 +13,8 @@ import handler.RenderHandler;
 public class Item {
 	private Sprite box;
 	private Sprite item;
-	private Sprite potion;
+	private Sprite bread;
+	
 	
 	private BufferedImage itemImg ;
 	private SpriteSheet itemImgSheet;
@@ -31,7 +32,8 @@ public class Item {
 		itemImgSheet.loadSprites(80, 96);
 
 		box = boxImgSheet.getSprite(0, 0);
-		item = itemImgSheet.getSprite(0, 0);
+		item = itemImgSheet.getSprite(1, 0);
+		bread = itemImgSheet.getSprite(0, 0); 
 		
 		f = new Font("Arial", Font.BOLD, 50);
 		fs = new Font("Arial", Font.BOLD, 30);
@@ -57,6 +59,9 @@ public class Item {
 		if(player.getRectangle().x >= 3950 && player.getRectangle().x <= 4035 && player.getRectangle().y >= -1090 && player.getRectangle().y <= -1005) {
 			renderer.renderSprite(item, 350, 250, xZoom, yZoom, true);
 		}
+		if(player.getRectangle().x >= 1809 && player.getRectangle().x <= 1954 && player.getRectangle().y >= -480 && player.getRectangle().y <= -460) {
+			renderer.renderSprite(bread, 350, 250, xZoom, yZoom, true);
+		}
 	}
 	
 	public void render(Graphics graphics, Game game) {
@@ -69,6 +74,10 @@ public class Item {
 		
 		if(game.player.getRectangle().x >= 3950 && game.player.getRectangle().x <= 4035 && game.player.getRectangle().y >= -1090 && game.player.getRectangle().y <= -1005) {
 			graphics.drawString("that's right, POTION!", 270, 250);
+			graphics.drawString("HP +3", 430, 520);
+		}
+		if(game.player.getRectangle().x >= 1809 && game.player.getRectangle().x <= 1954 && game.player.getRectangle().y >= -480 && game.player.getRectangle().y <= -460) {
+			graphics.drawString("that's right, SLICE OF BREAD!", 270, 250);
 			graphics.drawString("HP +3", 430, 520);
 		}
 //		graphics.drawString("that's right, SLICE OF BREAD!", 270, 250);
