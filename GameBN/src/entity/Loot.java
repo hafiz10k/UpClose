@@ -20,6 +20,8 @@ public class Loot {
 	private Font f;
 	private Font fs;
 	
+	private Rectangle keyRect;
+	
 	public Loot(Game game) {
 		BufferedImage boxImg = game.loadImage("/lootbox.png");
 		SpriteSheet boxImgSheet = new SpriteSheet(boxImg);
@@ -34,6 +36,9 @@ public class Loot {
 		
 		f = new Font("Arial", Font.BOLD, 50);
 		fs = new Font("Arial", Font.BOLD, 30);
+		
+		keyRect = new Rectangle(0, 700, 400, 400);
+		keyRect.generateGraphics(0xeff0f1);
 	}
 	
 	public void update(Game game) {
@@ -70,8 +75,7 @@ public class Loot {
 			graphics.drawString("that's right, POTION!", 270, 250);
 			graphics.drawString("HP +3", 430, 520);
 		}
-//		graphics.drawString("that's right, SLICE OF BREAD!", 270, 250);
-//		graphics.drawString("HP +3", 430, 520);
+		graphics.drawString("Press [A] to proceed", 50, 740);
 	}
 
 }

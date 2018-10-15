@@ -192,16 +192,28 @@ public class Scene02 {
 		if(timerRect.x > 10 && timerRect.x < 40) {
 			graphics.setColor(Color.BLUE);
 			graphics.drawString(addedBoyChar, 70, 650);
+			
+			graphics.setFont(fontKey);
+			graphics.setColor(Color.BLACK);
+			graphics.drawString(key, 800, 740);
 		}
 
 		if(timerRect.x >= 40 && timerRect.x <= 70) {
 			graphics.setColor(Color.MAGENTA);
 			graphics.drawString(addedGirlChar, 70, 650);
+			
+			graphics.setFont(fontKey);
+			graphics.setColor(Color.BLACK);
+			graphics.drawString(key, 800, 740);
 		}
 
 		if(timerRect.x > 70 && timerRect.x <= 110) {
 			graphics.setColor(Color.BLUE);
 			graphics.drawString(addedBoyChar, 70, 650);
+			
+			graphics.setFont(fontKey);
+			graphics.setColor(Color.BLACK);
+			graphics.drawString(key, 800, 740);
 
 		}
 

@@ -98,8 +98,8 @@ public class Ending {
 
 		}
 		
-		if(timerRect.x >= 170) {
-//			Game.State = Game.STATE.NAME;
+		if(timerRect.x >= 130) {
+			Game.State = Game.STATE.CREDIT;
 		}
 
 		try {

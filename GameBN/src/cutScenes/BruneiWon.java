@@ -114,13 +114,13 @@ public class BruneiWon {
 				KeyBoardListener keyListener = game.getKeyListener();
 
 				if(keyListener.a()) {
-//					Game.State = Game.STATE.FRANSARRIVE;
+					Game.State = Game.STATE.ENDING;
 				}
 
 			}
 			
 			if(timerRect.x >= 140) {
-//				Game.State = Game.STATE.FRANSARRIVE;
+				Game.State = Game.STATE.ENDING;
 			}
 
 			Thread.sleep(80);

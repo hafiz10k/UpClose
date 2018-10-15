@@ -44,7 +44,7 @@ public class CharacterInfoLaila {
 		try {
 			KeyBoardListener keyListener = game.getKeyListener();
 			if(keyListener.esc()) {
-					Game.State = Game.STATE.FRANCISCO;
+					Game.State = Game.STATE.LAILARATNA;
 
 			}
 

@@ -86,13 +86,13 @@ public class FranciscoDefeat {
 				KeyBoardListener keyListener = game.getKeyListener();
 
 				if(keyListener.a()) {
-					Game.State = Game.STATE.FRANSARRIVE;
+					Game.State = Game.STATE.BNWIN;
 				}
 
 			}
 			
 			if(timerRect.x >= 110) {
-				Game.State = Game.STATE.FRANSARRIVE;
+				Game.State = Game.STATE.BNWIN;
 			}
 
 			Thread.sleep(80);

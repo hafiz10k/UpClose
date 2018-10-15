@@ -424,56 +424,100 @@ public class Scene06 {
 		if(timerRect.x >= 25 && timerRect.x <= 60) {
 			graphics.setColor(Color.GREEN);
 			graphics.drawString(addedPGChar, 60, 650);
+			
+			graphics.setFont(fontKey);
+			graphics.setColor(Color.BLACK);
+			graphics.drawString("press [A]", 800, 740);
 		}
 
 		if(timerRect.x > 60 && timerRect.x <= 90) {
 			graphics.setColor(Color.MAGENTA);
 			graphics.drawString(addedGirlChar, 60, 650);
+			
+			graphics.setFont(fontKey);
+			graphics.setColor(Color.BLACK);
+			graphics.drawString("press [A]", 800, 740);
 		}
 
 		if(timerRect.x > 90 && timerRect.x <= 150) {
 			graphics.setColor(Color.GREEN);
 			graphics.drawString(addedPGChar, 60, 650);
+			
+			graphics.setFont(fontKey);
+			graphics.setColor(Color.BLACK);
+			graphics.drawString("press [A]", 800, 740);
 		}
 
 		if(timerRect.x > 150 && timerRect.x <= 180) {
 			graphics.setColor(Color.MAGENTA);
 			graphics.drawString(addedGirlChar, 60, 650);
+			
+			graphics.setFont(fontKey);
+			graphics.setColor(Color.BLACK);
+			graphics.drawString("press [A]", 800, 740);
 		}
 
 		if(timerRect.x > 180 && timerRect.x <= 250) {
 			graphics.setColor(Color.GREEN);
 			graphics.drawString(addedPGChar, 60, 650);
+			
+			graphics.setFont(fontKey);
+			graphics.setColor(Color.BLACK);
+			graphics.drawString("press [A]", 800, 740);
 		}
 
 		if(timerRect.x > 250 && timerRect.x <= 320) {
 			graphics.setColor(Color.MAGENTA);
 			graphics.drawString(addedGirlChar, 60, 650);
+			
+			graphics.setFont(fontKey);
+			graphics.setColor(Color.BLACK);
+			graphics.drawString("press [A]", 800, 740);
 		}
 
 		if(timerRect.x > 320 && timerRect.x <= 390) {
 			graphics.setColor(Color.GREEN);
 			graphics.drawString(addedPGChar, 60, 650);
+			
+			graphics.setFont(fontKey);
+			graphics.setColor(Color.BLACK);
+			graphics.drawString("press [A]", 800, 740);
 		}
 
 		if(timerRect.x > 390 && timerRect.x <= 450) {
 			graphics.setColor(Color.MAGENTA);
 			graphics.drawString(addedGirlChar, 60, 650);
+			
+			graphics.setFont(fontKey);
+			graphics.setColor(Color.BLACK);
+			graphics.drawString("press [A]", 800, 740);
 		}
 
 		if(timerRect.x > 450 && timerRect.x <= 510) {
 			graphics.setColor(Color.GREEN);
 			graphics.drawString(addedPGChar, 60, 650);
+			
+			graphics.setFont(fontKey);
+			graphics.setColor(Color.BLACK);
+			graphics.drawString("press [A]", 800, 740);
 		}
 
 		if(timerRect.x > 510 && timerRect.x <= 540) {
 			graphics.setColor(Color.MAGENTA);
 			graphics.drawString(addedGirlChar, 60, 650);
+			
+			graphics.setFont(fontKey);
+			graphics.setColor(Color.BLACK);
+			graphics.drawString("press [A]", 800, 740);
 		}
 
 		if(timerRect.x > 540 && timerRect.x <= 610) {
 			graphics.setColor(Color.GREEN);
 			graphics.drawString(addedPGChar, 60, 650);
+			
+			graphics.setFont(fontKey);
+			graphics.setColor(Color.BLACK);
+			graphics.drawString("press [A]", 800, 740);
 		}
 
 		if(timerRect.x >= 620) {

@@ -24,6 +24,7 @@ public class LailaRatnaScene {
 	private Font fontKey = new Font("arial", Font.PLAIN, 20);
 
 	public Player player;
+	private Audio sfx;
 
 	// dialog
 	private String[] laila =
@@ -42,7 +43,7 @@ public class LailaRatnaScene {
 				"Scratch that, we have bigger problems going on.",
 				"Yes! if Spain wins, DR. Francisco promises, Brunei will be ours!",
 				"*saw you* HEY! WHO ARE YOU!"
-				
+
 		};
 
 	private String key = "press [A]";
@@ -58,7 +59,7 @@ public class LailaRatnaScene {
 
 	private boolean beginratna = false;
 	private boolean beginlaila = false;
-	
+
 	private Audio bgm;
 
 	public LailaRatnaScene(Game game) {
@@ -72,6 +73,8 @@ public class LailaRatnaScene {
 		// TIMER RECT
 		timerRect = new Rectangle(0, 0, 10, 32);
 		timerRect.generateGraphics(1, 0xffffff);
+		
+		sfx = new Audio("/sfx/dialog.mp3");
 	}
 
 	public void update(Game game) {
@@ -91,6 +94,7 @@ public class LailaRatnaScene {
 				if(addedlailaCharCounter <= lailaChar.length-1) {
 					addedlailaChar = addedlailaChar + lailaChar[addedlailaCharCounter];
 					addedlailaCharCounter++;
+					sfx.play();
 				}
 			}
 
@@ -106,6 +110,7 @@ public class LailaRatnaScene {
 				if(addedratnaCharCounter <= ratnaChar.length-1) {
 					addedratnaChar = addedratnaChar + ratnaChar[addedratnaCharCounter];
 					addedratnaCharCounter++;
+					sfx.play();
 				} else {
 					beginlaila = false;
 				}
@@ -126,12 +131,13 @@ public class LailaRatnaScene {
 				if(addedlailaCharCounter <= lailaChar.length-1) {
 					addedlailaChar = addedlailaChar + lailaChar[addedlailaCharCounter];
 					addedlailaCharCounter++;
+					sfx.play();
 				}
 				else {
 					beginratna = false;
 				}
 			}
-			
+
 			if(timerRect.x > 160 && timerRect.x <= 220) {
 				// ANIMATING DIALOGS - ratna
 				char ratnaChar[] = ratna[r].toCharArray();
@@ -144,13 +150,14 @@ public class LailaRatnaScene {
 				if(addedratnaCharCounter <= ratnaChar.length-1) {
 					addedratnaChar = addedratnaChar + ratnaChar[addedratnaCharCounter];
 					addedratnaCharCounter++;
+					sfx.play();
 				} else {
 					beginlaila = false;
 				}
 
 
 			}
-			
+
 			if(timerRect.x > 220 && timerRect.x <= 280) {
 				// ANIMATING DIALOGS - laila
 				char lailaChar[] = laila[l].toCharArray();
@@ -163,12 +170,13 @@ public class LailaRatnaScene {
 				if(addedlailaCharCounter <= lailaChar.length-1) {
 					addedlailaChar = addedlailaChar + lailaChar[addedlailaCharCounter];
 					addedlailaCharCounter++;
+					sfx.play();
 				}
 				else {
 					beginratna = false;
 				}
 			}
-			
+
 			if(timerRect.x > 280 && timerRect.x <= 350) {
 				// ANIMATING DIALOGS - ratna
 				char ratnaChar[] = ratna[r].toCharArray();
@@ -181,12 +189,13 @@ public class LailaRatnaScene {
 				if(addedratnaCharCounter <= ratnaChar.length-1) {
 					addedratnaChar = addedratnaChar + ratnaChar[addedratnaCharCounter];
 					addedratnaCharCounter++;
+					sfx.play();
 				} else {
 					beginlaila = false;
 				}
 
 			}
-			
+
 			if(timerRect.x > 350 && timerRect.x <= 420) {
 				// ANIMATING DIALOGS - laila
 				char lailaChar[] = laila[l].toCharArray();
@@ -199,12 +208,13 @@ public class LailaRatnaScene {
 				if(addedlailaCharCounter <= lailaChar.length-1) {
 					addedlailaChar = addedlailaChar + lailaChar[addedlailaCharCounter];
 					addedlailaCharCounter++;
+					sfx.play();
 				}
 				else {
 					beginratna = false;
 				}
 			}
-			
+
 			if(timerRect.x > 420 && timerRect.x <= 470) {
 				// ANIMATING DIALOGS - ratna
 				char ratnaChar[] = ratna[r].toCharArray();
@@ -217,12 +227,13 @@ public class LailaRatnaScene {
 				if(addedratnaCharCounter <= ratnaChar.length-1) {
 					addedratnaChar = addedratnaChar + ratnaChar[addedratnaCharCounter];
 					addedratnaCharCounter++;
+					sfx.play();
 				} else {
 					beginlaila = false;
 				}
 
 			}
-			
+
 			if(timerRect.x > 470 && timerRect.x <= 520) {
 				// ANIMATING DIALOGS - laila
 				char lailaChar[] = laila[l].toCharArray();
@@ -234,15 +245,20 @@ public class LailaRatnaScene {
 				if(addedlailaCharCounter <= lailaChar.length-1) {
 					addedlailaChar = addedlailaChar + lailaChar[addedlailaCharCounter];
 					addedlailaCharCounter++;
+					sfx.play();
 				}
 			}
-			
+
 
 
 			if(timerRect.x >= 10) {
 				KeyBoardListener keyListener = game.getKeyListener();
 
 				if(keyListener.a()) {
+					Game.State = Game.STATE.LAILARATNA;
+				}
+
+				if(timerRect.x >= 530) {
 					Game.State = Game.STATE.LAILARATNA;
 				}
 
@@ -263,7 +279,7 @@ public class LailaRatnaScene {
 		if(timerRect.x > 10) {
 			renderer.renderRectangle(rect, xZoom, yZoom, true);
 		}
-		
+
 		renderer.renderRectangle(timerRect, xZoom, yZoom, false);
 
 	}
@@ -293,7 +309,7 @@ public class LailaRatnaScene {
 			graphics.setColor(Color.BLUE);
 			graphics.drawString(addedlailaChar, 70, 650);
 		}
-		
+
 		if(timerRect.x > 160 && timerRect.x <= 220) {
 			graphics.setColor(Color.RED);
 			graphics.drawString(addedratnaChar, 70, 650);
@@ -303,12 +319,12 @@ public class LailaRatnaScene {
 			graphics.drawString(key, 800, 740);
 
 		}
-		
+
 		if(timerRect.x > 220 && timerRect.x <= 280) {
 			graphics.setColor(Color.BLUE);
 			graphics.drawString(addedlailaChar, 70, 650);
 		}
-		
+
 		if(timerRect.x > 280 && timerRect.x <= 350) {
 			graphics.setColor(Color.RED);
 			graphics.drawString(addedratnaChar, 70, 650);
@@ -317,12 +333,12 @@ public class LailaRatnaScene {
 			graphics.setColor(Color.BLACK);
 			graphics.drawString(key, 800, 740);
 		}
-		
+
 		if(timerRect.x > 350 && timerRect.x <= 420) {
 			graphics.setColor(Color.BLUE);
 			graphics.drawString(addedlailaChar, 70, 650);
 		}
-		
+
 		if(timerRect.x > 420 && timerRect.x <= 470) {
 			graphics.setColor(Color.RED);
 			graphics.drawString(addedratnaChar, 70, 650);
@@ -331,7 +347,7 @@ public class LailaRatnaScene {
 			graphics.setColor(Color.BLACK);
 			graphics.drawString(key, 800, 740);
 		}
-		
+
 		if(timerRect.x > 470 && timerRect.x <= 520) {
 			graphics.setColor(Color.BLUE);
 			graphics.drawString(addedlailaChar, 70, 650);

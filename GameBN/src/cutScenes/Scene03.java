@@ -162,7 +162,7 @@ public class Scene03 {
 
 
 		//DIALOGS
-		if(timerRect.x > 10 && timerRect.x <= 150) {
+		if(timerRect.x > 10 && timerRect.x <= 80) {
 			// ANIMATING DIALOGS - PG Bendahara
 			char pgChar[] = pgDialog[pg].toCharArray();
 			if(beginPG == false) {
@@ -192,7 +192,7 @@ public class Scene03 {
 			}
 		}
 		
-		if(timerRect.x >= 160) {
+		if(timerRect.x >= 80) {
 			Game.State = Game.STATE.SCENE05;
 		}
 
@@ -209,7 +209,7 @@ public void render(RenderHandler renderer, Game game, Player player, int xZoom, 
 	renderer.renderSprite(boyAni, boyRect.x, boyRect.y, xZoom, yZoom, false);
 	renderer.renderSprite(pbsAni, pbsRect.x, pbsRect.y, xZoom, yZoom, false);
 
-	if(timerRect.x > 10 && timerRect.x <= 150) {
+	if(timerRect.x > 10 && timerRect.x <= 80) {
 		renderer.renderRectangle(rect, xZoom, yZoom, true);
 	}
 }
@@ -218,7 +218,7 @@ public void render(Graphics graphics) {
 	graphics.setFont(f);
 	graphics.setColor(Color.GREEN);
 
-	if(timerRect.x > 10 && timerRect.x <= 150) {
+	if(timerRect.x > 10 && timerRect.x <= 80) {
 		graphics.drawString(addedPGChar, 60, 650);
 
 		graphics.setFont(fontKey);

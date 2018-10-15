@@ -56,6 +56,7 @@ import menuComponents.CharacterInfo;
 import menuComponents.CharacterInfoFrancisco;
 import menuComponents.CharacterInfoLaila;
 import menuComponents.CreateName;
+import menuComponents.Exit;
 import menuComponents.Gender;
 import menuComponents.Help;
 import menuComponents.Load;
@@ -137,7 +138,7 @@ public class Game extends JFrame implements Runnable {
 	public CharacterInfoLaila Cinfolaila;
 	public CharacterInfoFrancisco Cinfofrancisco;
 	private battleWon win;
-
+	public Exit exit;
 	private Font font;
 
 	private Rectangle dialogRect;
@@ -180,7 +181,8 @@ public class Game extends JFrame implements Runnable {
 		CINFOFRANCISCO,
 		WIN,
 		ENDING,
-		CREDIT
+		CREDIT,
+		EXIT
 	};
 
 	public static STATE State = STATE.MENU;
@@ -249,23 +251,23 @@ public class Game extends JFrame implements Runnable {
 		vilAud = new Audio("/bgm/inGame.mp3");
 
 		//load SDK GUI
-		GUIButton[] buttons = new GUIButton[tiles.size()];
-		Sprite[] tileSprites = tiles.getSprites();
-
-		for(int i = 0; i < buttons.length; i++) {
-			Rectangle tileRectangle = new Rectangle(0, i*(16*xZoom), 16*xZoom, 16*yZoom);
-
-			buttons[i] = new SDKButton(this, i, tileSprites[i], tileRectangle);
-		}
-
-		GUI gui = new GUI(buttons, 5, 5, true);
+//		GUIButton[] buttons = new GUIButton[tiles.size()];
+//		Sprite[] tileSprites = tiles.getSprites();
+//
+//		for(int i = 0; i < buttons.length; i++) {
+//			Rectangle tileRectangle = new Rectangle(0, i*(16*xZoom), 16*xZoom, 16*yZoom);
+//
+//			buttons[i] = new SDKButton(this, i, tileSprites[i], tileRectangle);
+//		}
+//
+//		GUI gui = new GUI(buttons, 5, 5, true);
 
 
 		// load objects
-		objects = new GameObject[2];
+		objects = new GameObject[1];
 		player = new Player(boyAni, xZoom, yZoom);
 		objects[0] = player;
-		objects[1] = gui;
+//		objects[1] = gui;
 
 		//new java class load
 		menu = new Menu(this);
@@ -279,6 +281,7 @@ public class Game extends JFrame implements Runnable {
 		Cinfo = new CharacterInfo(this);
 		Cinfolaila = new CharacterInfoLaila(this);
 		Cinfofrancisco = new CharacterInfoFrancisco(this);
+		exit = new Exit(this);
 		
 		// CUTSCENES
 		scene01 = new Scene01(this);
@@ -298,6 +301,7 @@ public class Game extends JFrame implements Runnable {
 		bnWin = new BruneiWon(this);
 		end = new Ending(this);
 		credit = new Credit(this);
+		
 
 		//BATTLE
 		dummy = new dummyBattle(this);
@@ -314,8 +318,8 @@ public class Game extends JFrame implements Runnable {
 		// add listeners
 		canvas.addKeyListener(keyListener);
 		canvas.addFocusListener(keyListener);
-		canvas.addMouseListener(mouseListener);
-		canvas.addMouseMotionListener(mouseListener);
+//		canvas.addMouseListener(mouseListener);
+//		canvas.addMouseMotionListener(mouseListener);
 
 		addComponentListener(new ComponentListener() {
 
@@ -360,14 +364,16 @@ public class Game extends JFrame implements Runnable {
 
 			}		
 			gamePlay.update(this);
-
+			
 			if(!playedGameMusic) {
 				menu.getAud().stop();
 				fransShip.bgm.stop();
+				
+				
 				vilAud.play();
 				playedGameMusic = true;
 			}
-
+			
 		}
 
 		if(State == STATE.MENU) {
@@ -458,34 +464,34 @@ public class Game extends JFrame implements Runnable {
 		}
 
 		if(State == STATE.LRS) {
+				menu.getAud().stop();
+				vilAud.stop();
+				
+				playedGameMusic = false;
+			
 			LR.update(this);
 		}
 		
 		if(State == STATE.FRANSHIP) {
-			if(!playedGameMusic) {
 				menu.getAud().stop();
 				vilAud.stop();
 				
 				fransShip.bgm.play();
 				playedGameMusic = true;
-			}
 			
 			fransShip.update(this);
 		}
 		
 		if(State == STATE.FRANSARRIVE) {
-			if(!playedGameMusic) {
 				menu.getAud().stop();
 				vilAud.stop();
-				
-				fransArrive.bgm.play();
-				playedGameMusic = true;
-			}
-			
-			fransArrive.update(this);
+
+				fransArrive.update(this);
 		}
 		
 		if(State == STATE.FRANSDEFEAT) {
+			menu.getAud().stop();
+			vilAud.stop();
 			fransDefeat.update(this);
 		}
 		
@@ -506,12 +512,10 @@ public class Game extends JFrame implements Runnable {
 		}
 
 		if(State == STATE.LAILARATNA) {
-			if(!playedGameMusic) {
-				menu.getAud().stop();
-				vilAud.stop();
-				
-				playedGameMusic = true;
-			}
+			menu.getAud().stop();
+			vilAud.stop();
+			
+			playedGameMusic = false;
 			
 			lailaRatna.update(this);
 		}
@@ -521,13 +525,6 @@ public class Game extends JFrame implements Runnable {
 		}
 		
 		if(State == STATE.WIN) {
-			if(!playedGameMusic) {
-				menu.getAud().stop();
-				vilAud.stop();
-				
-				win.bgm.play();
-				playedGameMusic = true;
-			}
 			
 			win.update(this);
 		}
@@ -538,6 +535,10 @@ public class Game extends JFrame implements Runnable {
 
 		if(State == STATE.HOSP) {
 			hosp.update(this);
+		}
+		
+		if(State == STATE.EXIT) {
+			exit.update(this);
 		}
 
 	}
@@ -555,37 +556,37 @@ public class Game extends JFrame implements Runnable {
 		}
 	}
 
-	public void handleCTRL(boolean[] keys) {
-		if(keys[KeyEvent.VK_S]) {
-			map.saveMap();
-		}
-	}
-
-	//set tile
-	public void leftClick(int x, int y) { 
-		Rectangle mouseRect = new Rectangle(x, y, 1, 1);
-		boolean stoppedChecking = false;
-
-		for(int i = 0; i < objects.length; i++) {
-			if(!stoppedChecking) {
-				stoppedChecking = objects[i].handleMouseClick(mouseRect, renderer.getCamera(), xZoom, yZoom);
-			}
-
-		}
-
-		if(!stoppedChecking) {
-			x = (int) Math.floor((x + renderer.getCamera().x) / (16.0 * xZoom));
-			y = (int) Math.floor((y + renderer.getCamera().y) / (16.0 * yZoom));
-			map.setTile(selectedLayer, x, y, selectedTileID);
-		}
-	}
-
-	//remove tile 
-	public void rightClick(int x, int y) {
-		x = (int) Math.floor((x + renderer.getCamera().x) / (16.0 * xZoom));
-		y = (int) Math.floor((y + renderer.getCamera().y) / (16.0 * yZoom));
-		map.removeTile(selectedLayer, x, y);
-	}
+//	public void handleCTRL(boolean[] keys) {
+//		if(keys[KeyEvent.VK_S]) {
+//			map.saveMap();
+//		}
+//	}
+//
+//	//set tile
+//	public void leftClick(int x, int y) { 
+//		Rectangle mouseRect = new Rectangle(x, y, 1, 1);
+//		boolean stoppedChecking = false;
+//
+//		for(int i = 0; i < objects.length; i++) {
+//			if(!stoppedChecking) {
+//				stoppedChecking = objects[i].handleMouseClick(mouseRect, renderer.getCamera(), xZoom, yZoom);
+//			}
+//
+//		}
+//
+//		if(!stoppedChecking) {
+//			x = (int) Math.floor((x + renderer.getCamera().x) / (16.0 * xZoom));
+//			y = (int) Math.floor((y + renderer.getCamera().y) / (16.0 * yZoom));
+//			map.setTile(selectedLayer, x, y, selectedTileID);
+//		}
+//	}
+//
+//	//remove tile 
+//	public void rightClick(int x, int y) {
+//		x = (int) Math.floor((x + renderer.getCamera().x) / (16.0 * xZoom));
+//		y = (int) Math.floor((y + renderer.getCamera().y) / (16.0 * yZoom));
+//		map.removeTile(selectedLayer, x, y);
+//	}
 
 	public void render() {
 
@@ -802,7 +803,10 @@ public class Game extends JFrame implements Runnable {
 			renderer.render(graphics);
 			Cinfofrancisco.render(graphics);
 		}
-
+		
+		if(State == STATE.EXIT) {
+			exit.render(graphics);
+		}
 
 		graphics.dispose();
 		bufferStrategy.show();

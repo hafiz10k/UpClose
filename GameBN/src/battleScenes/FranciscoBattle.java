@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -136,6 +137,11 @@ public class FranciscoBattle {
 
 		}
 	}
+	
+	public static int enemyATKRange(int min, int max) {
+		Random random = new Random();
+		return random.nextInt((max - min) + 1) + min;
+	}
 
 	public void enemyHitPlayer(int enemyATK) {
 		if(playerDead) {
@@ -228,7 +234,7 @@ public class FranciscoBattle {
 					player.EXP = 100;
 				}
 
-				game.State = STATE.WIN;
+				game.State = STATE.FRANSDEFEAT;
 			}
 
 			Thread.sleep(150);
@@ -249,6 +255,8 @@ public class FranciscoBattle {
 
 			TimerTask task = new TimerTask() {
 				public void run() {
+					enemyHitPlayer(enemyATKRange(10, 25));
+					
 					enemyAttacking = true;
 					playerAttacking = false;
 				}
@@ -302,7 +310,7 @@ public class FranciscoBattle {
 		graphics.setColor(Color.WHITE);
 		graphics.drawString(enemyName, 650, 50);
 		graphics.drawString("HP: " + enemyHP + "/" + enemyMaxHP, 650, 80);
-		graphics.drawString("ATK: " + enemyAttack, 650, 110);
+		graphics.drawString("ATK: " + enemyATKRange(10, 25), 650, 110);
 
 
 		if(game.name.fullName != null && !game.name.fullName.isEmpty()) {
@@ -313,7 +321,7 @@ public class FranciscoBattle {
 		}
 
 		graphics.drawString(playerName, 30, 400);
-		graphics.drawString("HP: " + player.HP, 30, 430);
+		graphics.drawString("HP: " + player.HP + "/" + player.getMaxHP(), 30, 430);
 		graphics.drawString("ATK: " + playerAttack, 30, 460);
 
 		if(playerAttacking == true) {

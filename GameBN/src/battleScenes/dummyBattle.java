@@ -82,8 +82,7 @@ public class dummyBattle {
 		charInfo = charInfoSheet.getSprite(0, 0);
 
 		// dummy stats
-		enemyHP = enemyMaxHP = 20;
-		//		enemyAttack = 1;
+		enemyHP = enemyMaxHP = 10;
 
 		// load player stats
 		player = game.player;
@@ -231,7 +230,13 @@ public class dummyBattle {
 		renderer.renderSprite(enemyInfo, 650, 0, 5, 4, true);
 		renderer.renderRectangle(keyRect, xZoom, yZoom, true);
 		
+		if(currentChoice == 0) {
+			renderer.renderRectangle(rect, xZoom, yZoom, true);
+		}
 		if(currentChoice == 1) {
+			renderer.renderRectangle(rect, xZoom, yZoom, true);
+		}
+		if(currentChoice == 2) {
 			renderer.renderRectangle(rect, xZoom, yZoom, true);
 		}
 	}
@@ -275,10 +280,20 @@ public class dummyBattle {
 			graphics.setColor(Color.RED);
 			graphics.drawString("dummy CAN'T attack", 550, 220);
 		}
+		
+		if(currentChoice == 0) {
+			graphics.setColor(Color.BLACK);
+			graphics.drawString("ATTACK: CLICK TO REDUCE ENEMY HP!", 70, 580);
+		}
 
 		if(currentChoice == 1) {
 			graphics.setColor(Color.BLACK);
 			graphics.drawString("This is only a dummy, no ATK points", 70, 580);
+		}
+		
+		if(currentChoice == 2) {
+			graphics.setColor(Color.BLACK);
+			graphics.drawString("STATS: CLICK TO DISPLAY PLAYER STATS", 70, 580);
 		}
 
 		if(dummyDead == true) {

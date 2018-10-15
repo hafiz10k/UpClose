@@ -70,7 +70,7 @@ public class Credit {
 		graphics.setColor(Color.RED);
 		graphics.drawString("DESIGNER: ", rect.x + 100 , rect.y + 350);
 		
-		graphics.drawString("CHONG ZHEN JYE ", rect.x + 100 , rect.y + 400);
+		graphics.drawString("CHONG ZHENG JYE ", rect.x + 100 , rect.y + 400);
 		graphics.drawString("HAJAH HUWAIDA", rect.x + 100 , rect.y + 450);
 		graphics.drawString("HERNIE ABDUL WAHAB ", rect.x + 100 , rect.y + 500);
 		

@@ -3,7 +3,6 @@ package menuComponents;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -15,7 +14,7 @@ import entity.SpriteSheet;
 import game.Game;
 import handler.KeyBoardListener;
 
-public class retryGame implements MenuObject{
+public class Exit implements MenuObject{
 	
 	private Font titleFont;
 	private Color titleColor;
@@ -38,7 +37,7 @@ public class retryGame implements MenuObject{
 				"No"
 		};
 	
-	public retryGame(Game game) {
+	public Exit(Game game) {
 		titleFont = new Font("Broadway", Font.BOLD, 80);
 		font = new Font("Arial", Font.PLAIN, 40);
 		
@@ -47,13 +46,13 @@ public class retryGame implements MenuObject{
 
 	@Override
 	public void render(Graphics graphics) {
-		graphics.setFont(titleFont);
-		graphics.setColor(Color.RED);
-		graphics.drawString("PLAYER IS DEAD :(", 90, 120);
+//		graphics.setFont(titleFont);
+//		graphics.setColor(Color.RED);
+//		graphics.drawString("PLAYER IS DEAD :(", 90, 120);
 		
 		graphics.setFont(f);
 		graphics.setColor(Color.WHITE);
-		graphics.drawString("Retry game?", 330, 300);
+		graphics.drawString("Exit Game?", 330, 300);
 
 		
 		graphics.setFont(font);
@@ -136,46 +135,12 @@ public class retryGame implements MenuObject{
 	private void select(Game game) {
 
 		if(loadChoice == 0) {
-			System.out.println(nameLoad);
-			System.out.println(genderLoad);
-			if(genderLoad == 2) {
-				//male
-				BufferedImage playerSheetImage = game.loadImage("/mainAnimated.png");
-				SpriteSheet boySheet = new SpriteSheet(playerSheetImage);
-				boySheet.loadSprites(24, 32);
-
-				AnimatedSprite boyAni = new AnimatedSprite(boySheet, 10);
-
-				game.player.changeSprite(boyAni);
-				game.player.playerRectangle.x = playerPosX;
-				game.player.playerRectangle.y = playerPosY;
-				game.player.HP = playerHP;
-				game.player.EXP = playerEXP;
-
-				Game.State = Game.STATE.GAME;
-			} 
-			else {
-				// female
-				BufferedImage girlSheetImage = game.loadImage("/girl-main-anim.png");
-				SpriteSheet girlSheet = new SpriteSheet(girlSheetImage);
-				girlSheet.loadSprites(24, 32);
-
-				AnimatedSprite girlAni = new AnimatedSprite(girlSheet, 10);
-				game.player.changeSprite(girlAni);
-				game.player.playerRectangle.x = playerPosX;
-				game.player.playerRectangle.y = playerPosY;
-				Game.State = Game.STATE.GAME;
-			}
-			
-
+			System.exit(1);
 		}
-
 		if(loadChoice == 1) {
-			Game.State = Game.STATE.MENU;
+			Game.State = Game.STATE.GAME;
 		}
 
 
 	}
-
-
-}
+	}

@@ -23,9 +23,9 @@ public class KeyBoardListener implements KeyListener, FocusListener{
 		if(keyCode < keys.length) {
 			keys[keyCode] = true;
 		}
-		if(keys[KeyEvent.VK_CONTROL]) {
-			game.handleCTRL(keys);
-		}
+//		if(keys[KeyEvent.VK_CONTROL]) {
+//			game.handleCTRL(keys);
+//		}
 
 	}
 

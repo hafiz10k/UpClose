@@ -145,7 +145,7 @@ public class Scene04 {
 			}
 
 			//DIALOGS
-			if(timerRect.x > 10 && timerRect.x <= 150) {
+			if(timerRect.x > 10 && timerRect.x <= 80) {
 
 				// ANIMATING DIALOGS - BOY
 				char pgChar[] = pgDialog[pg].toCharArray();
@@ -191,7 +191,7 @@ public class Scene04 {
 		renderer.renderSprite(girlAni, girlRect.x, girlRect.y, xZoom, yZoom, false);
 		renderer.renderSprite(pbsAni, pbsRect.x, pbsRect.y, xZoom, yZoom, false);
 
-		if(timerRect.x > 10 && timerRect.x <= 150) {
+		if(timerRect.x > 10 && timerRect.x <= 80) {
 			renderer.renderRectangle(rect, xZoom, yZoom, true);
 			}
 	}
@@ -200,7 +200,7 @@ public class Scene04 {
 		graphics.setFont(f);
 		graphics.setColor(Color.GREEN);
 
-		if(timerRect.x > 10 && timerRect.x <= 150) {
+		if(timerRect.x > 10 && timerRect.x <= 80) {
 			graphics.drawString(addedPGChar, 60, 650);
 			
 			graphics.setFont(fontKey);

@@ -11,6 +11,7 @@ import entity.Rectangle;
 import entity.SpriteSheet;
 import game.Game;
 import game.Game.STATE;
+import handler.Audio;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
 
@@ -46,6 +47,8 @@ public class Gender implements MenuObject{
 				"Boy",
 				"Girl"
 		};
+	
+	private Audio sfx;
 
 	public Gender(Game game) {
 
@@ -75,6 +78,8 @@ public class Gender implements MenuObject{
 			titleFont = new Font("Broadway", Font.BOLD, 50);
 
 			font = new Font("Arial", Font.BOLD, 35);
+			
+			sfx = new Audio("/sfx/menu_click.mp3");
 
 		}
 		catch (Exception e) {
@@ -131,6 +136,8 @@ public class Gender implements MenuObject{
 
 			if(keyListener.left()) {
 				loading = true;
+				sfx.play();
+				
 				loadChoice --;
 				if(loadChoice == -1)
 				{
@@ -140,6 +147,8 @@ public class Gender implements MenuObject{
 
 			if(keyListener.right()) {
 				loading = true;
+				sfx.play();
+				
 				loadChoice ++;
 				if(loadChoice == gen.length)
 				{
@@ -149,6 +158,8 @@ public class Gender implements MenuObject{
 			}
 			if(keyListener.enter()) {
 				loading = true;
+				sfx.play();
+				
 				if(loadChoice == 0) {
 					genderchosen = 2;
 					//male
