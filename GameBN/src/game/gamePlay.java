@@ -69,6 +69,16 @@ public class gamePlay {
 				} 
 
 			}
+			
+			if(game.player.getRectangle().x >= 7335 && game.player.getRectangle().x <= 7425 && game.player.getRectangle().y == 445) {
+				if(keyListener.a()) {
+					game.player.getRectangle().x = 7600;
+					game.player.getRectangle().y = 500;
+					
+					Game.State = Game.STATE.FRANSHIP;
+				}
+				
+			}
 
 			if(game.player.getRectangle().x >= 2139 && game.player.getRectangle().x <= 2184 && game.player.getRectangle().y >= -225 && game.player.getRectangle().y <= -145) {
 				if(keyListener.a()) {
@@ -114,17 +124,13 @@ public class gamePlay {
 			renderer.renderSprite(dialogBtn, 40, 600, xZoom, yZoom, true);
 		}
 		
+		if(player.getRectangle().x >= 7335 && player.getRectangle().x <= 7425 && player.getRectangle().y == 445) {
+			renderer.renderSprite(dialogBtn, 40, 600, xZoom, yZoom, true);
+		}
+		
 		if(player.getRectangle().x >= 7235 && player.getRectangle().x <= 7335 && player.getRectangle().y >= -140 && player.getRectangle().y <= -35) {
 			renderer.renderSprite(dialogBtn, 40, 600, xZoom, yZoom, true);
 		}
-	}
-
-	public void render(Graphics graphics, Game game) {
-//				graphics.setFont(f);
-//				graphics.setColor(Color.WHITE);
-//				graphics.drawString(game.load.nameLoad, 10, 60);
-//				graphics.drawString(playerHP, 10, 100);
-//				graphics.drawString(playerLVL, 10, 160);
 	}
 
 

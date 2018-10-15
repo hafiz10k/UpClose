@@ -13,6 +13,8 @@ import entity.Rectangle;
 import entity.Sprite;
 import entity.SpriteSheet;
 import game.Game;
+import game.Game.STATE;
+import handler.Audio;
 import handler.KeyBoardListener;
 import handler.RenderHandler;
 
@@ -38,12 +40,20 @@ public class FranciscoBattle {
 	private int enemyHP;
 	private int enemyMaxHP;
 	private int enemyAttack;
-	private boolean dead = false;
+
+
+	public boolean enemyDead = false;
+	public boolean playerDead = false;
 
 	//player
 	private String playerName;
 	private int playerAttack;
 	private int playerEXP;
+
+	private boolean playerAttacking = false;
+	private boolean enemyAttacking = false;
+
+	public int achievedEXP;
 
 	private Player player;
 	private Game game;
@@ -52,14 +62,17 @@ public class FranciscoBattle {
 	private Font fontN;
 	private Font deadFont;
 	private Font fontKey;
-	
-	private Rectangle timerRect;
+
 	private Rectangle keyRect;
+	private Rectangle timerRect;
+	private Rectangle rect;
+
+	private Audio sfx;
 
 	public FranciscoBattle(Game game) {
-		
+
 		this.game = game;
-		
+
 		bg = game.loadImage("/franciscoBattle.png");
 
 		BufferedImage dfdsImage = game.loadImage("/dfds-ani.png");
@@ -67,7 +80,7 @@ public class FranciscoBattle {
 		dfdsSheet.loadSprites(24, 40);
 
 		dfds = new AnimatedSprite(dfdsSheet, speed);
-		
+
 		BufferedImage enemyInfoImg = game.loadImage("/enemy_info.png");
 		SpriteSheet enemyInfoSheet = new SpriteSheet(enemyInfoImg);
 		enemyInfoSheet.loadSprites(64, 40);
@@ -82,13 +95,11 @@ public class FranciscoBattle {
 
 		//enemy stats
 		player = game.player;
-		playerName = game.name.getName();
-
-		game.player.exp(50);
-		playerAttack = game.player.getAttack();
 
 		enemyAttack = 25;
 		enemyHP = enemyMaxHP = 100;
+
+		achievedEXP = 50;
 
 		keyRect = new Rectangle(0, 650, 400, 400);
 		keyRect.generateGraphics(0x000000);
@@ -98,28 +109,55 @@ public class FranciscoBattle {
 		deadFont = new Font("Arial", Font.BOLD, 60);
 		fontKey = new Font("Arial", Font.PLAIN, 20);
 
+		// dialog
+		rect = new Rectangle(40, 550, 300, 30);
+		rect.generateGraphics(0xeff0f1);
+
 		// TIMER RECT
 		timerRect = new Rectangle(0, 0, 10, 32);
 		timerRect.generateGraphics(1, 0xffffff);
+
+		sfx = new Audio("/sfx/menu_click.mp3");
 	}
 
-	public void hit(int damage) {
-		if(dead) {
-			return;
+	public void playerHitEnemy(int playerATK) {
+		if(enemyDead) {
+			return;			
 		}
-		enemyHP -= damage;
+
+		enemyHP -= playerATK;
 
 		if(enemyHP < 0) {
 			enemyHP = 0;
 		}
 
 		if(enemyHP == 0) {
-			dead = true;
+			enemyDead = true;
+
 		}
 	}
 
+	public void enemyHitPlayer(int enemyATK) {
+		if(playerDead) {
+			return;
+		}
+		player.HP -= enemyATK;
+
+		if(player.HP < 0) {
+			player.HP = 0;
+		}
+
+		if(player.HP == 0) {
+			playerDead = true;
+
+		}
+	}
 	public void update(Game game) {
 		timerRect.x++;
+
+		player.exp(game.player.EXP);
+		playerAttack = game.player.getAttack();
+
 		try {
 
 			KeyBoardListener keyListener = game.getKeyListener();
@@ -128,6 +166,7 @@ public class FranciscoBattle {
 			if(keyListener.enter()) {
 				didMove = true;
 				select();
+				sfx.play();
 
 			}
 
@@ -138,6 +177,7 @@ public class FranciscoBattle {
 				{
 					currentChoice = options.length -1;
 				}
+				sfx.play();
 			}
 
 			if(keyListener.right()) {
@@ -147,6 +187,7 @@ public class FranciscoBattle {
 				{
 					currentChoice = 0;
 				}
+				sfx.play();
 			}
 			if(didMove) {
 				Thread.sleep(150);
@@ -175,6 +216,21 @@ public class FranciscoBattle {
 
 				}
 			}
+			
+			if(enemyDead == true) {
+				playerAttacking = false;
+				enemyAttacking = false;
+
+				player.EXP += achievedEXP;
+				System.out.println(player.EXP);
+
+				if(player.EXP >= 100) {
+					player.EXP = 100;
+				}
+
+				game.State = STATE.WIN;
+			}
+
 			Thread.sleep(150);
 
 		} catch (InterruptedException e) {
@@ -186,13 +242,17 @@ public class FranciscoBattle {
 		if(currentChoice == 0)
 		{
 			// attack	
-			this.hit(playerAttack);
-			System.out.println(playerAttack + ", " + "enemy: " + enemyHP);
+			playerHitEnemy(playerAttack);
+
+			playerAttacking = true;
+			enemyAttacking = false;
 
 			TimerTask task = new TimerTask() {
 				public void run() {
-					System.out.println(enemyAttack + ", " + "player: " + player.HP);
+					enemyAttacking = true;
+					playerAttacking = false;
 				}
+
 			};
 			Timer timer = new Timer();
 			timer.schedule(task, 1500);
@@ -200,7 +260,6 @@ public class FranciscoBattle {
 		if(currentChoice == 1)
 		{
 			// check
-			Game.State = Game.STATE.GAME;
 
 		}
 		if(currentChoice == 2)
@@ -218,6 +277,10 @@ public class FranciscoBattle {
 		renderer.renderSprite(charInfo, 0, 350, 5, 4, true);
 		renderer.renderSprite(enemyInfo, 610, 0, 6, 4, true);
 		renderer.renderRectangle(keyRect, xZoom, yZoom, true);
+
+		if(currentChoice == 1) {
+			renderer.renderRectangle(rect, xZoom, yZoom, true);
+		}
 	}
 
 	public void render(Graphics graphics) {
@@ -234,13 +297,13 @@ public class FranciscoBattle {
 			}
 			graphics.drawString(options[i], 150 + i * 300 , 700);
 		}
-		
+
 		graphics.setFont(fontN);
 		graphics.setColor(Color.WHITE);
 		graphics.drawString(enemyName, 650, 50);
 		graphics.drawString("HP: " + enemyHP + "/" + enemyMaxHP, 650, 80);
 		graphics.drawString("ATK: " + enemyAttack, 650, 110);
-		
+
 
 		if(game.name.fullName != null && !game.name.fullName.isEmpty()) {
 			playerName = game.name.getName();
@@ -253,7 +316,20 @@ public class FranciscoBattle {
 		graphics.drawString("HP: " + player.HP, 30, 430);
 		graphics.drawString("ATK: " + playerAttack, 30, 460);
 
-		if(dead == true) {
+		if(playerAttacking == true) {
+			graphics.drawString("Player attacked!", 100, 280);
+		}
+		if(enemyAttacking == true) {
+			graphics.setColor(Color.BLACK);
+			graphics.drawString("enemy attacked!", 600, 220);
+		}
+
+		if(currentChoice == 1) {
+			graphics.setColor(Color.BLACK);
+			graphics.drawString("Dr. Francisco De Sande, leader of Spain Attackers.", 70, 580);
+		}
+
+		if(enemyDead == true) {
 			graphics.setFont(deadFont);
 			graphics.setColor(Color.RED);
 			graphics.drawString("ENEMY DEAD!", 100, 100);

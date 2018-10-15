@@ -19,6 +19,9 @@ import battleScenes.FranciscoBattle;
 import battleScenes.battleWon;
 import battleScenes.dummyBattle;
 import battleScenes.lailaRatna;
+import cutScenes.FranciscoScene;
+import cutScenes.FranciscoScene02;
+import cutScenes.LailaRatnaScene;
 import cutScenes.Scene01;
 import cutScenes.Scene02;
 import cutScenes.Scene03;
@@ -29,8 +32,6 @@ import cutScenes.Scene07;
 import cutScenes.Scene08;
 import cutScenes.Scene09;
 import cutScenes.Scene10;
-import cutScenes.franciscoScene;
-import cutScenes.lailaRatnaScene;
 import entity.AnimatedSprite;
 import entity.Item;
 import entity.Map;
@@ -73,7 +74,7 @@ public class Game extends JFrame implements Runnable {
 	private SpriteSheet girlSheet;
 
 	private int selectedTileID = 2;
-	private int selectedLayer = 0;
+	private int selectedLayer = 1;
 
 	private Tiles tiles;
 	private Map map;
@@ -111,16 +112,18 @@ public class Game extends JFrame implements Runnable {
 	private Scene08 scene08;
 	private Scene09 scene09;
 	private Scene10 scene10;
-	private lailaRatnaScene LR;
-	private franciscoScene fransShip;
+	private LailaRatnaScene LR;
+	private FranciscoScene fransShip;
+	private FranciscoScene02 fransArrive;
 
 	//places Scenes
 	private hospitalScene hosp;
 
 	//battle scenes
 	public dummyBattle dummy;
-	private lailaRatna lailaRatna;
-	private FranciscoBattle francisco;
+	public lailaRatna lailaRatna;
+	public FranciscoBattle francisco;
+	
 	public CharacterInfo Cinfo;
 	private Item item;
 	public CharacterInfoLaila Cinfolaila;
@@ -150,6 +153,7 @@ public class Game extends JFrame implements Runnable {
 		SCENE10,
 		LRS,
 		FRANSHIP,
+		FRANSARRIVE,
 		DUMMY,
 		LAILARATNA,
 		FRANCISCO,
@@ -177,7 +181,7 @@ public class Game extends JFrame implements Runnable {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// set pos n size of frame
-		setBounds(0, 0, 1000, 800);
+		setBounds(0, 0, 1000, 1000);
 
 		//put our frame in center of screen
 		setLocationRelativeTo(null);
@@ -275,8 +279,9 @@ public class Game extends JFrame implements Runnable {
 		scene08 = new Scene08(this);
 		scene09 = new Scene09(this);
 		scene10 = new Scene10(this);
-		LR = new lailaRatnaScene(this);
-		fransShip = new franciscoScene(this);
+		LR = new LailaRatnaScene(this);
+		fransShip = new FranciscoScene(this);
+		fransArrive = new FranciscoScene02(this);
 
 		//BATTLE
 		dummy = new dummyBattle(this);
@@ -451,12 +456,31 @@ public class Game extends JFrame implements Runnable {
 			
 			fransShip.update(this);
 		}
+		
+		if(State == STATE.FRANSARRIVE) {
+			if(!playedGameMusic) {
+				menu.getAud().stop();
+				vilAud.stop();
+				
+				fransArrive.bgm.play();
+				playedGameMusic = true;
+			}
+			
+			fransArrive.update(this);
+		}
 
 		if(State == STATE.DUMMY) {
 			dummy.update(this);
 		}
 
 		if(State == STATE.LAILARATNA) {
+			if(!playedGameMusic) {
+				menu.getAud().stop();
+				vilAud.stop();
+				
+				playedGameMusic = true;
+			}
+			
 			lailaRatna.update(this);
 		}
 
@@ -465,6 +489,14 @@ public class Game extends JFrame implements Runnable {
 		}
 		
 		if(State == STATE.WIN) {
+			if(!playedGameMusic) {
+				menu.getAud().stop();
+				vilAud.stop();
+				
+				win.bgm.play();
+				playedGameMusic = true;
+			}
+			
 			win.update(this);
 		}
 
@@ -537,7 +569,6 @@ public class Game extends JFrame implements Runnable {
 
 			gamePlay.render(renderer, xZoom, yZoom);
 			renderer.render(graphics);
-			gamePlay.render(graphics, this);
 		}
 
 		if(State == STATE.MENU) {
@@ -652,6 +683,13 @@ public class Game extends JFrame implements Runnable {
 			fransShip.render(renderer, xZoom, yZoom); 
 			renderer.render(graphics); 
 			fransShip.render(graphics); 
+		}
+		
+		if(State == STATE.FRANSARRIVE) {
+
+			fransArrive.render(renderer, xZoom, yZoom); 
+			renderer.render(graphics); 
+			fransArrive.render(graphics); 
 		}
 
 		if(State == STATE.DUMMY) {

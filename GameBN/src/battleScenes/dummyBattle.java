@@ -149,6 +149,8 @@ public class dummyBattle {
 			if(keyListener.enter()) {
 				didMove = true;
 				select(game);
+				
+				sfx.play();
 			}
 
 			if(keyListener.left()) {
@@ -158,6 +160,7 @@ public class dummyBattle {
 				{
 					currentChoice = options.length -1;
 				}
+				sfx.play();
 			}
 
 			if(keyListener.right()) {
@@ -167,6 +170,7 @@ public class dummyBattle {
 				{
 					currentChoice = 0;
 				}
+				sfx.play();
 			}
 			if(didMove) {
 				Thread.sleep(200);

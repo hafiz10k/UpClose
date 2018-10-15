@@ -58,8 +58,9 @@ public class lailaRatna {
 	private int playerEXP;
 	public int achievedEXP;
 
-	private boolean enemyDead = false;
-	private boolean playerDead = false;
+	public boolean enemyDead = false;
+	public boolean playerDead = false;
+	
 	private boolean playerAttacking = false;
 	private boolean enemyAttacking = false;
 
@@ -258,9 +259,7 @@ public class lailaRatna {
 					player.EXP = 50;
 				}
 
-				if(keyListener.a()) {
-					game.State = STATE.GAME;
-				}
+				game.State = STATE.WIN;
 			}
 
 			Thread.sleep(200);
